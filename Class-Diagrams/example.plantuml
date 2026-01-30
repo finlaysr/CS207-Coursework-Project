@@ -1,0 +1,17 @@
+@startuml
+abstract class Shape {
+    + draw(): void
+}
+
+class Circle {
+    + radius: Double
+}
+
+class Rectangle {
+    + width: Double
+    + height: Double
+}
+
+Shape <|-- Circle
+Shape <|-- Rectangle
+@enduml
