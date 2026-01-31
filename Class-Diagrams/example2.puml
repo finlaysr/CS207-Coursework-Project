@@ -1,0 +1,53 @@
+@startuml
+
+interface thing_interface {
+    # protected_field
+    ~ pack_private_func()
+}
+
+' This is a comment
+class thing<generic Type: T>{
+    + public_field: int
+    - private_flied: bool
+    --
+
+    .. seperator..
+    + public_func(T value): void
+    - private_func(): String
+    ..
+    == getters ==
+    + getter()
+}
+
+-abstract class private_abstract {
+    {static} static_field
+}
+note left #green: this is a <b>relative</b> note
+note top of thing: this is a <u>positional</u> note
+
+note right of thing_interface::pack_private_func
+ this is a note for a method
+end note
+
++abstract class public_abstract {
+    {abstract} abstract_func(String field)
+}
+
+' single - for horizontal link
+thing "top" -> "bottom" thing_interface: < arrow
+' double .. for vertical link
+private_abstract <|.. public_abstract: dotted
+public_abstract *--o private_abstract: dashed
+
+note on link #red: note on an arrow
+
+package import #bbbbbb {
+    class random{
+    + random_int(): int
+    }
+
+}
+' specify link direction inside of arrow
+random -down-|> thing: imports <
+
+@enduml

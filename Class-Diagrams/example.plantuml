@@ -1,6 +1,8 @@
 @startuml
-abstract class Shape {
+interface Shape {
+    + area: int
     + draw(): void
+    - calcArea(): int
 }
 
 class Circle {
@@ -12,6 +14,6 @@ class Rectangle {
     + height: Double
 }
 
-Shape <|-- Circle
-Shape <|-- Rectangle
+class Circle implements Shape
+class Rectangle extends Shape
 @enduml
