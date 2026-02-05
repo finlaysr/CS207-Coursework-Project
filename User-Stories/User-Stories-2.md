@@ -11,3 +11,7 @@
 * As a user, I want to be able to have the option to play a large options of games, so as there is variety in the messages to be decoding and I am not repeating the same messages.
 
 * As a user, I want to be able to change my puzzle if the current one is too difficult, so that I am not stuck and can get another chance to solve a puzzle.
+
+* As a user, I want to have a stopwatch timer from when I first start completing the puzzle so as I can see how first I can solve puzzle.
+
+* As a user, I want to be able to view the rules so as when I'm playing for the first time I know what to do and I am not confused.
