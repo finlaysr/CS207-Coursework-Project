@@ -1,4 +1,4 @@
-# User Stroies 2- Gameplay
+# User Stroies 2 - Gameplay
 
 ## Stakeholder : User
 
