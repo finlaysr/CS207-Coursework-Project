@@ -7,6 +7,7 @@
 * As a player, I want to be able to view my stats like puzzles completed, like hints used, so I can then compare to other players.
 * As a player I want my login name saved so that my progress that my personal progress can be saved and accessed.
 * As a player I want see my current game progress and other user progresses as a scoreboard after my session ends, so that I can easily see my score.
+* As a player, I want my incomplete sessions to be saved during the term of the program, so that when I return to particular quiz my state remains.
 
 ### Acceptance Test:
 
