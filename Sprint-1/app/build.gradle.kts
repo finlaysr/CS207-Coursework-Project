@@ -8,6 +8,8 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    // Spotless plugin for auto-formatting files
+    id("com.diffplug.spotless") version "8.2.1"
 }
 
 repositories {
@@ -40,4 +42,34 @@ application {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+spotless {
+    // optional: limit format enforcement to just the files changed by this feature branch
+    // ratchetFrom("origin/main")
+
+    format("misc") {
+        // define the files to apply `misc` to
+        target("*.gradle", ".gitattributes", ".gitignore")
+
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        leadingSpacesToTabs() // or leadingTabsToSpaces(n)
+        endWithNewline()
+    }
+
+    java {
+        importOrder()
+        removeUnusedImports()
+
+        cleanthat()
+
+        // apply a specific flavor of google-java-format
+        googleJavaFormat("1.34.1").reflowLongStrings()
+
+        formatAnnotations()
+
+        // license header
+        licenseHeader("/* CS207 Cryptogram Project - Sprint 1 - Team 25 2026 */")
+    }
 }

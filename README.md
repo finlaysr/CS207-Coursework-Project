@@ -18,6 +18,6 @@ The projects will take place in several stages of development:
 
 1. [User Stories](User-Stories)
 2. [High Level Design (Class Diagram)](Class-Diagrams)
-3. [Iteration 1](Iteration-1)
+3. [Sprint 1](Sprint-1)
 4. Iteration 2
 5. Iteration 3 (Final Design)
