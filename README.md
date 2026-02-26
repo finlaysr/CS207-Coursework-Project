@@ -21,3 +21,10 @@ The projects will take place in several stages of development:
 3. [Sprint 1](Sprint-1)
 4. Iteration 2
 5. Iteration 3 (Final Design)
+
+## Setup
+
+* Run to set up the git hooks:
+  ```
+  git config core.hooksPath .githooks
+  ```
