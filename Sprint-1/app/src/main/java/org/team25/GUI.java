@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
@@ -15,6 +16,7 @@ public class GUI {
 
   public GUI() {
     JFrame mainFrame = new JFrame("Cryptogram Game");
+    GitSetup.configureHooksPath();
 
     mainFrame.addWindowListener(
         new WindowAdapter() {
@@ -169,5 +171,25 @@ class GamePanel extends JPanel {
           }
         });
     return textField;
+  }
+}
+
+class GitSetup {
+  public static void configureHooksPath() {
+    ProcessBuilder pb = new ProcessBuilder("git", "config", "core.hooksPath", ".githooks");
+
+    pb.inheritIO();
+    int exit = 0;
+    try {
+      Process p = pb.start();
+      exit = p.waitFor();
+    } catch (IOException | InterruptedException e) {
+
+      System.out.println("Failed to set core.hooksPath: " + e);
+    }
+
+    if (exit != 0) {
+      System.out.println("Failed to set core.hooksPath (exit " + exit + ")");
+    }
   }
 }
