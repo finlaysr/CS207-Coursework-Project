@@ -50,7 +50,7 @@ public class GUI {
     fontPanel.add(fontDown, GUI.setConstraints(2, 0, 1, 1));
     fontDown.addActionListener(_ -> resizeFont(mainFrame, -3));
 
-    switchContent(new GamePanel());
+    switchContent(new GameChoicePanel());
   }
 
   protected void switchContent(JPanel pane) {
@@ -86,6 +86,21 @@ public class GUI {
         resizeFont(inner, change);
       }
     }
+  }
+}
+
+class GameChoicePanel extends JPanel {
+  protected GameChoicePanel() {
+    this.setLayout(new GridBagLayout());
+    this.add(new JLabel("Choose Game Type:"), GUI.setConstraints(0, 0, 1, 1));
+
+    JButton letterButton = new JButton("Letter");
+    this.add(letterButton, GUI.setConstraints(0, 1, 1, 1));
+    letterButton.addActionListener(_ -> System.out.println("Letter"));
+
+    JButton numberButton = new JButton("Number");
+    this.add(numberButton, GUI.setConstraints(0, 2, 1, 1));
+    numberButton.addActionListener(_ -> System.out.println("Number"));
   }
 }
 
