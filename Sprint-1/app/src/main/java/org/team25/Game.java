@@ -26,8 +26,10 @@ public class Game {
     // allow the user to choice if they would want letter to letter or number to letter
     // check what cryptogram to generate
     if (isLetterCrypto) {
-      playerGameMapping = new LetterCryptogram();
+      LetterCryptogram playerGameMapping = new LetterCryptogram();
       System.out.println("Letter cryptogram created!");
+      playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
+      playerGameMapping.Show(); // Shows the hashmap connections
     } else {
       playerGameMapping = new NumberCryptogram();
       System.out.println("Number cryptogram created!");
