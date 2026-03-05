@@ -8,14 +8,31 @@ import java.util.Scanner;
 public class Game {
 
   // instance variables- still to decdie the data types of the variables
-  // private payerGameMapping; //need to decide a data type
-  private Player currentPlayer;
+  private Cryptogram playerGameMapping; // the current cryptogram that the player is playing
+  private Player currentPlayer; // the current player playing the game
 
   // constructor for Game, empty for now
-  public Game() {}
+  // initialse to empty just now
+  public Game() {
+    this.playerGameMapping = null;
+    this.currentPlayer = null;
+  }
 
-  /** User story 1: As a player I want to be able to generate a cryptogram */
-  private void generateCryptogram() {}
+  /**
+   * User story 1: As a player I want to be able to generate a cryptogram When the game starts, a
+   * crcyptogram
+   */
+  public void generateCryptogram(boolean isLetterCrypto) {
+    // allow the user to choice if they would want letter to letter or number to letter
+    // check what cryptogram to generate
+    if (isLetterCrypto) {
+      playerGameMapping = new LetterCryptogram();
+      System.out.println("Letter cryptogram created!");
+    } else {
+      playerGameMapping = new NumberCryptogram();
+      System.out.println("Number cryptogram created!");
+    }
+  }
 
   /**
    * User story 2: As a player I want to be able to enter a letter so I can solve the cryptogram.
