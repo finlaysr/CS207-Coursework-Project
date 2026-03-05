@@ -4,6 +4,7 @@ package org.team25;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -18,13 +19,16 @@ public class LetterCryptogram extends Cryptogram {
     // Convert each element
     String phrase = "";
 
-    File database = new File("src/resources/test.txt");
+    File database = new File("src/resources/sentences.txt");
 
     try (Scanner myReader = new Scanner(database)) {
-      while (myReader.hasNextLine()) {
+      Random rand = new Random();
+      int num = rand.nextInt(51);
+      do {
         phrase = myReader.nextLine();
-        // System.out.println(phrase);
-      }
+        num--;
+      } while (num >= 0);
+
     } catch (FileNotFoundException e) {
       System.out.println("File not found");
       e.printStackTrace();
