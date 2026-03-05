@@ -3,19 +3,23 @@ package org.team25;
 
 /*Imports Required */
 import java.util.Scanner;
+import java.util.Stack;
 
 /** This is the game class which acts as the controller/engine for the overall system */
 public class Game {
+
 
   // instance variables- still to decdie the data types of the variables
   private Cryptogram playerGameMapping; // the current cryptogram that the player is playing
   private Player currentPlayer; // the current player playing the game
 
+  private Stack<Character> guessStack = new Stack<>();
   // constructor for Game, empty for now
   // initialse to empty just now
   public Game() {
     this.playerGameMapping = null;
     this.currentPlayer = null;
+    this.guessStack = null;
   }
 
   /**
@@ -27,11 +31,14 @@ public class Game {
     // check what cryptogram to generate
     if (isLetterCrypto) {
       LetterCryptogram playerGameMapping = new LetterCryptogram();
+      guessStack = null;
+
       System.out.println("Letter cryptogram created!");
       playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
       playerGameMapping.Show(); // Shows the hashmap connections
     } else {
       playerGameMapping = new NumberCryptogram();
+      guessStack = null;
       System.out.println("Number cryptogram created!");
     }
   }
@@ -39,21 +46,49 @@ public class Game {
   /**
    * User story 2: As a player I want to be able to enter a letter so I can solve the cryptogram.
    */
-  public void enterLetter() {
-    boolean validGuess = false;
-    while (!validGuess) {
-      Scanner input = new Scanner(System.in);
-      System.out.println("Enter your guess: ");
+  //enter a letter and ensure its valid
+  public boolean enterLetter(char guess) {
 
-      String userGuess = input.nextLine();
-      if (userGuess.length() > 1 || userGuess.length() < 1) {
-        System.out.println("Guess must be a single letter");
-      } else {
-        validGuess = true;
-      }
+    if (!Character.isLetter(guess)) {
+      System.out.println("Guess must be a letter");
+      return false;
     }
+
+    if (guessStack.contains(guess)) {
+        System.out.println("You already guessed that letter");
+      return false;
+      }
+
+      guessStack.push(guess);
+    return true;
   }
 
   /** User story 3: As a player I want to be able to undo a letter so I can play the cryptogram */
-  public void undoLetter() {}
+  public Stack<Character> undoLetter(char removed) {
+
+    if (guessStack.isEmpty()){
+      System.out.println("There are no guesses to be undone");
+      return null;
+    }
+    guessStack.pop();
+
+    return guessStack;
+  }
+
+  public void viewFrequencies() {
+
+  }
+
+  public void saveGame() {
+
+  }
+
+  public void loadGame() {
+
+  }
+
+  public void showSolution(){
+
+ }
+
 }
