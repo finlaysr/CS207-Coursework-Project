@@ -5,8 +5,8 @@ public class App {
   public static void main(String[] args) {
 
     GUI gui = new GUI();
-    LetterCryptogram letterCryptogram = new LetterCryptogram();
-    letterCryptogram.Cryptogram();
-    letterCryptogram.Show();
+    NumberCryptogram numCryptogram = new NumberCryptogram();
+    numCryptogram.Cryptogram();
+    // numCryptogram.Show();
   }
 }
