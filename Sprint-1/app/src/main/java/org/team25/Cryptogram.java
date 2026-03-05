@@ -3,8 +3,8 @@ package org.team25;
 
 public class Cryptogram {
 
-  String phrase;
-  String cryptogramAlphabet;
+  private String phrase;
+  private String cryptogramAlphabet;
 
   public Cryptogram() {}
 
