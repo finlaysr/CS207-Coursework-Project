@@ -64,8 +64,15 @@ public class Game {
   }
 
   /** User story 3: As a player I want to be able to undo a letter so I can play the cryptogram */
-  public void undoLetter() {
+  public Stack<Character> undoLetter(char removed) {
 
+    if (guessStack.isEmpty()){
+      System.out.println("There are no guesses to be undone");
+      return null;
+    }
+    guessStack.pop();
+
+    return guessStack;
   }
 
   public void viewFrequencies() {
