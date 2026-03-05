@@ -2,18 +2,17 @@
 package org.team25;
 
 /*Imports Required */
-import java.util.Scanner;
 import java.util.Stack;
 
 /** This is the game class which acts as the controller/engine for the overall system */
 public class Game {
-
 
   // instance variables- still to decdie the data types of the variables
   private Cryptogram playerGameMapping; // the current cryptogram that the player is playing
   private Player currentPlayer; // the current player playing the game
 
   private Stack<Character> guessStack = new Stack<>();
+
   // constructor for Game, empty for now
   // initialse to empty just now
   public Game() {
@@ -39,14 +38,17 @@ public class Game {
     } else {
       playerGameMapping = new NumberCryptogram();
       guessStack = null;
+      NumberCryptogram playerGameMapping = new NumberCryptogram();
       System.out.println("Number cryptogram created!");
+      playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
+      playerGameMapping.Show(); // shows hashmap connections
     }
   }
 
   /**
    * User story 2: As a player I want to be able to enter a letter so I can solve the cryptogram.
    */
-  //enter a letter and ensure its valid
+  // enter a letter and ensure its valid
   public boolean enterLetter(char guess) {
 
     if (!Character.isLetter(guess)) {
@@ -55,18 +57,18 @@ public class Game {
     }
 
     if (guessStack.contains(guess)) {
-        System.out.println("You already guessed that letter");
+      System.out.println("You already guessed that letter");
       return false;
-      }
+    }
 
-      guessStack.push(guess);
+    guessStack.push(guess);
     return true;
   }
 
   /** User story 3: As a player I want to be able to undo a letter so I can play the cryptogram */
   public Stack<Character> undoLetter(char removed) {
 
-    if (guessStack.isEmpty()){
+    if (guessStack.isEmpty()) {
       System.out.println("There are no guesses to be undone");
       return null;
     }
@@ -75,20 +77,11 @@ public class Game {
     return guessStack;
   }
 
-  public void viewFrequencies() {
+  public void viewFrequencies() {}
 
-  }
+  public void saveGame() {}
 
-  public void saveGame() {
+  public void loadGame() {}
 
-  }
-
-  public void loadGame() {
-
-  }
-
-  public void showSolution(){
-
- }
-
+  public void showSolution() {}
 }
