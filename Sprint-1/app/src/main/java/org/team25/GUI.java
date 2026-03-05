@@ -50,7 +50,7 @@ public class GUI {
     fontPanel.add(fontDown, GUI.setConstraints(2, 0, 1, 1));
     fontDown.addActionListener(_ -> resizeFont(mainFrame, -3));
 
-    switchContent(new GameChoicePanel());
+    switchContent(new GameChoicePanel(this));
   }
 
   protected void switchContent(JPanel pane) {
@@ -90,25 +90,39 @@ public class GUI {
 }
 
 class GameChoicePanel extends JPanel {
-  protected GameChoicePanel() {
+  private final GUI gui;
+
+  protected GameChoicePanel(GUI gui) {
+    this.gui = gui;
     this.setLayout(new GridBagLayout());
     this.add(new JLabel("Choose Game Type:"), GUI.setConstraints(0, 0, 1, 1));
 
     JButton letterButton = new JButton("Letter");
     this.add(letterButton, GUI.setConstraints(0, 1, 1, 1));
-    letterButton.addActionListener(_ -> System.out.println("Letter"));
+    letterButton.addActionListener(
+        _ -> {
+          this.gui.switchContent(new GamePanel(gui));
+          System.out.println("Letter");
+        });
 
     JButton numberButton = new JButton("Number");
     this.add(numberButton, GUI.setConstraints(0, 2, 1, 1));
-    numberButton.addActionListener(_ -> System.out.println("Number"));
+    numberButton.addActionListener(
+        _ -> {
+          this.gui.switchContent(new GamePanel(gui));
+          System.out.println("Number");
+        });
   }
 }
 
 class GamePanel extends JPanel {
+  private final GUI gui;
+
   private JPanel inputGroup;
   private ArrayList<JTextField> inputFields;
 
-  protected GamePanel() {
+  protected GamePanel(GUI gui) {
+    this.gui = gui;
     this.setLayout(new GridBagLayout());
     this.inputFields = new ArrayList<>();
 
@@ -127,6 +141,10 @@ class GamePanel extends JPanel {
     this.add(submitButton, GUI.setConstraints(0, 3, 1, 1));
     submitButton.addActionListener(
         _ -> inputFields.forEach(inputField -> System.out.print(inputField.getText())));
+
+    JButton backButton = new JButton("Back");
+    this.add(backButton, GUI.setConstraints(0, 4, 1, 1));
+    backButton.addActionListener(_ -> gui.switchContent(new GameChoicePanel(gui)));
   }
 
   private void addWords(ArrayList<String> words) {
