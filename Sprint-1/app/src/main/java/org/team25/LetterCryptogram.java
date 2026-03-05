@@ -82,26 +82,15 @@ public class LetterCryptogram extends Cryptogram {
     }*/
   }
 
-  void inputTaking() {
+  void compareInput(char input) {
 
-    Scanner userinput = new Scanner(System.in);
-    String getInput = "";
-    while (userinput.hasNextLine()) {
-      getInput = userinput.nextLine();
-    }
-    input.push(getInput.charAt(0));
-  }
-
-  void compareInput() {
-    int j = 0;
     for (char i : cryptogramAlphabet.keySet()) {
-      if (cryptogramAlphabet.get(i) == input.get(j)) {
+      if (cryptogramAlphabet.get(i) == input) {
         // Correct
         System.out.println("Found it!");
       } else {
         System.out.println("Not found!");
       }
-      j++;
     }
   }
 

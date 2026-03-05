@@ -7,14 +7,14 @@ import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 public class NumberCryptogram extends Cryptogram {
-  LinkedHashMap<Character, Character> cryptogramAlphabet = new LinkedHashMap<>();
+  LinkedHashMap<Integer, Character> cryptogramAlphabet = new LinkedHashMap<>();
 
   void Cryptogram() { // Scanner the file
     // Store the string inside crpytogramAlphabet as a linked hashmap(string, string)
     // Convert each element
     String phrase = "";
 
-    File database = new File("src/test.txt");
+    File database = new File("src/resources/test.txt");
 
     try (Scanner myReader = new Scanner(database)) {
       while (myReader.hasNextLine()) {
@@ -28,8 +28,9 @@ public class NumberCryptogram extends Cryptogram {
     // Phrase contains the string
     // Encrpyted phrase will contain the encrypted chars of each element
     // System.out.println("Length : " + Math.pow(2, phrase.length()));
-    int[] encryptedIntArray = new int[phrase.length() * 10];
-    for (int i = 0; i < phrase.length(); i++) {
+    String thinnedPhrase = phrase.replaceAll("\\s", "");
+    int[] encryptedIntArray = new int[thinnedPhrase.length()];
+    for (int i = 0; i < thinnedPhrase.length(); i++) {
 
       char currentChar = phrase.charAt(i);
 
@@ -50,12 +51,36 @@ public class NumberCryptogram extends Cryptogram {
         }
         // System.out.println(2);
       }
-
-      System.out.print("Encrypted : ");
-      for (int j : encryptedIntArray) {
-        System.out.print(j + " ");
-      }
-      System.out.println();
+      // System.out.print();
     }
+
+    System.out.print("Encrypted : ");
+    int k = 0; // Pointer for the encryptedIntArray
+
+    for (int j = 0; j < phrase.length(); j++) {
+      if (Character.isWhitespace(phrase.charAt(j))) {
+        System.out.print("  "); // Print your spacing
+      } else {
+        // Only access the array and increment k if it's NOT a space
+        System.out.print(encryptedIntArray[k] + " ");
+        k++;
+      }
+    }
+
+    System.out.println();
+
+    // Store inside hashmap
+    for (int i = 0; i < thinnedPhrase.length(); i++) {
+      cryptogramAlphabet.put(encryptedIntArray[i], thinnedPhrase.charAt(i));
+    }
+  }
+
+  void Show() {
+    System.out.println(cryptogramAlphabet);
+    System.out.println("keyset" + cryptogramAlphabet.keySet());
+    /*
+    for (char i : cryptogramAlphabet.keySet()) {
+        System.out.print(i);
+    }*/
   }
 }

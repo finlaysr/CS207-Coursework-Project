@@ -6,6 +6,6 @@ public class App {
 
     // GUI gui = new GUI();
     Game laika = new Game();
-    laika.generateCryptogram(true);
+    laika.generateCryptogram(false);
   }
 }
