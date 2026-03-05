@@ -4,11 +4,8 @@ package org.team25;
 public class App {
   public static void main(String[] args) {
 
-    GUI gui = new GUI();
-    LetterCryptogram letterCryptogram = new LetterCryptogram();
-    letterCryptogram.Cryptogram();
-    letterCryptogram.Show();
-    letterCryptogram.inputTaking();
-    letterCryptogram.compareInput();
+    // GUI gui = new GUI();
+    Game laika = new Game();
+    laika.generateCryptogram(true);
   }
 }
