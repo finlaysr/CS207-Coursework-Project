@@ -4,6 +4,16 @@ package org.team25;
 /*Imports Required */
 import java.util.Stack;
 
+class Input{
+  public Character guess;
+  public Character encrypted;
+
+  public Input(Character guess, Character encrypted) {
+    this.guess = guess;
+    this.encrypted = encrypted;
+  }
+}
+
 /** This is the game class which acts as the controller/engine for the overall system */
 public class Game {
 
@@ -11,8 +21,7 @@ public class Game {
   private Cryptogram playerGameMapping; // the current cryptogram that the player is playing
   private Player currentPlayer; // the current player playing the game
 
-  private Stack<Character> guessStack = new Stack<>();
-
+  private Stack<Input> guessStack = new Stack<>();
   // constructor for Game, empty for now
   // initialse to empty just now
   public Game() {
@@ -48,8 +57,9 @@ public class Game {
   /**
    * User story 2: As a player I want to be able to enter a letter so I can solve the cryptogram.
    */
-  // enter a letter and ensure its valid
-  public boolean enterLetter(char guess) {
+
+  //enter a letter and ensure its valid
+  public boolean enterLetter(char guess, char encrypted) {
 
     if (!Character.isLetter(guess)) {
       System.out.println("Guess must be a letter");
@@ -61,12 +71,15 @@ public class Game {
       return false;
     }
 
-    guessStack.push(guess);
+      //guess is valid
+      Input current = new Input(guess, encrypted);
+
+      guessStack.push(current);
     return true;
   }
 
   /** User story 3: As a player I want to be able to undo a letter so I can play the cryptogram */
-  public Stack<Character> undoLetter(char removed) {
+  public Stack<Input> undoLetter(char removed) {
 
     if (guessStack.isEmpty()) {
       System.out.println("There are no guesses to be undone");
