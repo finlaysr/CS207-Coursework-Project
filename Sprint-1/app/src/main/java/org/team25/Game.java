@@ -4,7 +4,7 @@ package org.team25;
 /*Imports Required */
 import java.util.Stack;
 
-class Input{
+class Input {
   public Character guess;
   public Character encrypted;
 
@@ -22,12 +22,13 @@ public class Game {
   private Player currentPlayer; // the current player playing the game
 
   private Stack<Input> guessStack = new Stack<>();
+
   // constructor for Game, empty for now
   // initialse to empty just now
   public Game() {
     this.playerGameMapping = null;
     this.currentPlayer = null;
-    this.guessStack = null;
+    this.guessStack = new Stack<>();
   }
 
   /**
@@ -39,14 +40,14 @@ public class Game {
     // check what cryptogram to generate
     if (isLetterCrypto) {
       LetterCryptogram playerGameMapping = new LetterCryptogram();
-      guessStack = null;
+      guessStack.clear();
 
       System.out.println("Letter cryptogram created!");
       playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
       playerGameMapping.Show(); // Shows the hashmap connections
     } else {
       playerGameMapping = new NumberCryptogram();
-      guessStack = null;
+      guessStack.clear();
       NumberCryptogram playerGameMapping = new NumberCryptogram();
       System.out.println("Number cryptogram created!");
       playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
@@ -58,23 +59,22 @@ public class Game {
    * User story 2: As a player I want to be able to enter a letter so I can solve the cryptogram.
    */
 
-  //enter a letter and ensure its valid
-  public boolean enterLetter(char guess, char encrypted) {
-
+  // enter a letter and ensure its valid
+  public boolean enterLetter(Character guess, Character encrypted) {
     if (!Character.isLetter(guess)) {
       System.out.println("Guess must be a letter");
       return false;
     }
 
-    if (guessStack.contains(guess)) {
+    if (guessStack.stream().anyMatch(input -> input.guess.equals(guess))) {
       System.out.println("You already guessed that letter");
       return false;
     }
 
-      //guess is valid
-      Input current = new Input(guess, encrypted);
+    // guess is valid
+    Input current = new Input(guess, encrypted);
 
-      guessStack.push(current);
+    guessStack.push(current);
     return true;
   }
 
