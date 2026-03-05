@@ -8,5 +8,7 @@ public class App {
     LetterCryptogram letterCryptogram = new LetterCryptogram();
     letterCryptogram.Cryptogram();
     letterCryptogram.Show();
+    letterCryptogram.inputTaking();
+    letterCryptogram.compareInput();
   }
 }
