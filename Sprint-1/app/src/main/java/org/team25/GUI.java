@@ -13,8 +13,10 @@ import javax.swing.*;
 public class GUI {
   final Font titleFont = new Font("Ariel", Font.BOLD, 20);
   private JPanel contentPane;
+  private Game game;
 
-  public GUI() {
+  public GUI(Game game) {
+    this.game = game;
     JFrame mainFrame = new JFrame("Cryptogram Game");
     GitSetup.configureHooksPath();
 
@@ -50,7 +52,7 @@ public class GUI {
     fontPanel.add(fontDown, GUI.setConstraints(2, 0, 1, 1));
     fontDown.addActionListener(_ -> resizeFont(mainFrame, -3));
 
-    switchContent(new GameChoicePanel(this));
+    switchContent(new GameChoicePanel(this, game));
   }
 
   protected void switchContent(JPanel pane) {
@@ -91,9 +93,11 @@ public class GUI {
 
 class GameChoicePanel extends JPanel {
   private final GUI gui;
+  private Game game;
 
-  protected GameChoicePanel(GUI gui) {
+  protected GameChoicePanel(GUI gui, Game game) {
     this.gui = gui;
+    this.game = game;
     this.setLayout(new GridBagLayout());
     this.add(new JLabel("Choose Game Type:"), GUI.setConstraints(0, 0, 1, 1));
 
@@ -101,28 +105,30 @@ class GameChoicePanel extends JPanel {
     this.add(letterButton, GUI.setConstraints(0, 1, 1, 1));
     letterButton.addActionListener(
         _ -> {
-          this.gui.switchContent(new GamePanel(gui));
-          System.out.println("Letter");
+          game.generateCryptogram(true);
+          this.gui.switchContent(new GamePanel(this.gui, game));
         });
 
     JButton numberButton = new JButton("Number");
     this.add(numberButton, GUI.setConstraints(0, 2, 1, 1));
     numberButton.addActionListener(
         _ -> {
-          this.gui.switchContent(new GamePanel(gui));
-          System.out.println("Number");
+          game.generateCryptogram(false);
+          this.gui.switchContent(new GamePanel(this.gui, game));
         });
   }
 }
 
 class GamePanel extends JPanel {
   private final GUI gui;
+  private Game game;
 
   private JPanel inputGroup;
   private ArrayList<JTextField> inputFields;
 
-  protected GamePanel(GUI gui) {
+  protected GamePanel(GUI gui, Game game) {
     this.gui = gui;
+    this.game = game;
     this.setLayout(new GridBagLayout());
     this.inputFields = new ArrayList<>();
 
@@ -144,7 +150,7 @@ class GamePanel extends JPanel {
 
     JButton backButton = new JButton("Back");
     this.add(backButton, GUI.setConstraints(0, 4, 1, 1));
-    backButton.addActionListener(_ -> gui.switchContent(new GameChoicePanel(gui)));
+    backButton.addActionListener(_ -> gui.switchContent(new GameChoicePanel(gui, game)));
   }
 
   private void addWords(ArrayList<String> words) {
@@ -156,7 +162,7 @@ class GamePanel extends JPanel {
         i++;
         JPanel charPanel = new JPanel(new GridBagLayout());
         charPanel.setBackground(Color.lightGray);
-        JTextField textField = buildCharInput(i);
+        JTextField textField = buildCharInput(i, c);
 
         inputFields.add(textField);
         charPanel.add(textField, GUI.setConstraints(0, 0, 1, 1));
@@ -168,7 +174,7 @@ class GamePanel extends JPanel {
     }
   }
 
-  private JTextField buildCharInput(int index) {
+  private JTextField buildCharInput(int index, char encrypted) {
     JTextField textField = new JTextField(1);
     textField.setBorder(BorderFactory.createLineBorder(Color.lightGray));
     textField.addKeyListener(
@@ -178,15 +184,25 @@ class GamePanel extends JPanel {
             if (evt.getKeyChar() == KeyEvent.VK_DELETE
                 || evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
               textField.setText("");
+              // move to previous input if not at start
               if (index > 0 && evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
                 inputFields.get(index - 1).requestFocus();
               }
             } else {
-              textField.setText(Character.toString(evt.getKeyChar()));
-              if (index < inputFields.size() - 1) {
-                inputFields.get(index + 1).requestFocus();
+              char guess = Character.toLowerCase(evt.getKeyChar());
+              System.out.println("Letter entered: " + guess + " encrypted: " + encrypted);
+
+              // Check it was a valid input
+              if (game.enterLetter(guess, encrypted)) {
+                textField.setText(Character.toString(guess));
+                // move to next text field if not at end
+                if (index < inputFields.size() - 1) {
+                  inputFields.get(index + 1).requestFocus();
+                }
+              } else {
+                JOptionPane.showMessageDialog(
+                    null, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
               }
-              System.out.println("Letter entered: " + evt.getKeyChar() + " at " + index);
             }
             evt.consume();
           }
@@ -207,6 +223,7 @@ class GamePanel extends JPanel {
   }
 }
 
+// Temporary, will be removed after everyone has this set up
 class GitSetup {
   public static void configureHooksPath() {
     ProcessBuilder pb = new ProcessBuilder("git", "config", "core.hooksPath", ".githooks");

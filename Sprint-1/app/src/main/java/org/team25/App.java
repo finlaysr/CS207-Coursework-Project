@@ -4,8 +4,7 @@ package org.team25;
 public class App {
   public static void main(String[] args) {
 
-    // GUI gui = new GUI();
-    Game laika = new Game();
-    laika.generateCryptogram(false);
+    Game game = new Game();
+    GUI gui = new GUI(game);
   }
 }
