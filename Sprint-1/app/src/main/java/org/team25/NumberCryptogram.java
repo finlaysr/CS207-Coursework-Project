@@ -1,35 +1,17 @@
 /* CS207 Cryptogram Project - Sprint 1 - Team 25 2026 */
 package org.team25;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.LinkedHashMap;
-import java.util.Random;
-import java.util.Scanner;
-
 public class NumberCryptogram extends Cryptogram {
-  LinkedHashMap<Integer, Character> cryptogramAlphabet = new LinkedHashMap<>();
+  public NumberCryptogram() { // Scanner the file
+    // loadPhrase is called in Cryptogram
+    encryptPhrase();
+  }
 
-  void Cryptogram() { // Scanner the file
-    // Store the string inside crpytogramAlphabet as a linked hashmap(string, string)
-    // Convert each element
-    String phrase = "";
-
-    File database = new File("src/resources/sentences.txt");
-
-    try (Scanner myReader = new Scanner(database)) {
-      Random rand = new Random();
-      int num = rand.nextInt(51);
-      do {
-        phrase = myReader.nextLine();
-        num--;
-      } while (num >= 0);
-    } catch (FileNotFoundException e) {
-      System.out.println("File not found");
-      e.printStackTrace();
-    }
-    // Phrase contains the string
-    // Encrpyted phrase will contain the encrypted chars of each element
+  // Store the string inside crpytogramAlphabet as a linked hashmap(string, string)
+  // Convert each element
+  // Phrase contains the string
+  // Encrpyted phrase will contain the encrypted chars of each element
+  private void encryptPhrase() {
     // System.out.println("Length : " + Math.pow(2, phrase.length()));
     String thinnedPhrase = phrase.replaceAll("\\s", "");
     int[] encryptedIntArray = new int[thinnedPhrase.length()];
@@ -74,16 +56,7 @@ public class NumberCryptogram extends Cryptogram {
 
     // Store inside hashmap
     for (int i = 0; i < thinnedPhrase.length(); i++) {
-      cryptogramAlphabet.put(encryptedIntArray[i], thinnedPhrase.charAt(i));
+      cryptogramAlphabet.put(Integer.toString(encryptedIntArray[i]), thinnedPhrase.charAt(i));
     }
-  }
-
-  void Show() {
-    System.out.println(cryptogramAlphabet);
-    System.out.println("keyset" + cryptogramAlphabet.keySet());
-    /*
-    for (char i : cryptogramAlphabet.keySet()) {
-        System.out.print(i);
-    }*/
   }
 }

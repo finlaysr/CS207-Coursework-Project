@@ -1,40 +1,17 @@
 /* CS207 Cryptogram Project - Sprint 1 - Team 25 2026 */
 package org.team25;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.LinkedHashMap;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Stack;
-
 public class LetterCryptogram extends Cryptogram {
-  // Key is encrypted, and Value is the original value
-  LinkedHashMap<Character, Character> cryptogramAlphabet = new LinkedHashMap<>();
-  Stack<Character> input = new Stack<>();
+  public LetterCryptogram() {
+    // loadPhrase is called in Cryptogram
+    encryptPhrase();
+  }
 
-  void Cryptogram() {
-    // Scanner the file
-    // Store the string inside crpytogramAlphabet as a linked hashmap(string, string)
-    // Convert each element
-    String phrase = "";
-
-    File database = new File("src/resources/sentences.txt");
-
-    try (Scanner myReader = new Scanner(database)) {
-      Random rand = new Random();
-      int num = rand.nextInt(51);
-      do {
-        phrase = myReader.nextLine();
-        num--;
-      } while (num >= 0);
-
-    } catch (FileNotFoundException e) {
-      System.out.println("File not found");
-      e.printStackTrace();
-    }
-    // Phrase contains the string
-    // Encrpyted phrase will contain the encrypted chars of each element
+  // Store the string inside crpytogramAlphabet as a linked hashmap(string, string)
+  // Phrase contains the string
+  // Convert each element
+  // Encrpyted phrase will contain the encrypted chars of each element
+  private void encryptPhrase() {
     // System.out.println("Length : " + Math.pow(2, phrase.length()));
     char[] encryptedCharArray = new char[phrase.length()];
     for (int i = 0; i < phrase.length(); i++) {
@@ -73,22 +50,12 @@ public class LetterCryptogram extends Cryptogram {
 
       // System.out.println("Adding this encrypted: " + thinnedEncrypt.charAt(i) + " -> " +
       // thinnedPhrase.charAt(i));
-      cryptogramAlphabet.put(thinnedEncrypt.charAt(i), thinnedPhrase.charAt(i));
+      cryptogramAlphabet.put(Character.toString(thinnedEncrypt.charAt(i)), thinnedPhrase.charAt(i));
     }
   }
 
-  void Show() {
-    System.out.println(cryptogramAlphabet);
-    System.out.println("keyset" + cryptogramAlphabet.keySet());
-    /*
-    for (char i : cryptogramAlphabet.keySet()) {
-        System.out.print(i);
-    }*/
-  }
-
   void compareInput(char input) {
-
-    for (char i : cryptogramAlphabet.keySet()) {
+    for (String i : cryptogramAlphabet.keySet()) {
       if (cryptogramAlphabet.get(i) == input) {
         // Correct
         System.out.println("Found it!");

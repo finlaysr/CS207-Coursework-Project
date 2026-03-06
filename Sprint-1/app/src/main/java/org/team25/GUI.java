@@ -2,6 +2,7 @@
 package org.team25;
 
 import java.awt.*;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -125,6 +126,7 @@ class GamePanel extends JPanel {
   private Game game;
 
   private JPanel inputGroup;
+  // Key: Encrypted, Value: Array of input fields corresponding to that key
   private HashMap<Character, ArrayList<JTextField>> inputFields;
 
   protected GamePanel(GUI gui, Game game) {
@@ -211,7 +213,8 @@ class GamePanel extends JPanel {
           public void keyTyped(java.awt.event.KeyEvent evt) {
             if (evt.getKeyChar() == KeyEvent.VK_DELETE
                 || evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
-              textField.setText("");
+              game.getGuessStack().remove(encrypted);
+              regenerateGuess();
               // move to previous input if not at start
               if (index > 0 && evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
                 // TODO: Move focus backwards
@@ -222,7 +225,6 @@ class GamePanel extends JPanel {
 
               // Check it was a valid input
               if (game.enterLetter(guess, encrypted)) {
-                textField.setText(Character.toString(guess));
                 // move to next text field if not at end
                 if (index < inputFields.size() - 1) {
                   // TODO: Move focus forwards
@@ -258,7 +260,19 @@ class GamePanel extends JPanel {
                   }
                 });
           }
+
+          @Override
+          public void focusLost(FocusEvent e) {
+            inputFields.forEach(
+                (_, fields) ->
+                    fields.forEach(
+                        field -> {
+                          field.setBackground(Color.WHITE);
+                          field.setCaretColor(Color.WHITE);
+                        }));
+          }
         });
+
     return textField;
   }
 }

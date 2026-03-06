@@ -2,6 +2,7 @@
 package org.team25;
 
 /*Imports Required */
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,7 +21,6 @@ public class Game {
   public Game() {
     this.playerGameMapping = null;
     this.currentPlayer = null;
-    this.guesses = new LinkedHashMap<>();
   }
 
   /**
@@ -31,19 +31,18 @@ public class Game {
     // allow the user to choice if they would want letter to letter or number to letter
     // check what cryptogram to generate
     if (isLetterCrypto) {
-      LetterCryptogram playerGameMapping = new LetterCryptogram();
+      // Generates the cryptogram and prints the statement
+      playerGameMapping = new LetterCryptogram();
       guesses.clear();
-
       System.out.println("Letter cryptogram created!");
-      playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
-      playerGameMapping.Show(); // Shows the hashmap connections
+      playerGameMapping.show(); // Shows the hashmap connections
+
     } else {
+      // Generates the cryptogram and prints the statement
       playerGameMapping = new NumberCryptogram();
       guesses.clear();
-      NumberCryptogram playerGameMapping = new NumberCryptogram();
       System.out.println("Number cryptogram created!");
-      playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
-      playerGameMapping.Show(); // shows hashmap connections
+      playerGameMapping.show(); // shows hashmap connections
     }
   }
 
@@ -90,6 +89,10 @@ public class Game {
   public boolean getType() {
     if (playerGameMapping instanceof LetterCryptogram) return true;
     else return false;
+  }
+
+  public HashMap<String, Character> getCryptoAlph() {
+    return playerGameMapping.getCryptoAlphabet();
   }
 
   public void viewFrequencies() {}
