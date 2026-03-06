@@ -2,33 +2,25 @@
 package org.team25;
 
 /*Imports Required */
-import java.util.Stack;
-
-class Input {
-  public Character guess;
-  public Character encrypted;
-
-  public Input(Character guess, Character encrypted) {
-    this.guess = guess;
-    this.encrypted = encrypted;
-  }
-}
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /** This is the game class which acts as the controller/engine for the overall system */
 public class Game {
 
-  // instance variables- still to decdie the data types of the variables
+  // instance variables - still to decide the data types of the variables
   private Cryptogram playerGameMapping; // the current cryptogram that the player is playing
   private Player currentPlayer; // the current player playing the game
 
-  private Stack<Input> guessStack = new Stack<>();
+  // Key: Encrypted, Value: Guess
+  private LinkedHashMap<Character, Character> guesses = new LinkedHashMap<>();
 
   // constructor for Game, empty for now
-  // initialse to empty just now
+  // initialise to empty just now
   public Game() {
     this.playerGameMapping = null;
     this.currentPlayer = null;
-    this.guessStack = new Stack<>();
+    this.guesses = new LinkedHashMap<>();
   }
 
   /**
@@ -40,14 +32,14 @@ public class Game {
     // check what cryptogram to generate
     if (isLetterCrypto) {
       LetterCryptogram playerGameMapping = new LetterCryptogram();
-      guessStack.clear();
+      guesses.clear();
 
       System.out.println("Letter cryptogram created!");
       playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
       playerGameMapping.Show(); // Shows the hashmap connections
     } else {
       playerGameMapping = new NumberCryptogram();
-      guessStack.clear();
+      guesses.clear();
       NumberCryptogram playerGameMapping = new NumberCryptogram();
       System.out.println("Number cryptogram created!");
       playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
@@ -66,28 +58,28 @@ public class Game {
       return false;
     }
 
-    if (guessStack.stream().anyMatch(input -> input.guess.equals(guess))) {
+    if (guesses.containsValue(guess)) {
       System.out.println("You already guessed that letter");
       return false;
     }
 
-    // guess is valid
-    Input current = new Input(guess, encrypted);
-
-    guessStack.push(current);
+    guesses.put(encrypted, guess);
     return true;
   }
 
   /** User story 3: As a player I want to be able to undo a letter so I can play the cryptogram */
-  public Stack<Input> undoLetter(char removed) {
-
-    if (guessStack.isEmpty()) {
+  public void undoLetter() {
+    System.out.println("Guesses beofre: " + guesses);
+    if (guesses.isEmpty()) {
       System.out.println("There are no guesses to be undone");
-      return null;
+    } else {
+      guesses.remove(guesses.lastEntry().getKey());
     }
-    guessStack.pop();
+    System.out.println("Guesses after: " + guesses);
+  }
 
-    return guessStack;
+  public Map<Character, Character> getGuessStack() {
+    return guesses;
   }
 
   public void viewFrequencies() {}

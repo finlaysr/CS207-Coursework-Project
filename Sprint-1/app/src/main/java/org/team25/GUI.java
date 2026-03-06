@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import javax.swing.*;
 
 public class GUI {
@@ -124,13 +125,13 @@ class GamePanel extends JPanel {
   private Game game;
 
   private JPanel inputGroup;
-  private ArrayList<JTextField> inputFields;
+  private HashMap<Character, ArrayList<JTextField>> inputFields;
 
   protected GamePanel(GUI gui, Game game) {
     this.gui = gui;
     this.game = game;
     this.setLayout(new GridBagLayout());
-    this.inputFields = new ArrayList<>();
+    this.inputFields = new HashMap<>();
 
     this.add(new JLabel("Game"), GUI.setConstraints(0, 0, 1, 1));
 
@@ -142,11 +143,21 @@ class GamePanel extends JPanel {
 
     JButton undoButton = new JButton("Undo");
     this.add(undoButton, GUI.setConstraints(0, 2, 1, 1));
+    undoButton.addActionListener(
+        _ -> {
+          game.undoLetter();
+          regenerateGuess();
+        });
 
     JButton submitButton = new JButton("Submit");
     this.add(submitButton, GUI.setConstraints(0, 3, 1, 1));
     submitButton.addActionListener(
-        _ -> inputFields.forEach(inputField -> System.out.print(inputField.getText())));
+        _ ->
+            inputFields.forEach(
+                (enc, arr) -> {
+                  System.out.print("\n" + enc + ": ");
+                  arr.forEach(f -> System.out.print(f.getText() + ", "));
+                }));
 
     JButton backButton = new JButton("Back");
     this.add(backButton, GUI.setConstraints(0, 4, 1, 1));
@@ -164,14 +175,31 @@ class GamePanel extends JPanel {
         charPanel.setBackground(Color.lightGray);
         JTextField textField = buildCharInput(i, c);
 
-        inputFields.add(textField);
+        if (!inputFields.containsKey(c)) {
+          inputFields.put(c, new ArrayList<>());
+        }
+        inputFields.get(c).add(textField);
+
         charPanel.add(textField, GUI.setConstraints(0, 0, 1, 1));
+        charPanel.add(textField, GUI.setConstraints(0, 2, 1, 1));
 
         charPanel.add(new JLabel(Character.toString(c)), GUI.setConstraints(0, 1, 1, 1));
         wordPanel.add(charPanel);
       }
       inputGroup.add(wordPanel);
     }
+  }
+
+  private void regenerateGuess() {
+    System.out.println("Regenerating Guess");
+    inputFields.forEach(
+        (encrypted, arr) -> {
+          if (game.getGuessStack().containsKey(encrypted)) {
+            arr.forEach(field -> field.setText(game.getGuessStack().get(encrypted).toString()));
+          } else {
+            arr.forEach(field -> field.setText(""));
+          }
+        });
   }
 
   private JTextField buildCharInput(int index, char encrypted) {
@@ -186,7 +214,7 @@ class GamePanel extends JPanel {
               textField.setText("");
               // move to previous input if not at start
               if (index > 0 && evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
-                inputFields.get(index - 1).requestFocus();
+                // TODO: Move focus backwards
               }
             } else {
               char guess = Character.toLowerCase(evt.getKeyChar());
@@ -197,13 +225,14 @@ class GamePanel extends JPanel {
                 textField.setText(Character.toString(guess));
                 // move to next text field if not at end
                 if (index < inputFields.size() - 1) {
-                  inputFields.get(index + 1).requestFocus();
+                  // TODO: Move focus forwards
                 }
               } else {
                 JOptionPane.showMessageDialog(
                     null, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
               }
             }
+            regenerateGuess();
             evt.consume();
           }
         });
@@ -212,11 +241,22 @@ class GamePanel extends JPanel {
         new java.awt.event.FocusAdapter() {
           @Override
           public void focusGained(java.awt.event.FocusEvent evt) {
-            inputFields.forEach(field -> field.setBackground(Color.WHITE));
-            inputFields.forEach(field -> field.setCaretColor(Color.WHITE));
-            // light blue
-            textField.setBackground(Color.YELLOW);
-            textField.setCaretColor(Color.YELLOW);
+            inputFields.forEach(
+                (c, fields) -> {
+                  if (c == encrypted) {
+                    fields.forEach(
+                        field -> {
+                          field.setBackground(Color.YELLOW);
+                          field.setCaretColor(Color.YELLOW);
+                        });
+                  } else {
+                    fields.forEach(
+                        field -> {
+                          field.setBackground(Color.WHITE);
+                          field.setCaretColor(Color.WHITE);
+                        });
+                  }
+                });
           }
         });
     return textField;
