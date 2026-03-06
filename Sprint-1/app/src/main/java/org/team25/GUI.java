@@ -8,7 +8,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.*;
 
@@ -127,7 +126,7 @@ class GamePanel extends JPanel {
 
   private JPanel inputGroup;
   // Key: Encrypted, Value: Array of input fields corresponding to that key
-  private HashMap<Character, ArrayList<JTextField>> inputFields;
+  private HashMap<String, ArrayList<JTextField>> inputFields;
 
   protected GamePanel(GUI gui, Game game) {
     this.gui = gui;
@@ -140,8 +139,7 @@ class GamePanel extends JPanel {
     this.inputGroup = new JPanel(new FlowLayout());
     this.add(inputGroup, GUI.setConstraints(0, 1, 1, 1));
 
-    ArrayList<String> words = new ArrayList<>(Arrays.asList("Hello World Test".split(" ")));
-    addWords(words);
+    addWords(game.getEncryptedPhrase());
 
     JButton undoButton = new JButton("Undo");
     this.add(undoButton, GUI.setConstraints(0, 2, 1, 1));
@@ -166,30 +164,37 @@ class GamePanel extends JPanel {
     backButton.addActionListener(_ -> gui.switchContent(new GameChoicePanel(gui, game)));
   }
 
-  private void addWords(ArrayList<String> words) {
+  private void addWords(ArrayList<String> characters) {
     int i = -1;
-    for (String word : words) {
-      JPanel wordPanel = new JPanel(new FlowLayout());
-      wordPanel.setBackground(Color.lightGray);
-      for (char c : word.toCharArray()) {
+    JPanel wordPanel = new JPanel(new FlowLayout());
+    wordPanel.setBackground(Color.lightGray);
+
+    for (String encrypted : characters) {
+      if (encrypted.equals(" ")) {
+        inputGroup.add(wordPanel);
+        wordPanel = new JPanel(new FlowLayout());
+        wordPanel.setBackground(Color.lightGray);
+
+      } else {
         i++;
         JPanel charPanel = new JPanel(new GridBagLayout());
         charPanel.setBackground(Color.lightGray);
-        JTextField textField = buildCharInput(i, c);
 
-        if (!inputFields.containsKey(c)) {
-          inputFields.put(c, new ArrayList<>());
+        // Check if it's a character for input, not punctuation
+        if (encrypted.matches("^[a-z0-9]*$")) {
+          JTextField textField = buildCharInput(i, encrypted);
+          if (!inputFields.containsKey(encrypted)) {
+            inputFields.put(encrypted, new ArrayList<>());
+          }
+          inputFields.get(encrypted).add(textField);
+          charPanel.add(textField, GUI.setConstraints(0, 0, 1, 1));
         }
-        inputFields.get(c).add(textField);
 
-        charPanel.add(textField, GUI.setConstraints(0, 0, 1, 1));
-        charPanel.add(textField, GUI.setConstraints(0, 2, 1, 1));
-
-        charPanel.add(new JLabel(Character.toString(c)), GUI.setConstraints(0, 1, 1, 1));
+        charPanel.add(new JLabel(encrypted), GUI.setConstraints(0, 1, 1, 1));
         wordPanel.add(charPanel);
       }
-      inputGroup.add(wordPanel);
     }
+    inputGroup.add(wordPanel);
   }
 
   private void regenerateGuess() {
@@ -204,7 +209,7 @@ class GamePanel extends JPanel {
         });
   }
 
-  private JTextField buildCharInput(int index, char encrypted) {
+  private JTextField buildCharInput(int index, String encrypted) {
     JTextField textField = new JTextField(1);
     textField.setBorder(BorderFactory.createLineBorder(Color.lightGray));
     textField.addKeyListener(
@@ -245,7 +250,7 @@ class GamePanel extends JPanel {
           public void focusGained(java.awt.event.FocusEvent evt) {
             inputFields.forEach(
                 (c, fields) -> {
-                  if (c == encrypted) {
+                  if (c.equals(encrypted)) {
                     fields.forEach(
                         field -> {
                           field.setBackground(Color.YELLOW);

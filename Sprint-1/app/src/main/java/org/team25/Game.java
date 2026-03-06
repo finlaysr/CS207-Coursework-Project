@@ -2,6 +2,7 @@
 package org.team25;
 
 /*Imports Required */
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class Game {
   private Player currentPlayer; // the current player playing the game
 
   // Key: Encrypted, Value: Guess
-  private LinkedHashMap<Character, Character> guesses = new LinkedHashMap<>();
+  private LinkedHashMap<String, Character> guesses = new LinkedHashMap<>();
 
   // constructor for Game, empty for now
   // initialise to empty just now
@@ -51,7 +52,7 @@ public class Game {
    */
 
   // enter a letter and ensure its valid
-  public boolean enterLetter(Character guess, Character encrypted) {
+  public boolean enterLetter(Character guess, String encrypted) {
     if (!Character.isLetter(guess)) {
       System.out.println("Guess must be a letter");
       return false;
@@ -77,7 +78,7 @@ public class Game {
     System.out.println("Guesses after: " + guesses);
   }
 
-  public Map<Character, Character> getGuessStack() {
+  public Map<String, Character> getGuessStack() {
     return guesses;
   }
 
@@ -93,6 +94,10 @@ public class Game {
 
   public HashMap<String, Character> getCryptoAlph() {
     return playerGameMapping.getCryptoAlphabet();
+  }
+
+  public ArrayList<String> getEncryptedPhrase() {
+    return playerGameMapping.getEncryptedPhrase();
   }
 
   public void viewFrequencies() {}

@@ -3,6 +3,7 @@ package org.team25;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
@@ -51,13 +52,35 @@ public class Cryptogram {
     return cryptogramAlphabet;
   }
 
-  void show() {
+  public void show() {
     System.out.println("phrase: " + phrase);
     System.out.println("Cryptogram Alphabet: " + cryptogramAlphabet);
+    System.out.println("encrypted: " + getEncryptedPhrase());
     /*
     for (char i : cryptogramAlphabet.keySet()) {
         System.out.print(i);
     }*/
+  }
+
+  // encrypts the phrase using the cryptogramAlphabet
+  // very complicated since the hashmap is in the opposite direction from what we need here
+  // leaves special characters alone, only encrypts characters
+  public ArrayList<String> getEncryptedPhrase() {
+    return new ArrayList<>(
+        phrase
+            .chars()
+            .mapToObj(
+                c -> {
+                  if (cryptogramAlphabet.containsValue((char) c)) {
+                    return cryptogramAlphabet.keySet().stream()
+                        .filter(a -> cryptogramAlphabet.get(a).equals((char) c))
+                        .findFirst()
+                        .get();
+                  } else {
+                    return Character.toString((char) c);
+                  }
+                })
+            .toList());
   }
 
   void getFrequency() {}
