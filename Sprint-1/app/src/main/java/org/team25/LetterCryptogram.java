@@ -4,14 +4,14 @@ package org.team25;
 public class LetterCryptogram extends Cryptogram {
   public LetterCryptogram() {
     // loadPhrase is called in Cryptogram
-    encryptPhrase();
+    encryptPhrase(13);
   }
 
   // Store the string inside crpytogramAlphabet as a linked hashmap(string, string)
   // Phrase contains the string
   // Convert each element
   // Encrpyted phrase will contain the encrypted chars of each element
-  private void encryptPhrase() {
+  private void encryptPhrase(int offset) {
     // System.out.println("Length : " + Math.pow(2, phrase.length()));
     char[] encryptedCharArray = new char[phrase.length()];
     for (int i = 0; i < phrase.length(); i++) {
@@ -22,7 +22,7 @@ public class LetterCryptogram extends Cryptogram {
         // Move 13 places forward
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
         // System.out.println(base);
-        encryptedCharArray[i] = (char) ((currentChar - base + 13) % 26 + base);
+        encryptedCharArray[i] = (char) ((currentChar - base + offset) % 26 + base);
         // System.out.print(encryptedCharArray[i]);
 
       } else {

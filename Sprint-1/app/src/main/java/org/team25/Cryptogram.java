@@ -13,7 +13,6 @@ public class Cryptogram {
   // Annoyingly has to be a String, not a Char, since in NumberCryptogram 2-digit numbers will be
   // more than one character long
   protected HashMap<String, Character> cryptogramAlphabet = new HashMap<>();
-  protected char[] encryptedCharArray;
 
   public Cryptogram() {
     phrase = loadPhrase();
@@ -38,7 +37,8 @@ public class Cryptogram {
       e.printStackTrace();
     }
 
-    System.out.println("phrase: " + phrase);
+    phrase = phrase.toLowerCase();
+
     return phrase;
   }
 
@@ -47,17 +47,13 @@ public class Cryptogram {
     return phrase;
   }
 
-  public char[] getEncryptedCharArray() {
-    return encryptedCharArray;
-  }
-
   public HashMap<String, Character> getCryptoAlphabet() {
     return cryptogramAlphabet;
   }
 
   void show() {
-    System.out.println(cryptogramAlphabet);
-    System.out.println("keyset" + cryptogramAlphabet.keySet());
+    System.out.println("phrase: " + phrase);
+    System.out.println("Cryptogram Alphabet: " + cryptogramAlphabet);
     /*
     for (char i : cryptogramAlphabet.keySet()) {
         System.out.print(i);

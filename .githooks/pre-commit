@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# This runs after each commit and checks Sprint-1 java files are formatted correctly
+# This runs before each commit and checks staged Sprint-1 Java files are formatted.
 
-if git diff --cached --name-only --diff-filter=ACMR | grep -Eq '^Sprint-1/.*\.java$'; then
+# Read the list of staged Java files in Sprint-1 into an array
+mapfile -t staged_java_files < <(
+  git diff --cached --name-only --diff-filter=ACMR | grep -E '^Sprint-1/.*\.java$' || true
+)
+
+if ((${#staged_java_files[@]})); then
+  echo "------------------------------------"
   echo "Detected changes in Java files in Sprint-1, running gradle formatter."
   echo "If you don't want this add --no-verify, eg: git commit --no-verify -m \"message\""
-  echo ""
-  sleep 3
+  echo "------------------------------------"
 
   echo "Running spotlessApply..."
   (cd Sprint-1 && ./gradlew spotlessApply)
-  git add -A Sprint-1
+  # Re-stage only the files that were already staged for this commit.
+  git add -- "${staged_java_files[@]}"
 fi

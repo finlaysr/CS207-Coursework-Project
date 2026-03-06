@@ -4,14 +4,14 @@ package org.team25;
 public class NumberCryptogram extends Cryptogram {
   public NumberCryptogram() { // Scanner the file
     // loadPhrase is called in Cryptogram
-    encryptPhrase();
+    encryptPhrase(13);
   }
 
   // Store the string inside crpytogramAlphabet as a linked hashmap(string, string)
   // Convert each element
   // Phrase contains the string
   // Encrpyted phrase will contain the encrypted chars of each element
-  private void encryptPhrase() {
+  private void encryptPhrase(int offset) {
     // System.out.println("Length : " + Math.pow(2, phrase.length()));
     String thinnedPhrase = phrase.replaceAll("\\s", "");
     int[] encryptedIntArray = new int[thinnedPhrase.length()];
@@ -23,7 +23,7 @@ public class NumberCryptogram extends Cryptogram {
         // Move 13 places forward
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
         // System.out.println(base);
-        encryptedIntArray[i] = (currentChar - base + 13) % 26;
+        encryptedIntArray[i] = (currentChar - base + offset) % 26;
         // System.out.print(encryptedCharArray[i]);
 
       } else {
