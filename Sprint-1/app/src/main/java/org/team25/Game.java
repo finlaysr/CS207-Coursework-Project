@@ -52,19 +52,17 @@ public class Game {
    */
 
   // enter a letter and ensure its valid
-  public boolean enterLetter(Character guess, String encrypted) {
+  public String enterLetter(Character guess, String encrypted) {
     if (!Character.isLetter(guess)) {
-      System.out.println("Guess must be a letter");
-      return false;
+      return "Guess must be a letter from a-z!";
     }
 
     if (guesses.containsValue(guess)) {
-      System.out.println("You already guessed that letter");
-      return false;
+      return "Letter already in use!";
     }
 
     guesses.put(encrypted, guess);
-    return true;
+    return null;
   }
 
   /** User story 3: As a player I want to be able to undo a letter so I can play the cryptogram */

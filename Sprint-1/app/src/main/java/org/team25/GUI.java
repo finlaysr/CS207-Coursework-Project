@@ -16,11 +16,14 @@ public class GUI {
   private JPanel contentPane;
   private Game game;
 
+  private int fontChange = 0;
+  private static final int FONT_INCREMENT = 3;
+
   public GUI(Game game) {
     this.game = game;
-    JFrame mainFrame = new JFrame("Cryptogram Game");
-    GitSetup.configureHooksPath();
+    GitSetup.configureHooksPath(); // FIXME: Remove this later
 
+    JFrame mainFrame = new JFrame("Cryptogram Game");
     mainFrame.addWindowListener(
         new WindowAdapter() {
           @Override
@@ -28,8 +31,7 @@ public class GUI {
             System.exit(0);
           }
         });
-
-    mainFrame.setSize(800, 600);
+    mainFrame.setSize(1000, 800);
     mainFrame.setLayout(new GridBagLayout());
     mainFrame.setVisible(true);
 
@@ -47,11 +49,19 @@ public class GUI {
 
     JButton fontUp = new JButton("+");
     fontPanel.add(fontUp, GUI.setConstraints(1, 0, 1, 1));
-    fontUp.addActionListener(_ -> resizeFont(mainFrame, 3));
+    fontUp.addActionListener(
+        _ -> {
+          this.fontChange += 1;
+          resizeFont(mainFrame, FONT_INCREMENT);
+        });
 
     JButton fontDown = new JButton("-");
     fontPanel.add(fontDown, GUI.setConstraints(2, 0, 1, 1));
-    fontDown.addActionListener(_ -> resizeFont(mainFrame, -3));
+    fontDown.addActionListener(
+        _ -> {
+          resizeFont(mainFrame, -FONT_INCREMENT);
+          this.fontChange -= 1;
+        });
 
     switchContent(new GameChoicePanel(this, game));
   }
@@ -61,6 +71,8 @@ public class GUI {
     if (SwingUtilities.isEventDispatchThread()) {
       this.contentPane.removeAll();
       this.contentPane.add(pane);
+      resizeFont(this.contentPane, this.fontChange * FONT_INCREMENT);
+
       this.contentPane.revalidate();
       this.contentPane.repaint();
     } else {
@@ -77,7 +89,7 @@ public class GUI {
     return gbc;
   }
 
-  protected static void resizeFont(Container container, int change) {
+  protected void resizeFont(Container container, int change) {
     for (Component comp : container.getComponents()) {
       Font old = comp.getFont();
       if (old != null && (old.getSize() + change > 3)) {
@@ -126,18 +138,25 @@ class GamePanel extends JPanel {
 
   private JPanel inputGroup;
   // Key: Encrypted, Value: Array of input fields corresponding to that key
-  private HashMap<String, ArrayList<JTextField>> inputFields;
+  private HashMap<String, ArrayList<JTextField>> inputFields = new HashMap<>();
+  private ArrayList<String> encryptedChars = new ArrayList<>();
 
   protected GamePanel(GUI gui, Game game) {
     this.gui = gui;
     this.game = game;
     this.setLayout(new GridBagLayout());
-    this.inputFields = new HashMap<>();
+
+    // TODO: fix this scrollbar
+    inputGroup = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+    inputGroup.setPreferredSize(new Dimension(800, 400)); // width controls wrapping
+    JScrollPane scrollPane =
+        new JScrollPane(
+            inputGroup,
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    this.add(scrollPane, GUI.setConstraints(0, 1, 1, 1));
 
     this.add(new JLabel("Game"), GUI.setConstraints(0, 0, 1, 1));
-
-    this.inputGroup = new JPanel(new FlowLayout());
-    this.add(inputGroup, GUI.setConstraints(0, 1, 1, 1));
 
     addWords(game.getEncryptedPhrase());
 
@@ -172,6 +191,8 @@ class GamePanel extends JPanel {
     for (String encrypted : characters) {
       if (encrypted.equals(" ")) {
         inputGroup.add(wordPanel);
+        inputGroup.revalidate();
+        inputGroup.repaint();
         wordPanel = new JPanel(new FlowLayout());
         wordPanel.setBackground(Color.lightGray);
 
@@ -182,12 +203,16 @@ class GamePanel extends JPanel {
 
         // Check if it's a character for input, not punctuation
         if (encrypted.matches("^[a-z0-9]*$")) {
+          encryptedChars.add(encrypted);
+
           JTextField textField = buildCharInput(i, encrypted);
           if (!inputFields.containsKey(encrypted)) {
             inputFields.put(encrypted, new ArrayList<>());
           }
           inputFields.get(encrypted).add(textField);
           charPanel.add(textField, GUI.setConstraints(0, 0, 1, 1));
+        } else {
+          charPanel.add(new JLabel(encrypted), GUI.setConstraints(0, 0, 1, 1));
         }
 
         charPanel.add(new JLabel(encrypted), GUI.setConstraints(0, 1, 1, 1));
@@ -195,10 +220,11 @@ class GamePanel extends JPanel {
       }
     }
     inputGroup.add(wordPanel);
+    inputGroup.revalidate();
+    inputGroup.repaint();
   }
 
   private void regenerateGuess() {
-    System.out.println("Regenerating Guess");
     inputFields.forEach(
         (encrypted, arr) -> {
           if (game.getGuessStack().containsKey(encrypted)) {
@@ -222,21 +248,21 @@ class GamePanel extends JPanel {
               regenerateGuess();
               // move to previous input if not at start
               if (index > 0 && evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
-                // TODO: Move focus backwards
+                inputFields.get(encryptedChars.get(index - 1)).getFirst().requestFocus();
               }
             } else {
               char guess = Character.toLowerCase(evt.getKeyChar());
               System.out.println("Letter entered: " + guess + " encrypted: " + encrypted);
 
               // Check it was a valid input
-              if (game.enterLetter(guess, encrypted)) {
+              String error = game.enterLetter(guess, encrypted);
+              if (error == null) {
                 // move to next text field if not at end
                 if (index < inputFields.size() - 1) {
-                  // TODO: Move focus forwards
+                  inputFields.get(encryptedChars.get(index + 1)).getFirst().requestFocus();
                 }
               } else {
-                JOptionPane.showMessageDialog(
-                    null, "Invalid input!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
               }
             }
             regenerateGuess();

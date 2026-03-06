@@ -14,6 +14,7 @@ public class Cryptogram {
   // Annoyingly has to be a String, not a Char, since in NumberCryptogram 2-digit numbers will be
   // more than one character long
   protected HashMap<String, Character> cryptogramAlphabet = new HashMap<>();
+  protected ArrayList<String> encryptedPhrase = new ArrayList<>();
 
   public Cryptogram() {
     phrase = loadPhrase();
@@ -27,11 +28,11 @@ public class Cryptogram {
 
     try (Scanner myReader = new Scanner(database)) {
       Random rand = new Random();
-      int num = rand.nextInt(51);
+      int num = rand.nextInt(51); // random number from 1 to 50
       do {
         phrase = myReader.nextLine();
         num--;
-      } while (num >= 0);
+      } while (num > 0);
 
     } catch (FileNotFoundException e) {
       System.out.println("File not found");
@@ -66,21 +67,7 @@ public class Cryptogram {
   // very complicated since the hashmap is in the opposite direction from what we need here
   // leaves special characters alone, only encrypts characters
   public ArrayList<String> getEncryptedPhrase() {
-    return new ArrayList<>(
-        phrase
-            .chars()
-            .mapToObj(
-                c -> {
-                  if (cryptogramAlphabet.containsValue((char) c)) {
-                    return cryptogramAlphabet.keySet().stream()
-                        .filter(a -> cryptogramAlphabet.get(a).equals((char) c))
-                        .findFirst()
-                        .get();
-                  } else {
-                    return Character.toString((char) c);
-                  }
-                })
-            .toList());
+    return encryptedPhrase;
   }
 
   void getFrequency() {}

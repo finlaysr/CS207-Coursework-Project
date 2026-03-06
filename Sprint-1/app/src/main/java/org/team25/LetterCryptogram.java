@@ -13,44 +13,31 @@ public class LetterCryptogram extends Cryptogram {
   // Encrpyted phrase will contain the encrypted chars of each element
   private void encryptPhrase(int offset) {
     // System.out.println("Length : " + Math.pow(2, phrase.length()));
-    char[] encryptedCharArray = new char[phrase.length()];
-    for (int i = 0; i < phrase.length(); i++) {
 
+    for (int i = 0; i < phrase.length(); i++) {
       char currentChar = phrase.charAt(i);
 
       if (Character.isLetter(currentChar)) {
         // Move 13 places forward
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
         // System.out.println(base);
-        encryptedCharArray[i] = (char) ((currentChar - base + offset) % 26 + base);
+        char encrypted = (char) ((currentChar - base + offset) % 26 + base);
+        super.encryptedPhrase.add(Character.toString(encrypted));
         // System.out.print(encryptedCharArray[i]);
 
       } else {
-        // System.out.println(1);
-        if (Character.isWhitespace(currentChar)) {
-          // System.out.println("True");
-          encryptedCharArray[i] = ' ';
-        } else {
-          encryptedCharArray[i] = currentChar;
-        }
-        // System.out.println(2);
+        // if it's a space or punctuation just add it as it is
+        super.encryptedPhrase.add(Character.toString(currentChar));
       }
     }
     System.out.print("Encrypted : ");
-    for (char j : encryptedCharArray) {
-      System.out.print(j);
-    }
-    System.out.println();
 
-    String thinnedPhrase = phrase.replaceAll("\\s", "");
-    String thinnedEncrypt = new String(encryptedCharArray).replaceAll("\\s", "");
-
-    for (int i = 0; i < thinnedPhrase.length(); i++) {
+    for (int i = 0; i < phrase.length(); i++) {
       // System.out.println("i : " + i);
 
       // System.out.println("Adding this encrypted: " + thinnedEncrypt.charAt(i) + " -> " +
       // thinnedPhrase.charAt(i));
-      cryptogramAlphabet.put(Character.toString(thinnedEncrypt.charAt(i)), thinnedPhrase.charAt(i));
+      cryptogramAlphabet.put(super.encryptedPhrase.get(i), phrase.charAt(i));
     }
   }
 
