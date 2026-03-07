@@ -6,15 +6,19 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class GUI {
   final Font titleFont = new Font("Ariel", Font.BOLD, 20);
   private JPanel contentPane;
   private Game game;
+  private JButton backButton;
 
   private int fontChange = 0;
   private static final int FONT_INCREMENT = 3;
@@ -37,18 +41,18 @@ public class GUI {
 
     JLabel titleLabel = new JLabel("Group 25 Cryptogram Game");
     titleLabel.setFont(titleFont);
-    mainFrame.add(titleLabel, GUI.setConstraints(0, 0, 1, 1));
+    mainFrame.add(titleLabel, GUI.setConstraints(0, 0));
 
     contentPane = new JPanel();
-    mainFrame.add(contentPane, GUI.setConstraints(0, 1, 1, 1));
+    mainFrame.add(contentPane, GUI.setConstraints(0, 1));
 
     JPanel fontPanel = new JPanel(new GridBagLayout());
     fontPanel.setBackground(Color.lightGray);
-    fontPanel.add(new JLabel("Font Size  "), GUI.setConstraints(0, 0, 1, 1));
-    mainFrame.add(fontPanel, GUI.setConstraints(0, 2, 1, 1));
+    fontPanel.add(new JLabel("Font Size  "), GUI.setConstraints(0, 0));
+    mainFrame.add(fontPanel, GUI.setConstraints(0, 2, new Insets(10, 0, 0, 0)));
 
     JButton fontUp = new JButton("+");
-    fontPanel.add(fontUp, GUI.setConstraints(1, 0, 1, 1));
+    fontPanel.add(fontUp, GUI.setConstraints(1, 0));
     fontUp.addActionListener(
         _ -> {
           this.fontChange += 1;
@@ -56,14 +60,17 @@ public class GUI {
         });
 
     JButton fontDown = new JButton("-");
-    fontPanel.add(fontDown, GUI.setConstraints(2, 0, 1, 1));
+    fontPanel.add(fontDown, GUI.setConstraints(2, 0));
     fontDown.addActionListener(
         _ -> {
           resizeFont(mainFrame, -FONT_INCREMENT);
           this.fontChange -= 1;
         });
 
-    switchContent(new GameChoicePanel(this, game));
+    backButton = new JButton("Back");
+    mainFrame.add(backButton, GUI.setConstraints(0, 3));
+
+    switchContent(new WelcomePanel(this, game));
   }
 
   protected void switchContent(JPanel pane) {
@@ -80,12 +87,20 @@ public class GUI {
     }
   }
 
-  protected static GridBagConstraints setConstraints(int x, int y, int width, int height) {
+  public JButton getBackButton() {
+    return backButton;
+  }
+
+  protected static GridBagConstraints setConstraints(int x, int y) {
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridx = x;
     gbc.gridy = y;
-    gbc.gridwidth = width;
-    gbc.gridheight = height;
+    return gbc;
+  }
+
+  protected static GridBagConstraints setConstraints(int x, int y, Insets margin) {
+    GridBagConstraints gbc = setConstraints(x, y);
+    gbc.insets = margin;
     return gbc;
   }
 
@@ -104,37 +119,62 @@ public class GUI {
   }
 }
 
-class GameChoicePanel extends JPanel {
-  private final GUI gui;
-  private Game game;
-
-  protected GameChoicePanel(GUI gui, Game game) {
-    this.gui = gui;
-    this.game = game;
+class WelcomePanel extends JPanel {
+  protected WelcomePanel(GUI gui, Game game) {
     this.setLayout(new GridBagLayout());
-    this.add(new JLabel("Choose Game Type:"), GUI.setConstraints(0, 0, 1, 1));
+
+    JLabel welcomeLabel = new JLabel("Welcome to our Cryptogram Game!");
+    welcomeLabel.setFont(new Font("Ariel", Font.BOLD, 18));
+    this.add(welcomeLabel, GUI.setConstraints(0, 0));
+
+    try {
+      BufferedImage logo = ImageIO.read(new File("src/resources/Logo-2.jpeg"));
+      Image logoScaled = logo.getScaledInstance(300, 400, Image.SCALE_SMOOTH);
+      JLabel picLabel = new JLabel(new ImageIcon(logoScaled));
+      this.add(picLabel, GUI.setConstraints(0, 1));
+    } catch (IOException _) {
+      System.out.println("Could not load logo image!");
+    }
+
+    JButton startButton = new JButton("Start");
+    startButton.addActionListener(_ -> gui.switchContent(new GameChoicePanel(gui, game)));
+    this.add(startButton, GUI.setConstraints(0, 2));
+
+    gui.getBackButton().setVisible(false);
+  }
+}
+
+class GameChoicePanel extends JPanel {
+  protected GameChoicePanel(GUI gui, Game game) {
+    this.setLayout(new GridBagLayout());
+    this.add(new JLabel("Choose Game Type:"), GUI.setConstraints(0, 0));
 
     JButton letterButton = new JButton("Letter to Letter");
-    this.add(letterButton, GUI.setConstraints(0, 1, 1, 1));
+    this.add(letterButton, GUI.setConstraints(0, 1));
     letterButton.addActionListener(
         _ -> {
           game.generateCryptogram(true);
-          this.gui.switchContent(new GamePanel(this.gui, game));
+          gui.switchContent(new GamePanel(gui, game));
         });
 
     JButton numberButton = new JButton("Letter to Number");
-    this.add(numberButton, GUI.setConstraints(0, 2, 1, 1));
+    this.add(numberButton, GUI.setConstraints(0, 2));
     numberButton.addActionListener(
         _ -> {
           game.generateCryptogram(false);
-          this.gui.switchContent(new GamePanel(this.gui, game));
+          gui.switchContent(new GamePanel(gui, game));
         });
+
+    gui.getBackButton().setVisible(true);
+    if (gui.getBackButton().getActionListeners().length > 0) {
+      gui.getBackButton().removeActionListener(gui.getBackButton().getActionListeners()[0]);
+    }
+    gui.getBackButton().addActionListener(_ -> gui.switchContent(new WelcomePanel(gui, game)));
   }
 }
 
 class GamePanel extends JPanel {
-  private final GUI gui;
-  private Game game;
+  private final Game game;
 
   private JPanel inputGroup;
   // Key: Encrypted, Value: Array of input fields corresponding to that key
@@ -142,7 +182,6 @@ class GamePanel extends JPanel {
   private ArrayList<String> encryptedChars = new ArrayList<>();
 
   protected GamePanel(GUI gui, Game game) {
-    this.gui = gui;
     this.game = game;
     this.setLayout(new GridBagLayout());
 
@@ -154,17 +193,17 @@ class GamePanel extends JPanel {
             inputGroup,
             ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
             ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    this.add(scrollPane, GUI.setConstraints(0, 1, 1, 1));
+    this.add(scrollPane, GUI.setConstraints(0, 1));
 
     this.add(
         new JLabel(
             game.isLetterCrypto() ? "Letter to Letter Cryptogram" : "Letter to Number Cryptogram"),
-        GUI.setConstraints(0, 0, 1, 1));
+        GUI.setConstraints(0, 0));
 
     addWords(game.getEncryptedPhrase());
 
     JButton undoButton = new JButton("Undo");
-    this.add(undoButton, GUI.setConstraints(0, 2, 1, 1));
+    this.add(undoButton, GUI.setConstraints(0, 2));
     undoButton.addActionListener(
         _ -> {
           game.undoLetter();
@@ -172,7 +211,7 @@ class GamePanel extends JPanel {
         });
 
     JButton submitButton = new JButton("Submit");
-    this.add(submitButton, GUI.setConstraints(0, 3, 1, 1));
+    this.add(submitButton, GUI.setConstraints(0, 3));
     submitButton.addActionListener(
         _ ->
             inputFields.forEach(
@@ -181,9 +220,10 @@ class GamePanel extends JPanel {
                   arr.forEach(f -> System.out.print(f.getText() + ", "));
                 }));
 
-    JButton backButton = new JButton("Back");
-    this.add(backButton, GUI.setConstraints(0, 4, 1, 1));
-    backButton.addActionListener(_ -> gui.switchContent(new GameChoicePanel(gui, game)));
+    if (gui.getBackButton().getActionListeners().length > 0) {
+      gui.getBackButton().removeActionListener(gui.getBackButton().getActionListeners()[0]);
+    }
+    gui.getBackButton().addActionListener(_ -> gui.switchContent(new GameChoicePanel(gui, game)));
   }
 
   private void addWords(ArrayList<String> characters) {
@@ -202,9 +242,8 @@ class GamePanel extends JPanel {
         JPanel charPanel = new JPanel(new GridBagLayout());
         charPanel.setBackground(Color.lightGray);
 
-        // Check if it's a character for input, not punctuation
-        if ((game.isLetterCrypto() && encrypted.matches("^[a-z]*$"))
-            || (!game.isLetterCrypto() && encrypted.matches("^[0-9]*$"))) {
+        // Check if it's a character for input, not punctuation or a number
+        if (!encrypted.equals(game.getCryptoAlph().get(encrypted).toString())) {
           i++;
           encryptedChars.add(encrypted);
 
@@ -213,12 +252,12 @@ class GamePanel extends JPanel {
             inputFields.put(encrypted, new ArrayList<>());
           }
           inputFields.get(encrypted).add(textField);
-          charPanel.add(textField, GUI.setConstraints(0, 0, 1, 1));
+          charPanel.add(textField, GUI.setConstraints(0, 0));
         } else {
-          charPanel.add(new JLabel(encrypted), GUI.setConstraints(0, 0, 1, 1));
+          charPanel.add(new JLabel(encrypted), GUI.setConstraints(0, 0));
         }
 
-        charPanel.add(new JLabel(encrypted), GUI.setConstraints(0, 1, 1, 1));
+        charPanel.add(new JLabel(encrypted), GUI.setConstraints(0, 1));
         wordPanel.add(charPanel);
       }
     }
@@ -262,7 +301,6 @@ class GamePanel extends JPanel {
               }
             } else {
               char guess = Character.toLowerCase(evt.getKeyChar());
-              System.out.println("Letter entered: " + guess + " encrypted: " + encrypted);
 
               // Check it was a valid input
               String error = game.enterLetter(guess, encrypted);
@@ -274,7 +312,7 @@ class GamePanel extends JPanel {
                       .get(nextChar)
                       .get(
                           (int)
-                              encryptedChars.subList(0, index).stream()
+                              encryptedChars.subList(0, index + 1).stream()
                                   .filter(e -> e.equals(nextChar))
                                   .count())
                       .requestFocus();
@@ -339,7 +377,6 @@ class GitSetup {
       Process p = pb.start();
       exit = p.waitFor();
     } catch (IOException | InterruptedException e) {
-
       System.out.println("Failed to set core.hooksPath: " + e);
     }
 

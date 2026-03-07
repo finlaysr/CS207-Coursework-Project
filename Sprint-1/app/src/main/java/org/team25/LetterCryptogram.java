@@ -4,6 +4,7 @@ package org.team25;
 public class LetterCryptogram extends Cryptogram {
   public LetterCryptogram() {
     // loadPhrase is called in Cryptogram
+    super.phrase = loadPhrase();
     encryptPhrase(13);
   }
 

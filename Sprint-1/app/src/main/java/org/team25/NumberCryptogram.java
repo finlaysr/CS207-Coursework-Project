@@ -3,7 +3,9 @@ package org.team25;
 
 public class NumberCryptogram extends Cryptogram {
   public NumberCryptogram() { // Scanner the file
-    // loadPhrase is called in Cryptogram
+    // can't have numbers in a number cryptogram, so re-roll if it happens
+    do super.phrase = loadPhrase();
+    while (phrase.matches("^.*\\d.*"));
     encryptPhrase(13);
   }
 
@@ -20,6 +22,7 @@ public class NumberCryptogram extends Cryptogram {
         // Move 13 places forward
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
         int encrypted = (currentChar - base + offset) % 26;
+        System.out.println("encrypted: " + encrypted + " currentChar: " + currentChar);
         // System.out.println(base);
         super.encryptedPhrase.add(Integer.toString(encrypted));
         // System.out.print(encryptedCharArray[i]);

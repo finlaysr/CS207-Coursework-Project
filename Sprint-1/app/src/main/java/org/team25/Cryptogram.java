@@ -10,15 +10,11 @@ import java.util.Scanner;
 
 public class Cryptogram {
 
-  protected final String phrase;
+  protected String phrase;
   // Annoyingly has to be a String, not a Char, since in NumberCryptogram 2-digit numbers will be
   // more than one character long
   protected HashMap<String, Character> cryptogramAlphabet = new HashMap<>();
   protected ArrayList<String> encryptedPhrase = new ArrayList<>();
-
-  public Cryptogram() {
-    phrase = loadPhrase();
-  }
 
   // Scanner the file
   public String loadPhrase() {
