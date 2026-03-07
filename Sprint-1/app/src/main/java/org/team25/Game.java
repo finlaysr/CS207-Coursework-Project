@@ -2,33 +2,26 @@
 package org.team25;
 
 /*Imports Required */
-import java.util.Stack;
-
-class Input {
-  public Character guess;
-  public Character encrypted;
-
-  public Input(Character guess, Character encrypted) {
-    this.guess = guess;
-    this.encrypted = encrypted;
-  }
-}
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /** This is the game class which acts as the controller/engine for the overall system */
 public class Game {
 
-  // instance variables- still to decdie the data types of the variables
+  // instance variables - still to decide the data types of the variables
   private Cryptogram playerGameMapping; // the current cryptogram that the player is playing
   private Player currentPlayer; // the current player playing the game
 
-  private Stack<Input> guessStack = new Stack<>();
+  // Key: Encrypted, Value: Guess
+  private LinkedHashMap<String, Character> guesses = new LinkedHashMap<>();
 
   // constructor for Game, empty for now
-  // initialse to empty just now
+  // initialise to empty just now
   public Game() {
     this.playerGameMapping = null;
     this.currentPlayer = null;
-    this.guessStack = new Stack<>();
   }
 
   /**
@@ -39,19 +32,18 @@ public class Game {
     // allow the user to choice if they would want letter to letter or number to letter
     // check what cryptogram to generate
     if (isLetterCrypto) {
-      LetterCryptogram playerGameMapping = new LetterCryptogram();
-      guessStack.clear();
-
+      // Generates the cryptogram and prints the statement
+      playerGameMapping = new LetterCryptogram();
+      guesses.clear();
       System.out.println("Letter cryptogram created!");
-      playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
-      playerGameMapping.Show(); // Shows the hashmap connections
+      playerGameMapping.show(); // Shows the hashmap connections
+
     } else {
+      // Generates the cryptogram and prints the statement
       playerGameMapping = new NumberCryptogram();
-      guessStack.clear();
-      NumberCryptogram playerGameMapping = new NumberCryptogram();
+      guesses.clear();
       System.out.println("Number cryptogram created!");
-      playerGameMapping.Cryptogram(); // Generates the cryptogram and prints the statement
-      playerGameMapping.Show(); // shows hashmap connections
+      playerGameMapping.show(); // shows hashmap connections
     }
   }
 
@@ -60,34 +52,50 @@ public class Game {
    */
 
   // enter a letter and ensure its valid
-  public boolean enterLetter(Character guess, Character encrypted) {
+  public String enterLetter(Character guess, String encrypted) {
     if (!Character.isLetter(guess)) {
-      System.out.println("Guess must be a letter");
-      return false;
+      return "Guess must be a letter from a-z!";
     }
 
-    if (guessStack.stream().anyMatch(input -> input.guess.equals(guess))) {
-      System.out.println("You already guessed that letter");
-      return false;
+    if (guesses.containsValue(guess)) {
+      return "Letter already in use!";
     }
 
-    // guess is valid
-    Input current = new Input(guess, encrypted);
-
-    guessStack.push(current);
-    return true;
+    guesses.put(encrypted, guess);
+    return null;
   }
 
   /** User story 3: As a player I want to be able to undo a letter so I can play the cryptogram */
-  public Stack<Input> undoLetter(char removed) {
-
-    if (guessStack.isEmpty()) {
+  public void undoLetter() {
+    System.out.println("Guesses beofre: " + guesses);
+    if (guesses.isEmpty()) {
       System.out.println("There are no guesses to be undone");
-      return null;
+    } else {
+      guesses.remove(guesses.lastEntry().getKey());
     }
-    guessStack.pop();
+    System.out.println("Guesses after: " + guesses);
+  }
 
-    return guessStack;
+  public Map<String, Character> getGuessStack() {
+    return guesses;
+  }
+
+  /**
+   * An accesor method that will tell the GUI what type of cyptogram is in the game
+   *
+   * @return- true: this is a letter-letter cipher false- this is a letter-number cipher
+   */
+  public boolean getType() {
+    if (playerGameMapping instanceof LetterCryptogram) return true;
+    else return false;
+  }
+
+  public HashMap<String, Character> getCryptoAlph() {
+    return playerGameMapping.getCryptoAlphabet();
+  }
+
+  public ArrayList<String> getEncryptedPhrase() {
+    return playerGameMapping.getEncryptedPhrase();
   }
 
   /**
