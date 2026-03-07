@@ -85,9 +85,8 @@ public class Game {
    *
    * @return- true: this is a letter-letter cipher false- this is a letter-number cipher
    */
-  public boolean getType() {
-    if (playerGameMapping instanceof LetterCryptogram) return true;
-    else return false;
+  public boolean isLetterCrypto() {
+    return playerGameMapping instanceof LetterCryptogram;
   }
 
   public HashMap<String, Character> getCryptoAlph() {

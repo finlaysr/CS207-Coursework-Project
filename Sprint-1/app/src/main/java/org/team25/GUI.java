@@ -114,7 +114,7 @@ class GameChoicePanel extends JPanel {
     this.setLayout(new GridBagLayout());
     this.add(new JLabel("Choose Game Type:"), GUI.setConstraints(0, 0, 1, 1));
 
-    JButton letterButton = new JButton("Letter");
+    JButton letterButton = new JButton("Letter to Letter");
     this.add(letterButton, GUI.setConstraints(0, 1, 1, 1));
     letterButton.addActionListener(
         _ -> {
@@ -122,7 +122,7 @@ class GameChoicePanel extends JPanel {
           this.gui.switchContent(new GamePanel(this.gui, game));
         });
 
-    JButton numberButton = new JButton("Number");
+    JButton numberButton = new JButton("Letter to Number");
     this.add(numberButton, GUI.setConstraints(0, 2, 1, 1));
     numberButton.addActionListener(
         _ -> {
@@ -156,7 +156,10 @@ class GamePanel extends JPanel {
             ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     this.add(scrollPane, GUI.setConstraints(0, 1, 1, 1));
 
-    this.add(new JLabel("Game"), GUI.setConstraints(0, 0, 1, 1));
+    this.add(
+        new JLabel(
+            game.isLetterCrypto() ? "Letter to Letter Cryptogram" : "Letter to Number Cryptogram"),
+        GUI.setConstraints(0, 0, 1, 1));
 
     addWords(game.getEncryptedPhrase());
 
@@ -187,22 +190,22 @@ class GamePanel extends JPanel {
     int i = -1;
     JPanel wordPanel = new JPanel(new FlowLayout());
     wordPanel.setBackground(Color.lightGray);
+    inputGroup.add(wordPanel);
 
     for (String encrypted : characters) {
       if (encrypted.equals(" ")) {
-        inputGroup.add(wordPanel);
-        inputGroup.revalidate();
-        inputGroup.repaint();
         wordPanel = new JPanel(new FlowLayout());
         wordPanel.setBackground(Color.lightGray);
+        inputGroup.add(wordPanel);
 
       } else {
-        i++;
         JPanel charPanel = new JPanel(new GridBagLayout());
         charPanel.setBackground(Color.lightGray);
 
         // Check if it's a character for input, not punctuation
-        if (encrypted.matches("^[a-z0-9]*$")) {
+        if ((game.isLetterCrypto() && encrypted.matches("^[a-z]*$"))
+            || (!game.isLetterCrypto() && encrypted.matches("^[0-9]*$"))) {
+          i++;
           encryptedChars.add(encrypted);
 
           JTextField textField = buildCharInput(i, encrypted);
@@ -219,7 +222,6 @@ class GamePanel extends JPanel {
         wordPanel.add(charPanel);
       }
     }
-    inputGroup.add(wordPanel);
     inputGroup.revalidate();
     inputGroup.repaint();
   }
@@ -248,7 +250,15 @@ class GamePanel extends JPanel {
               regenerateGuess();
               // move to previous input if not at start
               if (index > 0 && evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
-                inputFields.get(encryptedChars.get(index - 1)).getFirst().requestFocus();
+                String prevChar = encryptedChars.get(index - 1);
+                inputFields
+                    .get(prevChar)
+                    .get(
+                        (int)
+                            encryptedChars.subList(0, index - 1).stream()
+                                .filter(e -> e.equals(prevChar))
+                                .count())
+                    .requestFocus();
               }
             } else {
               char guess = Character.toLowerCase(evt.getKeyChar());
@@ -258,8 +268,16 @@ class GamePanel extends JPanel {
               String error = game.enterLetter(guess, encrypted);
               if (error == null) {
                 // move to next text field if not at end
-                if (index < inputFields.size() - 1) {
-                  inputFields.get(encryptedChars.get(index + 1)).getFirst().requestFocus();
+                if (index < encryptedChars.size() - 1) {
+                  String nextChar = encryptedChars.get(index + 1);
+                  inputFields
+                      .get(nextChar)
+                      .get(
+                          (int)
+                              encryptedChars.subList(0, index).stream()
+                                  .filter(e -> e.equals(nextChar))
+                                  .count())
+                      .requestFocus();
                 }
               } else {
                 JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
@@ -275,8 +293,8 @@ class GamePanel extends JPanel {
           @Override
           public void focusGained(java.awt.event.FocusEvent evt) {
             inputFields.forEach(
-                (c, fields) -> {
-                  if (c.equals(encrypted)) {
+                (label, fields) -> {
+                  if (label.equals(encrypted)) {
                     fields.forEach(
                         field -> {
                           field.setBackground(Color.YELLOW);
@@ -290,6 +308,8 @@ class GamePanel extends JPanel {
                         });
                   }
                 });
+            ((JTextField) evt.getSource()).setBackground(Color.ORANGE);
+            ((JTextField) evt.getSource()).setCaretColor(Color.ORANGE);
           }
 
           @Override
