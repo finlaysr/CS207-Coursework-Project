@@ -68,4 +68,16 @@ public class Cryptogram {
   }
 
   void getFrequency() {}
+
+  public boolean isNumeric(String input) {
+    if (input.matches(".*[^a-zA-Z0-9].*")) {
+      return false;
+    }
+    try {
+      int inNum = Integer.parseInt(input);
+    } catch (NumberFormatException nfe) {
+      return false;
+    }
+    return true;
+  }
 }

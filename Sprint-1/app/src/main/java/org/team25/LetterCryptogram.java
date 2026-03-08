@@ -53,5 +53,21 @@ public class LetterCryptogram extends Cryptogram {
     }
   }
 
-  void getPlainLetter(char cryptoLetter) {}
+  public char getPlainLetter(char cryptoLetter) {
+    char revertedLetter = ' '; // This is to store the reverted phrase
+
+    if(Character.isLetter(cryptoLetter)){ // Check if the current character is a letter
+
+      char base = Character.isLowerCase(cryptoLetter) ? 'a' : 'A';
+
+      revertedLetter = (char) ((cryptoLetter - base - 13 + 26) % 26 + base); // Revert the phrase
+
+    } else { // If it is a special character
+
+      revertedLetter = cryptoLetter; // Just return it
+    }
+
+    return revertedLetter;
+  }
+
 }

@@ -39,4 +39,22 @@ public class NumberCryptogram extends Cryptogram {
       cryptogramAlphabet.put(super.encryptedPhrase.get(i), phrase.charAt(i));
     }
   }
+
+  public char getPlainLetter(String cryptoNum) {
+
+    System.out.println("CrytoNum : " + cryptoNum);
+    char revertedLetter = ' '; // This is to store the reverted phrase
+
+    if(isNumeric(cryptoNum)){
+      int temp = Integer.parseInt(cryptoNum);
+      char cryptoLetter = (char)((char)temp + 96);
+      System.out.println("CrytoLetter: " + cryptoLetter);
+      revertedLetter = (char) ((cryptoLetter - 'a' - 12 + 26) % 26 + 'a'); // Revert the phrase
+    } else {
+      revertedLetter = cryptoNum.charAt(0);
+    }
+    System.out.println("revertedLetter : " + revertedLetter);
+    return revertedLetter;
+  }
+
 }
