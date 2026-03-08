@@ -346,7 +346,7 @@ class GamePanel extends JPanel {
               char guess = Character.toLowerCase(evt.getKeyChar());
 
               // Check it was a valid input
-              String error = game.enterLetter(guess, encrypted);
+              String error = game.enterLetter(encrypted, guess);
               if (error == null) {
                 // move to next input field if not at end
                 if (index < encryptedChars.size() - 1) {

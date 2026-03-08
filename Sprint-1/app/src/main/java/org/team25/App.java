@@ -2,7 +2,7 @@
 package org.team25;
 
 public class App {
-  public static void main(String[] args) {
+  static void main() {
     // Create a new game
     Game game = new Game();
     // Start the gui
