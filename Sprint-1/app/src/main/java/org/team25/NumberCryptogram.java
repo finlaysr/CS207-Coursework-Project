@@ -14,7 +14,6 @@ public class NumberCryptogram extends Cryptogram {
   // Phrase contains the string
   // Encrpyted phrase will contain the encrypted chars of each element
   private void encryptPhrase(int offset) {
-    // System.out.println("Length : " + Math.pow(2, phrase.length()));
     for (int i = 0; i < phrase.length(); i++) {
       char currentChar = phrase.charAt(i);
 
@@ -23,9 +22,7 @@ public class NumberCryptogram extends Cryptogram {
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
         int encrypted = (currentChar - base + offset) % 26;
         System.out.println("encrypted: " + encrypted + " currentChar: " + currentChar);
-        // System.out.println(base);
         super.encryptedPhrase.add(Integer.toString(encrypted));
-        // System.out.print(encryptedCharArray[i]);
 
       } else {
         super.encryptedPhrase.add(String.valueOf(currentChar));
@@ -45,9 +42,9 @@ public class NumberCryptogram extends Cryptogram {
     System.out.println("CrytoNum : " + cryptoNum);
     char revertedLetter = ' '; // This is to store the reverted phrase
 
-    if(isNumeric(cryptoNum)){
+    if (isNumeric(cryptoNum)) {
       int temp = Integer.parseInt(cryptoNum);
-      char cryptoLetter = (char)((char)temp + 96);
+      char cryptoLetter = (char) ((char) temp + 96);
       System.out.println("CrytoLetter: " + cryptoLetter);
       revertedLetter = (char) ((cryptoLetter - 'a' - 12 + 26) % 26 + 'a'); // Revert the phrase
     } else {
@@ -56,5 +53,4 @@ public class NumberCryptogram extends Cryptogram {
     System.out.println("revertedLetter : " + revertedLetter);
     return revertedLetter;
   }
-
 }

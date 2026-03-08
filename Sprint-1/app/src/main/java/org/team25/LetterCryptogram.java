@@ -13,18 +13,14 @@ public class LetterCryptogram extends Cryptogram {
   // Convert each element
   // Encrpyted phrase will contain the encrypted chars of each element
   private void encryptPhrase(int offset) {
-    // System.out.println("Length : " + Math.pow(2, phrase.length()));
-
     for (int i = 0; i < phrase.length(); i++) {
       char currentChar = phrase.charAt(i);
 
       if (Character.isLetter(currentChar)) {
         // Move 13 places forward
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
-        // System.out.println(base);
         char encrypted = (char) ((currentChar - base + offset) % 26 + base);
         super.encryptedPhrase.add(Character.toString(encrypted));
-        // System.out.print(encryptedCharArray[i]);
 
       } else {
         // if it's a space or punctuation just add it as it is
@@ -34,10 +30,6 @@ public class LetterCryptogram extends Cryptogram {
     System.out.print("Encrypted : ");
 
     for (int i = 0; i < phrase.length(); i++) {
-      // System.out.println("i : " + i);
-
-      // System.out.println("Adding this encrypted: " + thinnedEncrypt.charAt(i) + " -> " +
-      // thinnedPhrase.charAt(i));
       cryptogramAlphabet.put(super.encryptedPhrase.get(i), phrase.charAt(i));
     }
   }
@@ -56,7 +48,7 @@ public class LetterCryptogram extends Cryptogram {
   public char getPlainLetter(char cryptoLetter) {
     char revertedLetter = ' '; // This is to store the reverted phrase
 
-    if(Character.isLetter(cryptoLetter)){ // Check if the current character is a letter
+    if (Character.isLetter(cryptoLetter)) { // Check if the current character is a letter
 
       char base = Character.isLowerCase(cryptoLetter) ? 'a' : 'A';
 
@@ -69,5 +61,4 @@ public class LetterCryptogram extends Cryptogram {
 
     return revertedLetter;
   }
-
 }

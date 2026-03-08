@@ -54,10 +54,6 @@ public class Cryptogram {
     System.out.println("phrase: " + phrase);
     System.out.println("Cryptogram Alphabet: " + cryptogramAlphabet);
     System.out.println("encrypted: " + getEncryptedPhrase());
-    /*
-    for (char i : cryptogramAlphabet.keySet()) {
-        System.out.print(i);
-    }*/
   }
 
   // encrypts the phrase using the cryptogramAlphabet

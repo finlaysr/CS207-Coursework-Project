@@ -214,7 +214,7 @@ class GamePanel extends JPanel {
     // TODO: fix this scrollbar
     // Panel containing all the encrypted word groups
     inputGroup = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-    inputGroup.setPreferredSize(new Dimension(800, 400));
+    inputGroup.setPreferredSize(new Dimension(600, 300));
     JScrollPane scrollPane =
         new JScrollPane(
             inputGroup,
