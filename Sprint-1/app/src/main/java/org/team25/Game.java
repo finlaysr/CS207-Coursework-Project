@@ -5,7 +5,6 @@ package org.team25;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /** This is the game class which acts as the controller/engine for the overall system */
 public class Game {
@@ -76,7 +75,7 @@ public class Game {
     System.out.println("Guesses after: " + guesses);
   }
 
-  public Map<String, Character> getGuessStack() {
+  public LinkedHashMap<String, Character> getGuessStack() {
     return guesses;
   }
 
