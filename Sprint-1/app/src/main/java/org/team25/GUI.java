@@ -138,7 +138,7 @@ class WelcomePanel extends JPanel {
 
     // Load app logo image, resize it, and display it
     try {
-      BufferedImage logo = ImageIO.read(new File("src/resources/Logo-2.jpeg"));
+      BufferedImage logo = ImageIO.read(new File("src/resources/Logo-2.png"));
       Image logoScaled = logo.getScaledInstance(300, 400, Image.SCALE_SMOOTH);
       JLabel picLabel = new JLabel(new ImageIcon(logoScaled));
       this.add(picLabel, GUI.setConstraints(0, 1));

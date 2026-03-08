@@ -24,7 +24,7 @@ public class Cryptogram {
 
     try (Scanner myReader = new Scanner(database)) {
       Random rand = new Random();
-      int num = rand.nextInt(51); // random number from 1 to 50
+      int num = rand.nextInt(39); // random number from 1 to 39
       do {
         phrase = myReader.nextLine();
         num--;
@@ -33,6 +33,7 @@ public class Cryptogram {
     } catch (FileNotFoundException e) {
       System.out.println("File not found");
       e.printStackTrace();
+      System.exit(1); // exit if file not found
     }
 
     phrase = phrase.toLowerCase();
