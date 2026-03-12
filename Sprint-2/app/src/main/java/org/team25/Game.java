@@ -1,4 +1,4 @@
-/* CS207 Cryptogram Project - Sprint 1 - Team 25 2026 */
+/* CS207 Cryptogram Project - Sprint 2 - Team 25 2026 */
 package org.team25;
 
 /*Imports Required */
@@ -12,7 +12,16 @@ public class Game {
   private Player currentPlayer; // the current player playing the game
 
   // Stores user guesses. Key: Encrypted, Value: Guess
-  private LinkedHashMap<String, Character> guesses = new LinkedHashMap<>();
+  private LinkedHashMap<String, Character> guesses;
+
+  /**
+   * Constructor for the game class, just initialises everything
+   */
+  public Game() {
+    playerGameMapping = new Cryptogram();
+    currentPlayer = null;
+    guesses = new LinkedHashMap<>();
+  }
 
   /**
    * User story 1: As a player I want to be able to generate a cryptogram When the game starts, a
@@ -32,6 +41,7 @@ public class Game {
       System.out.println("Number cryptogram created!");
     }
     playerGameMapping.show(); // shows hashmap connections
+    currentPlayer.IncrementCryptogramsPlayed();
   }
 
   /**
@@ -49,6 +59,13 @@ public class Game {
 
     // If guess valid enter it and return null
     guesses.put(encrypted, guess);
+    currentPlayer.IncrementTotalGuesses();
+
+    if (playerGameMapping.getCryptoAlphabet().get(encrypted)
+        == guess) { // If the guess is correct, increment total correct guesses
+      currentPlayer.IncrementTotalCorrectGuesses();
+    }
+
     return null;
   }
 
@@ -93,4 +110,14 @@ public class Game {
   public void loadGame() {}
 
   public void showSolution() {}
+
+  public boolean checkWin() {
+    for (String encrypted : playerGameMapping.getCryptoAlphabet().keySet()) {
+      if (!guesses.get(encrypted).equals(playerGameMapping.getCryptoAlphabet().get(encrypted))) {
+        return false; // If any guess is incorrect or missing, the player has not won
+      }
+    }
+    currentPlayer.IncrementCryptogramsCompleted();
+    return true; // All guesses are correct, the player has won
+  }
 }

@@ -1,4 +1,4 @@
-/* CS207 Cryptogram Project - Sprint 1 - Team 25 2026 */
+/* CS207 Cryptogram Project - Sprint 2 - Team 25 2026 */
 package org.team25;
 
 public class Player {
@@ -6,6 +6,7 @@ public class Player {
   // fields
   private String Username;
   private int TotalGuesses;
+  private int TotalCorrectGuesses;
   private int CryptogramsPlayed;
   private int CryptogramsCompleted;
   private double Accuracy;
@@ -14,13 +15,14 @@ public class Player {
   public Player(String Username) {
     this.Username = Username;
     this.TotalGuesses = 0;
+    this.TotalCorrectGuesses = 0;
     this.CryptogramsPlayed = 0;
     this.CryptogramsCompleted = 0;
     this.Accuracy = 0.0;
   }
 
   public void UpdateAccuracy() {
-    // probably (correct guesses over total guesses)
+    Accuracy = (double) TotalCorrectGuesses / TotalGuesses;
   }
 
   public void IncrementCryptogramsPlayed() {
@@ -55,5 +57,15 @@ public class Player {
 
   public void IncrementTotalGuesses() {
     TotalGuesses++;
+    System.out.println("Total guesses: " + TotalGuesses);
+  }
+
+  public int GetTotalCorrectGuesses() {
+    return TotalCorrectGuesses;
+  }
+
+  public void IncrementTotalCorrectGuesses() {
+    TotalCorrectGuesses++;
+    System.out.println("Total correct guesses: " + TotalCorrectGuesses);
   }
 }
