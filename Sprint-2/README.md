@@ -4,12 +4,12 @@
 
 For the second sprint, the following user stories should be implemented:
 
-- [ ] As a player I want to be able to save a cryptogram so I can play it at another time
-- [ ] As a player I want to be able to load a cryptogram so I can continue a game I was previously playing
+- [ ] Calum: As a player I want to be able to save a cryptogram so I can play it at another time
+- [ ] Calum: As a player I want to be able to load a cryptogram so I can continue a game I was previously playing
 - [ ] As a player I want to store my player name so the software can track my game play statistics
-- [ ] As a player I want the software to track the number of cryptograms I have successfully completed
-- [ ] As a player I want the software to track the number of cryptograms I have played so I can see how many games I’ve attempted
-- [ ] As a player I want the software to track the number of correct guesses I have made so I can see how accurate I am as a percentage of my total number of guesses 
+- [ ] Duncan: As a player I want the software to track the number of cryptograms I have successfully completed
+- [ ] Duncan: As a player I want the software to track the number of cryptograms I have played so I can see how many games I’ve attempted
+- [ ] Duncan: As a player I want the software to track the number of correct guesses I have made so I can see how accurate I am as a percentage of my total number of guesses 
 - [ ] As a player I want to load my details so I can track my game play statistics 
 
 ## How to use this gradle project

@@ -1,193 +1,22 @@
-/* CS207 Cryptogram Project - Sprint 1 - Team 25 2026 */
-package org.team25;
+package org.team25.gui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
-/** Main GUI class that sets up the window and loads the first screen */
-public class GUI {
-  final Font titleFont = new Font("Ariel", Font.BOLD, 20);
-  private final JPanel contentPane;
-  private final JButton backButton;
-
-  private int fontChange = 0;
-  private static final int FONT_INCREMENT = 3;
-
-  public GUI(Game game) {
-    // Main window of the game
-    JFrame mainFrame = new JFrame("Cryptogram Game");
-    // When window closes stop the program
-    mainFrame.addWindowListener(
-        new WindowAdapter() {
-          @Override
-          public void windowClosing(WindowEvent windowEvent) {
-            System.exit(0);
-          }
-        });
-    mainFrame.setSize(1000, 800);
-    mainFrame.setLayout(new GridBagLayout());
-    mainFrame.setVisible(true);
-
-    JLabel titleLabel = new JLabel("Group 25 Cryptogram Game");
-    titleLabel.setFont(titleFont);
-    mainFrame.add(titleLabel, GUI.setConstraints(0, 0));
-
-    // Part of the app that all the different screens will insert into
-    contentPane = new JPanel();
-    mainFrame.add(contentPane, GUI.setConstraints(0, 1));
-
-    // Add panel for increasing and decreasing the font size
-    JPanel fontPanel = new JPanel(new GridBagLayout());
-    fontPanel.setBackground(Color.lightGray);
-    fontPanel.add(new JLabel("Font Size  "), GUI.setConstraints(0, 0));
-    mainFrame.add(fontPanel, GUI.setConstraints(0, 2, new Insets(10, 0, 0, 0)));
-
-    // Increase font size button
-    JButton fontUp = new JButton("+");
-    fontPanel.add(fontUp, GUI.setConstraints(1, 0));
-    fontUp.addActionListener(
-        _ -> {
-          this.fontChange += 1;
-          resizeFont(mainFrame, FONT_INCREMENT);
-        });
-
-    // Decrease font size button
-    JButton fontDown = new JButton("-");
-    fontPanel.add(fontDown, GUI.setConstraints(2, 0));
-    fontDown.addActionListener(
-        _ -> {
-          resizeFont(mainFrame, -FONT_INCREMENT);
-          this.fontChange -= 1;
-        });
-
-    // Button to go back to previous screen
-    backButton = new JButton("Back");
-    mainFrame.add(backButton, GUI.setConstraints(0, 3));
-
-    // Go to first screen
-    switchContent(new WelcomePanel(this, game));
-  }
-
-  /** Switch the main content panel to a new panel */
-  protected void switchContent(JPanel pane) {
-    // Use invokeLater to ensure thread safety
-    if (SwingUtilities.isEventDispatchThread()) {
-      this.contentPane.removeAll();
-      this.contentPane.add(pane);
-      resizeFont(this.contentPane, this.fontChange * FONT_INCREMENT);
-
-      this.contentPane.revalidate();
-      this.contentPane.repaint();
-    } else {
-      SwingUtilities.invokeLater(() -> switchContent(pane));
-    }
-  }
-
-  public JButton getBackButton() {
-    return backButton;
-  }
-
-  // Used to position items in a grid
-  protected static GridBagConstraints setConstraints(int x, int y) {
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.gridx = x;
-    gbc.gridy = y;
-    return gbc;
-  }
-
-  protected static GridBagConstraints setConstraints(int x, int y, Insets margin) {
-    GridBagConstraints gbc = setConstraints(x, y);
-    gbc.insets = margin;
-    return gbc;
-  }
-
-  // Recursively increase the font size of all elements in the app
-  protected void resizeFont(Container container, int change) {
-    for (Component comp : container.getComponents()) {
-      Font old = comp.getFont();
-      if (old != null && (old.getSize() + change > 3)) {
-
-        comp.setFont(old.deriveFont(old.getStyle(), old.getSize() + change));
-        comp.repaint();
-      }
-      if (comp instanceof Container inner) {
-        resizeFont(inner, change);
-      }
-    }
-  }
-}
-
-/** Welcome panel containing app logo */
-class WelcomePanel extends JPanel {
-  protected WelcomePanel(GUI gui, Game game) {
-    this.setLayout(new GridBagLayout());
-
-    JLabel welcomeLabel = new JLabel("Welcome to our Cryptogram Game!");
-    welcomeLabel.setFont(new Font("Ariel", Font.BOLD, 18));
-    this.add(welcomeLabel, GUI.setConstraints(0, 0));
-
-    // Load app logo image, resize it, and display it
-    try {
-      BufferedImage logo = ImageIO.read(new File("src/resources/Logo-2.png"));
-      Image logoScaled = logo.getScaledInstance(300, 400, Image.SCALE_SMOOTH);
-      JLabel picLabel = new JLabel(new ImageIcon(logoScaled));
-      this.add(picLabel, GUI.setConstraints(0, 1));
-    } catch (IOException _) {
-      System.out.println("Could not load logo image!");
-    }
-
-    // Go to Game Choice panel
-    JButton startButton = new JButton("Start");
-    startButton.addActionListener(_ -> gui.switchContent(new GameChoicePanel(gui, game)));
-    this.add(startButton, GUI.setConstraints(0, 2));
-
-    // Hide the back button since there is no previous screen
-    gui.getBackButton().setVisible(false);
-  }
-}
-
-/** Panel where user chooses what kind of cryptogram they want to play */
-class GameChoicePanel extends JPanel {
-  protected GameChoicePanel(GUI gui, Game game) {
-    this.setLayout(new GridBagLayout());
-    this.add(new JLabel("Choose Game Type:"), GUI.setConstraints(0, 0));
-
-    // Button for Letter to Letter cryptogram
-    JButton letterButton = new JButton("Letter to Letter");
-    this.add(letterButton, GUI.setConstraints(0, 1));
-    letterButton.addActionListener(
-        _ -> {
-          game.generateCryptogram(true);
-          gui.switchContent(new GamePanel(gui, game));
-        });
-
-    // Button for Letter to Number cryptogram
-    JButton numberButton = new JButton("Letter to Number");
-    this.add(numberButton, GUI.setConstraints(0, 2));
-    numberButton.addActionListener(
-        _ -> {
-          game.generateCryptogram(false);
-          gui.switchContent(new GamePanel(gui, game));
-        });
-
-    // Set back button to go to Welcome Screen
-    gui.getBackButton().setVisible(true);
-    if (gui.getBackButton().getActionListeners().length > 0) {
-      gui.getBackButton().removeActionListener(gui.getBackButton().getActionListeners()[0]);
-    }
-    gui.getBackButton().addActionListener(_ -> gui.switchContent(new WelcomePanel(gui, game)));
-  }
-}
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import org.team25.Game;
 
 /** Panel where the main game is played */
 class GamePanel extends JPanel {
