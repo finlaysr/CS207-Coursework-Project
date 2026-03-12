@@ -86,16 +86,6 @@ public class Game {
     return playerGameMapping.getEncryptedPhrase();
   }
 
-  /**
-   * An accesor method that will tell the GUI what type of cyptogram is in the game
-   *
-   * @return- true: this is a letter-letter cipher false- this is a letter-number cipher
-   */
-  public boolean getType() {
-    if (playerGameMapping instanceof LetterCryptogram) return true;
-    else return false;
-  }
-
   public void viewFrequencies() {}
 
   public void saveGame() {}
