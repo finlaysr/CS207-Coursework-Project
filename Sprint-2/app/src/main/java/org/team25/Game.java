@@ -108,6 +108,7 @@ public class Game {
         return false; // If any guess is incorrect or missing, the player has not won
       }
     }
+    currentPlayer.IncrementCryptogramsCompleted();
     return true; // All guesses are correct, the player has won
   }
 }
