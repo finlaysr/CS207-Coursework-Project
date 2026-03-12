@@ -10,17 +10,20 @@ import java.util.LinkedHashMap;
 public class Game {
   private Cryptogram playerGameMapping; // the current cryptogram that the player is playing
   private Player currentPlayer; // the current player playing the game
+  private Players players;
 
   // Stores user guesses. Key: Encrypted, Value: Guess
   private LinkedHashMap<String, Character> guesses;
 
-  /**
-   * Constructor for the game class, just initialises everything
-   */
+  /** Constructor for the game class, just initialises everything */
   public Game() {
+    players = new Players();
     playerGameMapping = new Cryptogram();
-    currentPlayer = null;
     guesses = new LinkedHashMap<>();
+  }
+
+  public void shutdown(){
+    players.saveAllData();
   }
 
   /**
@@ -41,7 +44,7 @@ public class Game {
       System.out.println("Number cryptogram created!");
     }
     playerGameMapping.show(); // shows hashmap connections
-    currentPlayer.IncrementCryptogramsPlayed();
+    currentPlayer.incrementCryptogramsPlayed();
   }
 
   /**
@@ -59,11 +62,11 @@ public class Game {
 
     // If guess valid enter it and return null
     guesses.put(encrypted, guess);
-    currentPlayer.IncrementTotalGuesses();
+    currentPlayer.incrementTotalGuesses();
 
     if (playerGameMapping.getCryptoAlphabet().get(encrypted)
         == guess) { // If the guess is correct, increment total correct guesses
-      currentPlayer.IncrementTotalCorrectGuesses();
+      currentPlayer.incrementTotalCorrectGuesses();
     }
 
     return null;
@@ -117,7 +120,7 @@ public class Game {
         return false; // If any guess is incorrect or missing, the player has not won
       }
     }
-    currentPlayer.IncrementCryptogramsCompleted();
+    currentPlayer.incrementCryptogramsCompleted();
     return true; // All guesses are correct, the player has won
   }
 }

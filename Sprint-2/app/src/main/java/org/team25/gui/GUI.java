@@ -24,6 +24,7 @@ public class GUI {
         new WindowAdapter() {
           @Override
           public void windowClosing(WindowEvent windowEvent) {
+            game.shutdown();
             System.exit(0);
           }
         });
@@ -126,4 +127,3 @@ public class GUI {
     }
   }
 }
-

@@ -1,3 +1,4 @@
+/* CS207 Cryptogram Project - Sprint 2 - Team 25 2026 */
 package org.team25.gui;
 
 import java.awt.Font;

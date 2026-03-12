@@ -1,71 +1,73 @@
 /* CS207 Cryptogram Project - Sprint 2 - Team 25 2026 */
 package org.team25;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
 
   // fields
-  private String Username;
-  private int TotalGuesses;
-  private int TotalCorrectGuesses;
-  private int CryptogramsPlayed;
-  private int CryptogramsCompleted;
-  private double Accuracy;
+  private String username;
+  private int totalGuesses;
+  private int totalCorrectGuesses;
+  private int cryptogramsPlayed;
+  private int cryptogramsCompleted;
+  private double accuracy;
 
   // player constructor
-  public Player(String Username) {
-    this.Username = Username;
-    this.TotalGuesses = 0;
-    this.TotalCorrectGuesses = 0;
-    this.CryptogramsPlayed = 0;
-    this.CryptogramsCompleted = 0;
-    this.Accuracy = 0.0;
+  public Player(String username) {
+    this.username = username;
+    this.totalGuesses = 0;
+    this.totalCorrectGuesses = 0;
+    this.cryptogramsPlayed = 0;
+    this.cryptogramsCompleted = 0;
+    this.accuracy = 0.0;
   }
 
-  public void UpdateAccuracy() {
-    Accuracy = (double) TotalCorrectGuesses / TotalGuesses;
+  public void updateAccuracy() {
+    accuracy = (double) totalCorrectGuesses / totalGuesses;
   }
 
-  public void IncrementCryptogramsPlayed() {
-    CryptogramsPlayed++;
+  public void incrementCryptogramsPlayed() {
+    cryptogramsPlayed++;
   }
 
-  public void IncrementCryptogramsCompleted() {
-    CryptogramsCompleted++;
+  public void incrementCryptogramsCompleted() {
+    cryptogramsCompleted++;
   }
 
-  public double GetAccuracy() {
-    return Accuracy;
+  public double getAccuracy() {
+    return accuracy;
   }
 
-  public int GetNumCryptogramsPlayed() {
-    return CryptogramsPlayed;
+  public int getNumCryptogramsPlayed() {
+    return cryptogramsPlayed;
   }
 
-  public int GetNumCryptogramsCompleted() {
-    return CryptogramsCompleted;
+  public int getNumCryptogramsCompleted() {
+    return cryptogramsCompleted;
   }
 
   // not in the sample solution but might be needed
 
-  public String GetUsername() {
-    return Username;
+  public String getUsername() {
+    return username;
   }
 
-  public int GetTotalGuesses() {
-    return TotalGuesses;
+  public int getTotalGuesses() {
+    return totalGuesses;
   }
 
-  public void IncrementTotalGuesses() {
-    TotalGuesses++;
-    System.out.println("Total guesses: " + TotalGuesses);
+  public void incrementTotalGuesses() {
+    totalGuesses++;
+    System.out.println("Total guesses: " + totalGuesses);
   }
 
-  public int GetTotalCorrectGuesses() {
-    return TotalCorrectGuesses;
+  public int getTotalCorrectGuesses() {
+    return totalCorrectGuesses;
   }
 
-  public void IncrementTotalCorrectGuesses() {
-    TotalCorrectGuesses++;
-    System.out.println("Total correct guesses: " + TotalCorrectGuesses);
+  public void incrementTotalCorrectGuesses() {
+    totalCorrectGuesses++;
+    System.out.println("Total correct guesses: " + totalCorrectGuesses);
   }
 }
