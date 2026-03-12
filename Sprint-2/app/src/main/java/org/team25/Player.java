@@ -60,7 +60,7 @@ public class Player {
     System.out.println("Total guesses: " + TotalGuesses);
   }
 
-public int GetTotalCorrectGuesses() {
+  public int GetTotalCorrectGuesses() {
     return TotalCorrectGuesses;
   }
 

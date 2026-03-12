@@ -32,6 +32,7 @@ public class Game {
       System.out.println("Number cryptogram created!");
     }
     playerGameMapping.show(); // shows hashmap connections
+    currentPlayer.IncrementCryptogramsPlayed();
   }
 
   /**
@@ -51,10 +52,11 @@ public class Game {
     guesses.put(encrypted, guess);
     currentPlayer.IncrementTotalGuesses();
 
-    if (playerGameMapping.getCryptoAlphabet().get(encrypted) == guess) {
+    if (playerGameMapping.getCryptoAlphabet().get(encrypted)
+        == guess) { // If the guess is correct, increment total correct guesses
       currentPlayer.IncrementTotalCorrectGuesses();
     }
-    
+
     return null;
   }
 
@@ -99,4 +101,13 @@ public class Game {
   public void loadGame() {}
 
   public void showSolution() {}
+
+  public boolean checkWin() {
+    for (String encrypted : playerGameMapping.getCryptoAlphabet().keySet()) {
+      if (!guesses.get(encrypted).equals(playerGameMapping.getCryptoAlphabet().get(encrypted))) {
+        return false; // If any guess is incorrect or missing, the player has not won
+      }
+    }
+    return true; // All guesses are correct, the player has won
+  }
 }
