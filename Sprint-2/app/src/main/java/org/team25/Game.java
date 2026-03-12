@@ -12,7 +12,16 @@ public class Game {
   private Player currentPlayer; // the current player playing the game
 
   // Stores user guesses. Key: Encrypted, Value: Guess
-  private LinkedHashMap<String, Character> guesses = new LinkedHashMap<>();
+  private LinkedHashMap<String, Character> guesses;
+
+  /**
+   * Constructor for the game class, just initialises everything
+   */
+  public Game() {
+    playerGameMapping = new Cryptogram();
+    currentPlayer = null;
+    guesses = new LinkedHashMap<>();
+  }
 
   /**
    * User story 1: As a player I want to be able to generate a cryptogram When the game starts, a
