@@ -49,6 +49,12 @@ public class Game {
 
     // If guess valid enter it and return null
     guesses.put(encrypted, guess);
+    currentPlayer.IncrementTotalGuesses();
+
+    if (playerGameMapping.getCryptoAlphabet().get(encrypted) == guess) {
+      currentPlayer.IncrementTotalCorrectGuesses();
+    }
+    
     return null;
   }
 
