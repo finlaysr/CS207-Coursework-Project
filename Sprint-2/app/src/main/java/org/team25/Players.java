@@ -17,15 +17,17 @@ import org.jspecify.annotations.NonNull;
 /** A collection of all the players, this is what Game interacts with */
 public class Players {
 
-  //instance variables
+  // instance variables
   private ArrayList<Player> allPlayers;
   private ArrayList<Cryptogram> allCryptograms = new ArrayList<>();
 
   private final File playersFile = new File("src/data/playerGameMapping.csv");
-  private final File playersDir = new File("src" + File.separator + "data" + File.separator + "players");
-  private final File cryptogramsDir = new File("src" + File.separator + "data" + File.separator + "cryptograms");
+  private final File playersDir =
+      new File("src" + File.separator + "data" + File.separator + "players");
+  private final File cryptogramsDir =
+      new File("src" + File.separator + "data" + File.separator + "cryptograms");
 
-  /** Constructor method - creates an empty array list and loads in the player file */
+  /** Constructor method - loads in the players and cryptograms from a file */
   public Players() {
     allPlayers = fillArray();
     loadData(playersDir, allPlayers);

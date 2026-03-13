@@ -22,8 +22,37 @@ public class Game {
     guesses = new LinkedHashMap<>();
   }
 
-  public void shutdown(){
+  public void shutdown() {
     players.saveAllData();
+  }
+
+  // Returns error if exists, else null on success
+  public String signUp(String username) {
+    if (username.isEmpty()) {
+      return "Username cannot be empty!";
+    }
+    if (!username.chars().allMatch(Character::isLetter)) {
+      return "Username must contain only letters!";
+    }
+
+    // TODO: check username doesn't already exist
+
+    return null; // if successful return null (no error)
+  }
+
+  // Returns error if exists, else null on success
+  public String logIn(String username) {
+    if (username.isEmpty()) {
+      return "Username cannot be empty!";
+    }
+
+    // TODO: check username exists
+
+    return null; // if successful return null (no error)
+  }
+
+  public Player getCurrentPlayer() {
+    return currentPlayer;
   }
 
   /**
@@ -44,7 +73,7 @@ public class Game {
       System.out.println("Number cryptogram created!");
     }
     playerGameMapping.show(); // shows hashmap connections
-    currentPlayer.incrementCryptogramsPlayed();
+    //    currentPlayer.incrementCryptogramsPlayed();
   }
 
   /**
@@ -62,11 +91,13 @@ public class Game {
 
     // If guess valid enter it and return null
     guesses.put(encrypted, guess);
-    currentPlayer.incrementTotalGuesses();
+    //    currentPlayer.incrementTotalGuesses();
 
-    if (playerGameMapping.getCryptoAlphabet().get(encrypted)
-        == guess) { // If the guess is correct, increment total correct guesses
-      currentPlayer.incrementTotalCorrectGuesses();
+    if (playerGameMapping
+        .getCryptoAlphabet()
+        .get(encrypted)
+        .equals(guess)) { // If the guess is correct, increment total correct guesses
+      //      currentPlayer.incrementTotalCorrectGuesses();
     }
 
     return null;
@@ -107,10 +138,6 @@ public class Game {
   }
 
   public void viewFrequencies() {}
-
-  public void saveGame() {}
-
-  public void loadGame() {}
 
   public void showSolution() {}
 

@@ -9,7 +9,7 @@ import org.team25.Game;
 
 /** Main GUI class that sets up the window and loads the first screen */
 public class GUI {
-  final Font titleFont = new Font("Ariel", Font.BOLD, 20);
+  final Font titleFont = new Font("Ariel", Font.BOLD, 25);
   private final JPanel contentPane;
   private final JButton backButton;
 
@@ -29,22 +29,29 @@ public class GUI {
           }
         });
     mainFrame.setSize(1000, 800);
-    mainFrame.setLayout(new GridBagLayout());
+    mainFrame.setLayout(new BorderLayout());
     mainFrame.setVisible(true);
 
     JLabel titleLabel = new JLabel("Group 25 Cryptogram Game");
+    titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     titleLabel.setFont(titleFont);
-    mainFrame.add(titleLabel, GUI.setConstraints(0, 0));
+    mainFrame.add(titleLabel, BorderLayout.NORTH);
 
     // Part of the app that all the different screens will insert into
     contentPane = new JPanel();
-    mainFrame.add(contentPane, GUI.setConstraints(0, 1));
+    contentPane.setLayout(new BorderLayout());
+    contentPane.setBackground(Color.DARK_GRAY);
+    mainFrame.add(contentPane, BorderLayout.CENTER);
+
+    // Panel containing back button and font options
+    JPanel bottomPannel = new JPanel(new GridBagLayout());
+    mainFrame.add(bottomPannel, BorderLayout.SOUTH);
 
     // Add panel for increasing and decreasing the font size
     JPanel fontPanel = new JPanel(new GridBagLayout());
     fontPanel.setBackground(Color.lightGray);
     fontPanel.add(new JLabel("Font Size  "), GUI.setConstraints(0, 0));
-    mainFrame.add(fontPanel, GUI.setConstraints(0, 2, new Insets(10, 0, 0, 0)));
+    bottomPannel.add(fontPanel, GUI.setConstraints(0, 1));
 
     // Increase font size button
     JButton fontUp = new JButton("+");
@@ -66,7 +73,7 @@ public class GUI {
 
     // Button to go back to previous screen
     backButton = new JButton("Back");
-    mainFrame.add(backButton, GUI.setConstraints(0, 3));
+    bottomPannel.add(backButton, setConstraints(0, 0));
 
     // Go to first screen
     switchContent(new WelcomePanel(this, game));
@@ -77,7 +84,7 @@ public class GUI {
     // Use invokeLater to ensure thread safety
     if (SwingUtilities.isEventDispatchThread()) {
       this.contentPane.removeAll();
-      this.contentPane.add(pane);
+      this.contentPane.add(pane, BorderLayout.CENTER);
       resizeFont(this.contentPane, this.fontChange * FONT_INCREMENT);
 
       this.contentPane.revalidate();

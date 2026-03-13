@@ -15,6 +15,9 @@ For the second sprint, the following user stories should be implemented:
 ## How to use this gradle project
 
 ### Commands (tasks)
+
+**Windows Users:** substitute `./gradlew ...` for `.\gradlew.bat ...`
+
 * `./gradlew run`: run the project
 * `./gradlew spotlessApply`: format all code in the project
 * `./gradlew test`: run all tests in the project
@@ -27,6 +30,7 @@ For the second sprint, the following user stories should be implemented:
 * `./gradlew :app:dependencies`: view dependencies of a subproccess
 
 ### File structure
+
 ```
 Sprint-2
 ├── .gradle
