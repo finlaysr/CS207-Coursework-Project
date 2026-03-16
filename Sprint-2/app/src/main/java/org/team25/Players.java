@@ -116,4 +116,8 @@ public class Players {
       }
     }
   }
+
+public ArrayList<Player> getAllPlayers() {
+    return allPlayers;
+  }
 }

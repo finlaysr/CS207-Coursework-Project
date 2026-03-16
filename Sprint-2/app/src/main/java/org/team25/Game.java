@@ -20,6 +20,7 @@ public class Game {
     players = new Players();
     playerGameMapping = new Cryptogram();
     guesses = new LinkedHashMap<>();
+    currentPlayer = null;
   }
 
   public void shutdown() {
