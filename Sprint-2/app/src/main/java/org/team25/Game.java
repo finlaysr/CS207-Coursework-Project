@@ -39,7 +39,9 @@ public class Game {
     if (found != null) {
       return "Player already exists! Please log in or select a different username.";
     }
-
+    Player newPlayer = new Player(username);
+    players.addPlayer(newPlayer);
+    currentPlayer = newPlayer;
     return null; // if successful return null (no error)
   }
 
@@ -80,7 +82,7 @@ public class Game {
       System.out.println("Number cryptogram created!");
     }
     playerGameMapping.show(); // shows hashmap connections
-    //    currentPlayer.incrementCryptogramsPlayed();
+    currentPlayer.incrementCryptogramsPlayed();
   }
 
   /**
@@ -98,13 +100,13 @@ public class Game {
 
     // If guess valid enter it and return null
     guesses.put(encrypted, guess);
-    //    currentPlayer.incrementTotalGuesses();
+    currentPlayer.incrementTotalGuesses();
 
     if (playerGameMapping
         .getCryptoAlphabet()
         .get(encrypted)
         .equals(guess)) { // If the guess is correct, increment total correct guesses
-      //      currentPlayer.incrementTotalCorrectGuesses();
+      currentPlayer.incrementTotalCorrectGuesses();
     }
 
     return null;

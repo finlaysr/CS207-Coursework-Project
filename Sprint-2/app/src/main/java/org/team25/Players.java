@@ -117,8 +117,12 @@ public class Players {
     }
   }
 
-public ArrayList<Player> getAllPlayers() {
+  public ArrayList<Player> getAllPlayers() {
     return allPlayers;
+  }
+
+  public void addPlayer(Player player) {
+    allPlayers.add(player);
   }
 
   public Player findPlayer(String username) {
