@@ -120,4 +120,13 @@ public class Players {
 public ArrayList<Player> getAllPlayers() {
     return allPlayers;
   }
+
+  public Player findPlayer(String username) {
+    for (Player player : allPlayers) {
+      if (player.getUsername().equalsIgnoreCase(username)) {
+        return player;
+      }
+    }
+    return null;
+  }
 }

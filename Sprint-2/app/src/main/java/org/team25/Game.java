@@ -35,8 +35,10 @@ public class Game {
     if (!username.chars().allMatch(Character::isLetter)) {
       return "Username must contain only letters!";
     }
-
-    // TODO: check username doesn't already exist
+    Player found = players.findPlayer(username);
+    if (found != null) {
+      return "Player already exists! Please log in or select a different username.";
+    }
 
     return null; // if successful return null (no error)
   }
@@ -46,8 +48,12 @@ public class Game {
     if (username.isEmpty()) {
       return "Username cannot be empty!";
     }
+    Player found = players.findPlayer(username);
+    if (found == null) {
+      return "Player not found! Please sign up first.";
+    }
 
-    // TODO: check username exists
+    currentPlayer = found;
 
     return null; // if successful return null (no error)
   }
