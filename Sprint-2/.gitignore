@@ -9,3 +9,5 @@ bin
 .kotlin
 
 .vscode
+
+app/src/data/**

@@ -10,17 +10,58 @@ import java.util.LinkedHashMap;
 public class Game {
   private Cryptogram playerGameMapping; // the current cryptogram that the player is playing
   private Player currentPlayer; // the current player playing the game
+  private Players players;
 
   // Stores user guesses. Key: Encrypted, Value: Guess
   private LinkedHashMap<String, Character> guesses;
 
-  /**
-   * Constructor for the game class, just initialises everything
-   */
+  /** Constructor for the game class, just initialises everything */
   public Game() {
+    players = new Players();
     playerGameMapping = new Cryptogram();
-    currentPlayer = null;
     guesses = new LinkedHashMap<>();
+    currentPlayer = null;
+  }
+
+  public void shutdown() {
+    players.saveAllData();
+  }
+
+  // Returns error if exists, else null on success
+  public String signUp(String username) {
+    if (username.isEmpty()) {
+      return "Username cannot be empty!";
+    }
+    if (!username.chars().allMatch(Character::isLetter)) {
+      return "Username must contain only letters!";
+    }
+    Player found = players.findPlayer(username);
+    if (found != null) {
+      return "Player already exists! Please log in or select a different username.";
+    }
+    Player newPlayer = new Player(username);
+    players.addPlayer(newPlayer);
+    currentPlayer = newPlayer;
+    return null; // if successful return null (no error)
+  }
+
+  // Returns error if exists, else null on success
+  public String logIn(String username) {
+    if (username.isEmpty()) {
+      return "Username cannot be empty!";
+    }
+    Player found = players.findPlayer(username);
+    if (found == null) {
+      return "Player not found! Please sign up first.";
+    }
+
+    currentPlayer = found;
+
+    return null; // if successful return null (no error)
+  }
+
+  public Player getCurrentPlayer() {
+    return currentPlayer;
   }
 
   /**
@@ -41,7 +82,7 @@ public class Game {
       System.out.println("Number cryptogram created!");
     }
     playerGameMapping.show(); // shows hashmap connections
-    currentPlayer.IncrementCryptogramsPlayed();
+    currentPlayer.incrementCryptogramsPlayed();
   }
 
   /**
@@ -59,11 +100,13 @@ public class Game {
 
     // If guess valid enter it and return null
     guesses.put(encrypted, guess);
-    currentPlayer.IncrementTotalGuesses();
+    currentPlayer.incrementTotalGuesses();
 
-    if (playerGameMapping.getCryptoAlphabet().get(encrypted)
-        == guess) { // If the guess is correct, increment total correct guesses
-      currentPlayer.IncrementTotalCorrectGuesses();
+    if (playerGameMapping
+        .getCryptoAlphabet()
+        .get(encrypted)
+        .equals(guess)) { // If the guess is correct, increment total correct guesses
+      currentPlayer.incrementTotalCorrectGuesses();
     }
 
     return null;
@@ -105,10 +148,6 @@ public class Game {
 
   public void viewFrequencies() {}
 
-  public void saveGame() {}
-
-  public void loadGame() {}
-
   public void showSolution() {}
 
   public boolean checkWin() {
@@ -117,7 +156,7 @@ public class Game {
         return false; // If any guess is incorrect or missing, the player has not won
       }
     }
-    currentPlayer.IncrementCryptogramsCompleted();
+    currentPlayer.incrementCryptogramsCompleted();
     return true; // All guesses are correct, the player has won
   }
 }

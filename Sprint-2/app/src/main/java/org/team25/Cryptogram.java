@@ -3,18 +3,20 @@ package org.team25;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Cryptogram {
+public class Cryptogram implements Serializable {
 
   protected String phrase;
   // Annoyingly has to be a String, not a Char, since in NumberCryptogram 2-digit numbers will be
   // more than one character long
   protected HashMap<String, Character> cryptogramAlphabet = new HashMap<>();
   protected ArrayList<String> encryptedPhrase = new ArrayList<>();
+  protected Integer cryptogramID;
 
   // Scanner the file
   public String loadPhrase() {
@@ -75,5 +77,9 @@ public class Cryptogram {
       return false;
     }
     return true;
+  }
+
+  public Integer getCryptogramID() {
+    return cryptogramID;
   }
 }

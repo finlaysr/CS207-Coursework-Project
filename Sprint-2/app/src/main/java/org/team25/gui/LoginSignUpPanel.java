@@ -1,8 +1,10 @@
+/* CS207 Cryptogram Project - Sprint 2 - Team 25 2026 */
 package org.team25.gui;
 
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -39,7 +41,7 @@ class SignUp extends JPanel {
     this.gui = gui;
 
     this.setLayout(new GridBagLayout());
-    this.add(new JLabel("Welcome to the app!:"), GUI.setConstraints(0, 0, 2, 1));
+    this.add(new JLabel("Welcome to the app!"), GUI.setConstraints(0, 0, 2, 1));
     this.add(new JLabel("Username:"), GUI.setConstraints(0, 1, 1, 1));
 
     usernameField = new JTextField(20);
@@ -52,9 +54,12 @@ class SignUp extends JPanel {
 
   private void signUpButton() {
     usernameField.setText(usernameField.getText().strip());
-    // TODO: check user doesn't already exist
-
-    gui.switchContent(new GameChoicePanel(gui, game));
+    String error = game.signUp(usernameField.getText());
+    if (error == null) {
+      gui.switchContent(new GameChoicePanel(gui, game));
+    } else {
+      JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
+    }
   }
 }
 
@@ -68,7 +73,7 @@ class Login extends JPanel {
     this.gui = gui;
 
     this.setLayout(new GridBagLayout());
-    this.add(new JLabel("Welcome back!:"), GUI.setConstraints(0, 0, 2, 1));
+    this.add(new JLabel("Welcome back!"), GUI.setConstraints(0, 0, 2, 1));
     this.add(new JLabel("Username:"), GUI.setConstraints(0, 1, 1, 1));
 
     usernameField = new JTextField(20);
@@ -81,8 +86,11 @@ class Login extends JPanel {
 
   public void loginButton() {
     usernameField.setText(usernameField.getText().strip());
-    // TODO: check user exists
-
-    gui.switchContent(new GameChoicePanel(gui, game));
+    String error = game.logIn(usernameField.getText());
+    if (error == null) {
+      gui.switchContent(new GameChoicePanel(gui, game));
+    } else {
+      JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
+    }
   }
 }
