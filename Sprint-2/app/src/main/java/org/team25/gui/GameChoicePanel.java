@@ -4,6 +4,7 @@ package org.team25.gui;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.team25.Game;
 
@@ -17,7 +18,11 @@ class GameChoicePanel extends JPanel {
     this.add(prevButton, GUI.setConstraints(0, 1));
     prevButton.addActionListener(
         _ -> {
-          System.out.println("Load previous game");
+          if (game.loadGame()) {
+            gui.switchContent(new GamePanel(gui, game));
+          } else   {
+            JOptionPane.showMessageDialog(null, "No current cryptogram","Error", JOptionPane.ERROR_MESSAGE );
+          }
         });
 
     this.add(new JLabel("Start a new game:"), GUI.setConstraints(0, 2));
