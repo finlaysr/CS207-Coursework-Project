@@ -80,7 +80,10 @@ class GamePanel extends JPanel {
     if (gui.getBackButton().getActionListeners().length > 0) {
       gui.getBackButton().removeActionListener(gui.getBackButton().getActionListeners()[0]);
     }
-    gui.getBackButton().addActionListener(_ -> gui.switchContent(new GameChoicePanel(gui, game)));
+    gui.getBackButton().addActionListener(_ -> {
+         JOptionPane.showMessageDialog(null, "Game has been saved","Information", JOptionPane.INFORMATION_MESSAGE);
+         gui.switchContent(new GameChoicePanel(gui, game));
+    });
   }
 
   /** Add all encrypted characters and inputs, grouped by word */
