@@ -159,4 +159,17 @@ public class Game {
     currentPlayer.incrementCryptogramsCompleted();
     return true; // All guesses are correct, the player has won
   }
+
+  /**
+   * Checks that the player has a current cryptogram, this will then be loaded if they do
+   * if not then they can generate a letter or numver cryptogram
+   * @return boolean flag to tell if they have a game or not
+   */
+  public boolean loadGame() {
+    if (currentPlayer.getCurrentCryptogram() != null) {
+      return true;
+    } else return false;
+  }
+
 }
+
