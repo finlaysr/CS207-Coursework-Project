@@ -8,7 +8,6 @@ import java.util.LinkedHashMap;
 
 /** This is the game class which acts as the controller/engine for the overall system */
 public class Game {
-  private Cryptogram playerGameMapping; // the current cryptogram that the player is playing
   private Player currentPlayer; // the current player playing the game
   private Players players;
 
@@ -18,7 +17,6 @@ public class Game {
   /** Constructor for the game class, just initialises everything */
   public Game() {
     players = new Players();
-    playerGameMapping = new Cryptogram();
     guesses = new LinkedHashMap<>();
     currentPlayer = null;
   }
@@ -27,6 +25,7 @@ public class Game {
     players.saveAllData();
   }
 
+  //need to modify for setting current game mapping
   // Returns error if exists, else null on success
   public String signUp(String username) {
     if (username.isEmpty()) {
@@ -39,6 +38,7 @@ public class Game {
     if (found != null) {
       return "Player already exists! Please log in or select a different username.";
     }
+
     Player newPlayer = new Player(username);
     players.addPlayer(newPlayer);
     currentPlayer = newPlayer;
@@ -74,14 +74,14 @@ public class Game {
     guesses.clear();
     if (isLetterCrypto) {
       // Generates the cryptogram and prints the statement
-      playerGameMapping = new LetterCryptogram();
+      currentPlayer.setCurrentCryptogram(new LetterCryptogram());
       System.out.println("Letter cryptogram created!");
     } else {
       // Generates the cryptogram and prints the statement
-      playerGameMapping = new NumberCryptogram();
+      currentPlayer.setCurrentCryptogram(new Cryptogram());
       System.out.println("Number cryptogram created!");
     }
-    playerGameMapping.show(); // shows hashmap connections
+    currentPlayer.getCurrentCryptogram().show(); // shows hashmap connections
     currentPlayer.incrementCryptogramsPlayed();
   }
 
@@ -102,7 +102,7 @@ public class Game {
     guesses.put(encrypted, guess);
     currentPlayer.incrementTotalGuesses();
 
-    if (playerGameMapping
+    if (currentPlayer.getCurrentCryptogram()
         .getCryptoAlphabet()
         .get(encrypted)
         .equals(guess)) { // If the guess is correct, increment total correct guesses
@@ -133,17 +133,17 @@ public class Game {
    * @return true: this is a letter-letter cipher false: this is a letter-number cipher
    */
   public boolean isLetterCrypto() {
-    return playerGameMapping instanceof LetterCryptogram;
+    return currentPlayer.getCurrentCryptogram() instanceof LetterCryptogram;
   }
 
   /** Get mappings from encrypted to unencrypted */
   public HashMap<String, Character> getCryptoAlph() {
-    return playerGameMapping.getCryptoAlphabet();
+    return currentPlayer.getCurrentCryptogram().getCryptoAlphabet();
   }
 
   /** Return the entire encrypted phrase */
   public ArrayList<String> getEncryptedPhrase() {
-    return playerGameMapping.getEncryptedPhrase();
+    return currentPlayer.getCurrentCryptogram().getEncryptedPhrase();
   }
 
   public void viewFrequencies() {}
@@ -151,8 +151,8 @@ public class Game {
   public void showSolution() {}
 
   public boolean checkWin() {
-    for (String encrypted : playerGameMapping.getCryptoAlphabet().keySet()) {
-      if (!guesses.get(encrypted).equals(playerGameMapping.getCryptoAlphabet().get(encrypted))) {
+    for (String encrypted : currentPlayer.getCurrentCryptogram().getCryptoAlphabet().keySet()) {
+      if (!guesses.get(encrypted).equals(currentPlayer.getCurrentCryptogram().getCryptoAlphabet().get(encrypted))) {
         return false; // If any guess is incorrect or missing, the player has not won
       }
     }

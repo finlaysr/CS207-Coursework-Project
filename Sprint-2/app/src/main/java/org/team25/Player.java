@@ -12,6 +12,7 @@ public class Player implements Serializable {
   private int cryptogramsPlayed;
   private int cryptogramsCompleted;
   private double accuracy;
+  private Cryptogram currentCryptogram;
 
   // player constructor
   public Player(String username) {
@@ -21,6 +22,7 @@ public class Player implements Serializable {
     this.cryptogramsPlayed = 0;
     this.cryptogramsCompleted = 0;
     this.accuracy = 0.0;
+    this.currentCryptogram = null;
   }
 
   public void updateAccuracy() {
@@ -69,5 +71,19 @@ public class Player implements Serializable {
   public void incrementTotalCorrectGuesses() {
     totalCorrectGuesses++;
     System.out.println("Total correct guesses: " + totalCorrectGuesses);
+  }
+
+  /**
+   * Accessory method to return the current cryptogram, used by Game
+   * @return the current Cryptogram of the player
+   */
+  public Cryptogram getCurrentCryptogram() {return currentCryptogram;}
+
+  /**
+   * Settor method for curren cryptogram used for game
+   * @param current the cryptogram to be set
+   */
+  public void setCurrentCryptogram(Cryptogram current) {
+    this.currentCryptogram = current;
   }
 }
