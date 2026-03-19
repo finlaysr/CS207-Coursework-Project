@@ -90,4 +90,15 @@ public class Player implements Serializable {
   public void setCurrentCryptogram(Cryptogram current) {
     this.currentCryptogram = current;
   }
+
+  // for tests
+  public void setGuesses(int guesses) {
+      this.totalGuesses = guesses;
+  }
+
+  public void setCorrectGuesses(int guessesCorrect) {
+    this.totalCorrectGuesses = guessesCorrect;
+  }
 }
+
+

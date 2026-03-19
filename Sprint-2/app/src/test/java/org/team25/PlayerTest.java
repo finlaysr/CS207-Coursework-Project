@@ -10,76 +10,103 @@ class PlayerTest {
   // As a player I want to store my player name so the software can track my game play statistics
   @Test
   void testStorePlayerName() {
-    Player player = new Player("Luke");
-    assertEquals("Luke", player.getUsername());
+    Game game = new Game();
+    game.signUp("Luke");
+    assertEquals("Luke", game.getCurrentPlayer().getUsername());
   }
 
   // As a player I want to store my details so I can track my game play statistics
   @Test
   void testNewPlayerStartsWithZeroStats() {
-    Player player = new Player("Luke");
+    Game game = new Game();
+    game.signUp("Luke");
 
-    assertEquals(0, player.getNumCryptogramsPlayed());
-    assertEquals(0, player.getNumCryptogramsCompleted());
-    assertEquals(0, player.getTotalGuesses());
-    assertEquals(0, player.getTotalCorrectGuesses());
+    assertEquals(0, game.getCurrentPlayer().getNumCryptogramsPlayed());
+    assertEquals(0, game.getCurrentPlayer().getNumCryptogramsCompleted());
+    assertEquals(0, game.getCurrentPlayer().getTotalGuesses());
+    assertEquals(0, game.getCurrentPlayer().getTotalCorrectGuesses());
   }
 
   // Story 9:
   // As a player I want the software to track the number of cryptograms I have successfully completed
   @Test
   void testCryptogramsCompletedIncrement(){
-    Player player = new Player("Luke");
-    player.incrementCryptogramsCompleted();
-    assertEquals(1, player.getNumCryptogramsCompleted());
+    Game game = new Game();
+    game.signUp("Luke");
+
+    game.getCurrentPlayer().incrementCryptogramsCompleted();
+    assertEquals(1, game.getCurrentPlayer().getNumCryptogramsCompleted());
   }
 
   // Story 10:
   // As a player I want the software to track the number of cryptograms I have played
   @Test
   void testCryptogramsPlayedIncrement() {
-    Player player = new Player("Luke");
-    player.incrementCryptogramsPlayed();
-    assertEquals(1, player.getNumCryptogramsPlayed());
+    Game game = new Game();
+    game.signUp("Luke");
+
+    game.getCurrentPlayer().incrementCryptogramsCompleted();
+
+    assertEquals(1, game.getCurrentPlayer().getNumCryptogramsCompleted());
   }
+
 
   // Story 11:
   // As a player I want the software to track the number of correct guesses I have made
   // so I can see how accurate I am as a percentage of my total number of guesses
   @Test
   void testCorrectGuessUpdate() {
-    Player player = new Player("Luke");
+    Game game = new Game();
+    game.signUp("Luke");
 
-    player.incrementTotalGuesses();
-    player.incrementTotalCorrectGuesses();
-    assertEquals(1, player.getTotalGuesses());
-    assertEquals(1, player.getTotalCorrectGuesses());
+    game.getCurrentPlayer().incrementTotalGuesses();
+    game.getCurrentPlayer().incrementTotalCorrectGuesses();
+
+    assertEquals(1, game.getCurrentPlayer().getTotalGuesses());
+    assertEquals(1, game.getCurrentPlayer().getTotalCorrectGuesses());
   }
   @Test
   void testIncorrectGuessUpdates() {
-    Player player = new Player("Luke");
+    Game game = new Game();
+    game.signUp("Luke");
 
-    player.incrementTotalGuesses();
-    assertEquals(1, player.getTotalGuesses());
-    assertEquals(0, player.getTotalCorrectGuesses());
+    game.getCurrentPlayer().incrementTotalGuesses();
+    assertEquals(1, game.getCurrentPlayer().getTotalGuesses());
+    assertEquals(0, game.getCurrentPlayer().getTotalCorrectGuesses());
   }
-  /*
   @Test
   void testAccuracyPercentageCalculation() {
-    Player player = new Player("Luke");
+    Game game = new Game();
+    game.signUp("Luke");
 
-    player.setGuesses(10);
-    player.setCorrectGuesses(7);
+    game.getCurrentPlayer().setGuesses(10);
+    game.getCurrentPlayer().setCorrectGuesses(7);
 
-    assertEquals(70.0, player.getAccuracy());
+    assertEquals(70.0, game.getCurrentPlayer().getAccuracy());
   }
-
-   */
   @Test
   void testAccuracyWithZeroGuesses() {
-    Player player = new Player("Luke");
-    assertEquals(0.0, player.getAccuracy());
+    Game game = new Game();
+    game.signUp("Luke");
+
+    assertEquals(0.0, game.getCurrentPlayer().getAccuracy());
   }
 
+  // Story 12:
+  // As a player I want to load my details so I can track my game play statistics
+  /*
+  @Test
+  void testLoadPlayerDetails(){
+    Game game = new Game();
+    game.signUp("Luke");
 
+    game.getCurrentPlayer().incrementCryptogramsPlayed();
+    game.getCurrentPlayer().savePlayer("testPlayer.txt");
+
+    Game newGame = new Game();
+    newGame.loadPlayer("testPlayer.txt");
+
+    assertEquals(1, newGame.getCurrentPlayer().getNumCryptogramsPlayed());
+  }
+  */
 }
