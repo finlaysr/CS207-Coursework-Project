@@ -3,6 +3,7 @@ package org.team25;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -97,5 +98,17 @@ class GameTest {
     Game game = new Game();
     game.generateCryptogram(false);
     assertFalse(game.isLetterCrypto());
+  }
+
+  // check that user login is saved across games
+  @Test
+  void testLogin() {
+    Game game1 = new Game();
+    game1.signUp("test");
+    game1.shutdown(); // saves the test user
+
+    Game game2 = new Game();
+    assertNull(game2.logIn("test")); // check user was loaded
+    assertNotNull(game2.logIn("notAUser")); // check invalid user login not allowed
   }
 }

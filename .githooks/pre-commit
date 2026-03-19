@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Read the list of staged Java files in Sprint-1 or Sprint-2 into an array
 mapfile -t staged_java_files < <(
-  git diff --cached --name-only --diff-filter=ACMR | grep -E '^Sprint-(1|2)/.*\.java$' || true
+  git diff --cached --name-only --diff-filter=ACMR | grep -E '^Sprint-(1|2|3)/.*\.java$' || true
 )
 
 if ((${#staged_java_files[@]})); then
@@ -16,7 +16,7 @@ if ((${#staged_java_files[@]})); then
   done
 
   echo "------------------------------------"
-  echo "Detected changes in Java files in Sprint-1/Sprint-2, running gradle formatter."
+  echo "Detected changes in Java files in Sprint-1/Sprint-2/Sprint-3, running gradle formatter."
   echo "If you don't want this add --no-verify, eg: git commit --no-verify -m \"message\""
   echo "------------------------------------"
 
