@@ -1,21 +1,30 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# This runs before each commit and checks staged Sprint-1 Java files are formatted.
+# This runs before each commit and checks staged Sprint-1/Sprint-2 Java files are formatted.
 
-# Read the list of staged Java files in Sprint-1 into an array
+# Read the list of staged Java files in Sprint-1 or Sprint-2 into an array
 mapfile -t staged_java_files < <(
-  git diff --cached --name-only --diff-filter=ACMR | grep -E '^Sprint-1/.*\.java$' || true
+  git diff --cached --name-only --diff-filter=ACMR | grep -E '^Sprint-(1|2)/.*\.java$' || true
 )
 
 if ((${#staged_java_files[@]})); then
+  declare -A affected_sprints=()
+  for file in "${staged_java_files[@]}"; do
+    sprint_dir="${file%%/*}"
+    affected_sprints["$sprint_dir"]=1
+  done
+
   echo "------------------------------------"
-  echo "Detected changes in Java files in Sprint-1, running gradle formatter."
+  echo "Detected changes in Java files in Sprint-1/Sprint-2, running gradle formatter."
   echo "If you don't want this add --no-verify, eg: git commit --no-verify -m \"message\""
   echo "------------------------------------"
 
-  echo "Running spotlessApply..."
-  (cd Sprint-1 && ./gradlew spotlessApply)
+  for sprint_dir in "${!affected_sprints[@]}"; do
+    echo "Running spotlessApply in ${sprint_dir}..."
+    (cd "$sprint_dir" && ./gradlew spotlessApply)
+  done
+
   # Re-stage only the files that were already staged for this commit.
   git add -- "${staged_java_files[@]}"
 fi
