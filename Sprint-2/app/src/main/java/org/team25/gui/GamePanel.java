@@ -68,12 +68,13 @@ class GamePanel extends JPanel {
     JButton submitButton = new JButton("Submit");
     this.add(submitButton, GUI.setConstraints(0, 3));
     submitButton.addActionListener(
-        _ ->
-            inputFields.forEach(
-                (enc, arr) -> {
-                  System.out.print("\n" + enc + ": ");
-                  arr.forEach(f -> System.out.print(f.getText() + ", "));
-                }));
+        _ -> {
+          if (game.checkWin()) {
+            gui.switchContent(new LeaderBoardPanel(gui, game));
+          } else {
+            JOptionPane.showMessageDialog(null, "Incorrect!", "Error", JOptionPane.ERROR_MESSAGE);
+          }
+        });
 
     // Set back button to link to Game Choice panel
     if (gui.getBackButton().getActionListeners().length > 0) {

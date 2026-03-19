@@ -11,11 +11,20 @@ import org.team25.Game;
 class GameChoicePanel extends JPanel {
   protected GameChoicePanel(GUI gui, Game game) {
     this.setLayout(new GridBagLayout());
-    this.add(new JLabel("Choose Game Type:"), GUI.setConstraints(0, 0));
+
+    this.add(new JLabel("Continue previous game:"), GUI.setConstraints(0, 0));
+    JButton prevButton = new JButton("Load Previous Game");
+    this.add(prevButton, GUI.setConstraints(0, 1));
+    prevButton.addActionListener(
+        _ -> {
+          System.out.println("Load previous game");
+        });
+
+    this.add(new JLabel("Start a new game:"), GUI.setConstraints(0, 2));
 
     // Button for Letter to Letter cryptogram
     JButton letterButton = new JButton("Letter to Letter");
-    this.add(letterButton, GUI.setConstraints(0, 1));
+    this.add(letterButton, GUI.setConstraints(0, 3));
     letterButton.addActionListener(
         _ -> {
           game.generateCryptogram(true);
@@ -24,7 +33,7 @@ class GameChoicePanel extends JPanel {
 
     // Button for Letter to Number cryptogram
     JButton numberButton = new JButton("Letter to Number");
-    this.add(numberButton, GUI.setConstraints(0, 2));
+    this.add(numberButton, GUI.setConstraints(0, 4));
     numberButton.addActionListener(
         _ -> {
           game.generateCryptogram(false);

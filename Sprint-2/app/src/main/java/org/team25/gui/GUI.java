@@ -40,7 +40,6 @@ public class GUI {
     // Part of the app that all the different screens will insert into
     contentPane = new JPanel();
     contentPane.setLayout(new BorderLayout());
-    contentPane.setBackground(Color.DARK_GRAY);
     mainFrame.add(contentPane, BorderLayout.CENTER);
 
     // Panel containing back button and font options
