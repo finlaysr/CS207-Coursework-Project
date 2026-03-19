@@ -152,16 +152,18 @@ public class Game {
 
   public boolean checkWin() {
     System.out.println(currentPlayer.getCurrentCryptogram().getGuesses());
+    System.out.println(currentPlayer.getCurrentCryptogram().getCryptoAlphabet());
     if (currentPlayer.getCurrentCryptogram().getGuesses().containsValue(null)) {
       return false;
     }
-    for (String encrypted : currentPlayer.getCurrentCryptogram().getCryptoAlphabet().keySet()) {
+
+    for (String guess : currentPlayer.getCurrentCryptogram().getGuesses().keySet()) {
       // check input is equal to correct value
       if (!currentPlayer
           .getCurrentCryptogram()
-          .getGuesses()
-          .get(encrypted)
-          .equals(currentPlayer.getCurrentCryptogram().getCryptoAlphabet().get(encrypted))) {
+          .getCryptoAlphabet()
+          .get(guess)
+          .equals(currentPlayer.getCurrentCryptogram().getGuesses().get(guess))) {
         return false; // If any guess is incorrect or missing, the player has not won
       }
     }
