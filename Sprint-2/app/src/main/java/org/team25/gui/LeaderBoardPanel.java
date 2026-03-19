@@ -1,3 +1,4 @@
+/* CS207 Cryptogram Project - Sprint 2 - Team 25 2026 */
 package org.team25.gui;
 
 import java.awt.Font;
@@ -14,8 +15,7 @@ public class LeaderBoardPanel extends JPanel {
     welcomeLabel.setFont(new Font("Ariel", Font.BOLD, 18));
     this.add(welcomeLabel, GUI.setConstraints(0, 0));
 
-    this.add(new JLabel("Congratulations!"),  GUI.setConstraints(0, 1));
-
+    this.add(new JLabel("Congratulations!"), GUI.setConstraints(0, 1));
 
     // Set back button to go to Game Choice Screen
     gui.getBackButton().setVisible(true);
