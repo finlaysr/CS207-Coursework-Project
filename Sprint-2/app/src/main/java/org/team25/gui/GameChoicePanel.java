@@ -20,8 +20,9 @@ class GameChoicePanel extends JPanel {
         _ -> {
           if (game.loadGame()) {
             gui.switchContent(new GamePanel(gui, game));
-          } else   {
-            JOptionPane.showMessageDialog(null, "No current cryptogram","Error", JOptionPane.ERROR_MESSAGE );
+          } else {
+            JOptionPane.showMessageDialog(
+                null, "No current cryptogram", "Error", JOptionPane.ERROR_MESSAGE);
           }
         });
 

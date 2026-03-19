@@ -18,7 +18,7 @@ public class Players {
   // instance variables
   private ArrayList<Player> allPlayers = new ArrayList<>();
 
-  //player file
+  // player file
   private final File playersDir =
       new File("src" + File.separator + "data" + File.separator + "players");
 

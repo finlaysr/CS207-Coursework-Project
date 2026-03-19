@@ -6,16 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Cryptogram implements Serializable {
-
   protected String phrase;
   // Annoyingly has to be a String, not a Char, since in NumberCryptogram 2-digit numbers will be
   // more than one character long
   protected HashMap<String, Character> cryptogramAlphabet = new HashMap<>();
   protected ArrayList<String> encryptedPhrase = new ArrayList<>();
+  private LinkedHashMap<String, Character> guesses = new LinkedHashMap<>();
   protected Integer cryptogramID;
 
   // Scanner the file
@@ -81,5 +82,9 @@ public class Cryptogram implements Serializable {
 
   public Integer getCryptogramID() {
     return cryptogramID;
+  }
+
+  public LinkedHashMap<String, Character> getGuesses() {
+    return guesses;
   }
 }

@@ -12,12 +12,10 @@ public class Game {
   private Players players;
 
   // Stores user guesses. Key: Encrypted, Value: Guess
-  private LinkedHashMap<String, Character> guesses;
 
   /** Constructor for the game class, just initialises everything */
   public Game() {
     players = new Players();
-    guesses = new LinkedHashMap<>();
     currentPlayer = null;
   }
 
@@ -25,7 +23,7 @@ public class Game {
     players.saveAllData();
   }
 
-  //need to modify for setting current game mapping
+  // need to modify for setting current game mapping
   // Returns error if exists, else null on success
   public String signUp(String username) {
     if (username.isEmpty()) {
@@ -71,7 +69,6 @@ public class Game {
   public void generateCryptogram(boolean isLetterCrypto) {
     // allow the user to choice if they would want letter to letter or number to letter
     // check what cryptogram to generate
-    guesses.clear();
     if (isLetterCrypto) {
       // Generates the cryptogram and prints the statement
       currentPlayer.setCurrentCryptogram(new LetterCryptogram());
@@ -94,15 +91,16 @@ public class Game {
       return "Guess must be a letter from a-z!";
     }
 
-    if (guesses.containsValue(guess)) {
+    if (currentPlayer.getCurrentCryptogram().getGuesses().containsValue(guess)) {
       return "Letter already in use!";
     }
 
     // If guess valid enter it and return null
-    guesses.put(encrypted, guess);
+    currentPlayer.getCurrentCryptogram().getGuesses().put(encrypted, guess);
     currentPlayer.incrementTotalGuesses();
 
-    if (currentPlayer.getCurrentCryptogram()
+    if (currentPlayer
+        .getCurrentCryptogram()
         .getCryptoAlphabet()
         .get(encrypted)
         .equals(guess)) { // If the guess is correct, increment total correct guesses
@@ -114,17 +112,19 @@ public class Game {
 
   /** User story 3: As a player I want to be able to undo a letter so I can play the cryptogram */
   public void undoLetter() {
-    System.out.println("Guesses before: " + guesses);
-    if (guesses.isEmpty()) {
+    if (currentPlayer.getCurrentCryptogram().getGuesses().isEmpty()) {
       System.out.println("There are no guesses to be undone");
     } else {
-      guesses.remove(guesses.lastEntry().getKey());
+      currentPlayer
+          .getCurrentCryptogram()
+          .getGuesses()
+          .remove(currentPlayer.getCurrentCryptogram().getGuesses().lastEntry().getKey());
     }
-    System.out.println("Guesses after: " + guesses);
+    System.out.println("Guesses after: " + currentPlayer.getCurrentCryptogram().getGuesses());
   }
 
   public LinkedHashMap<String, Character> getGuessStack() {
-    return guesses;
+    return currentPlayer.getCurrentCryptogram().getGuesses();
   }
 
   /**
@@ -151,8 +151,19 @@ public class Game {
   public void showSolution() {}
 
   public boolean checkWin() {
-    for (String encrypted : currentPlayer.getCurrentCryptogram().getCryptoAlphabet().keySet()) {
-      if (!guesses.get(encrypted).equals(currentPlayer.getCurrentCryptogram().getCryptoAlphabet().get(encrypted))) {
+    System.out.println(currentPlayer.getCurrentCryptogram().getGuesses());
+    System.out.println(currentPlayer.getCurrentCryptogram().getCryptoAlphabet());
+    if (currentPlayer.getCurrentCryptogram().getGuesses().containsValue(null)) {
+      return false;
+    }
+
+    for (String guess : currentPlayer.getCurrentCryptogram().getGuesses().keySet()) {
+      // check input is equal to correct value
+      if (!currentPlayer
+          .getCurrentCryptogram()
+          .getCryptoAlphabet()
+          .get(guess)
+          .equals(currentPlayer.getCurrentCryptogram().getGuesses().get(guess))) {
         return false; // If any guess is incorrect or missing, the player has not won
       }
     }
@@ -161,8 +172,9 @@ public class Game {
   }
 
   /**
-   * Checks that the player has a current cryptogram, this will then be loaded if they do
-   * if not then they can generate a letter or numver cryptogram
+   * Checks that the player has a current cryptogram, this will then be loaded if they do If not,
+   * then they can generate a letter or number cryptogram
+   *
    * @return boolean flag to tell if they have a game or not
    */
   public boolean loadGame() {
@@ -170,6 +182,4 @@ public class Game {
       return true;
     } else return false;
   }
-
 }
-

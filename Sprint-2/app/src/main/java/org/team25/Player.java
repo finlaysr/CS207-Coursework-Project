@@ -75,12 +75,16 @@ public class Player implements Serializable {
 
   /**
    * Accessory method to return the current cryptogram, used by Game
+   *
    * @return the current Cryptogram of the player
    */
-  public Cryptogram getCurrentCryptogram() {return currentCryptogram;}
+  public Cryptogram getCurrentCryptogram() {
+    return currentCryptogram;
+  }
 
   /**
    * Settor method for curren cryptogram used for game
+   *
    * @param current the cryptogram to be set
    */
   public void setCurrentCryptogram(Cryptogram current) {
