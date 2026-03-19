@@ -151,6 +151,9 @@ public class Game {
   public void showSolution() {}
 
   public boolean checkWin() {
+    if (guesses.containsValue(null)) {
+      return false;
+    }
     for (String encrypted : currentPlayer.getCurrentCryptogram().getCryptoAlphabet().keySet()) {
       if (!guesses.get(encrypted).equals(currentPlayer.getCurrentCryptogram().getCryptoAlphabet().get(encrypted))) {
         return false; // If any guess is incorrect or missing, the player has not won
