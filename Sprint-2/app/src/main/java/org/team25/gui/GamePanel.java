@@ -110,7 +110,7 @@ class GamePanel extends JPanel {
         charPanel.setBackground(Color.lightGray);
 
         // Check if it's a character for input, not punctuation or a number
-        if (!encrypted.equals(game.getCryptoAlph().get(encrypted).toString())) {
+        if (game.getCryptoAlph().containsKey(encrypted)) {
           i++;
           encryptedChars.add(encrypted);
 

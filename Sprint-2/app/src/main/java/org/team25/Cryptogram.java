@@ -11,18 +11,26 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Cryptogram implements Serializable {
+  /** Stores unencrypted phrase */
   protected String phrase;
+
   // Annoyingly has to be a String, not a Char, since in NumberCryptogram 2-digit numbers will be
   // more than one character long
+  /** Stores encrypted character mappings, key: encrypted, value: unencrypted */
   protected HashMap<String, Character> cryptogramAlphabet = new HashMap<>();
+
   protected ArrayList<String> encryptedPhrase = new ArrayList<>();
+
+  /**
+   * Stores guesses entered: key: encrypted, value: guess LinkedHashMap so that last input can be
+   * removed using undo
+   */
   private LinkedHashMap<String, Character> guesses = new LinkedHashMap<>();
+
   protected Integer cryptogramID;
 
   // Scanner the file
-  public String loadPhrase() {
-    String phrase = "";
-
+  public void loadPhrase() {
     File database = new File("src/resources/sentences.txt");
 
     try (Scanner myReader = new Scanner(database)) {
@@ -40,11 +48,9 @@ public class Cryptogram implements Serializable {
     }
 
     phrase = phrase.toLowerCase();
-
-    return phrase;
   }
 
-  // Phrase contains the string
+  // Phrase contains the unencrypted string
   public String getPhrase() {
     return phrase;
   }

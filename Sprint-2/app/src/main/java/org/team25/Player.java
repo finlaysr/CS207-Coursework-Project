@@ -61,7 +61,6 @@ public class Player implements Serializable {
 
   public void incrementTotalGuesses() {
     totalGuesses++;
-    System.out.println("Total guesses: " + totalGuesses);
   }
 
   public int getTotalCorrectGuesses() {
@@ -70,7 +69,6 @@ public class Player implements Serializable {
 
   public void incrementTotalCorrectGuesses() {
     totalCorrectGuesses++;
-    System.out.println("Total correct guesses: " + totalCorrectGuesses);
   }
 
   /**

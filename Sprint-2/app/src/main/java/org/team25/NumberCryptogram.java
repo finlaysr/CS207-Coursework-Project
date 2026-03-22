@@ -4,8 +4,9 @@ package org.team25;
 public class NumberCryptogram extends Cryptogram {
   public NumberCryptogram() { // Scanner the file
     // can't have numbers in a number cryptogram, so re-roll if it happens
-    do super.phrase = loadPhrase();
-    while (phrase.matches("^.*\\d.*"));
+    do {
+      loadPhrase();
+    } while (super.phrase.matches("^.*\\d.*"));
     encryptPhrase(13);
   }
 
@@ -21,24 +22,17 @@ public class NumberCryptogram extends Cryptogram {
         // Move 13 places forward
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
         int encrypted = (currentChar - base + offset) % 26;
-        System.out.println("encrypted: " + encrypted + " currentChar: " + currentChar);
         super.encryptedPhrase.add(Integer.toString(encrypted));
+        super.cryptogramAlphabet.put(String.valueOf(encrypted), currentChar);
 
       } else {
+        // if it's a space or punctuation just add it as it is
         super.encryptedPhrase.add(String.valueOf(currentChar));
       }
-    }
-
-    System.out.println("Encrypted phrase " + super.encryptedPhrase);
-
-    // Store inside hashmap
-    for (int i = 0; i < phrase.length(); i++) {
-      cryptogramAlphabet.put(super.encryptedPhrase.get(i), phrase.charAt(i));
     }
   }
 
   public char getPlainLetter(String cryptoNum) {
-
     System.out.println("CrytoNum : " + cryptoNum);
     char revertedLetter = ' '; // This is to store the reverted phrase
 

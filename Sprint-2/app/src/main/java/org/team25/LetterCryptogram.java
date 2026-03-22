@@ -4,7 +4,7 @@ package org.team25;
 public class LetterCryptogram extends Cryptogram {
   public LetterCryptogram() {
     // loadPhrase is called in Cryptogram
-    super.phrase = loadPhrase();
+    loadPhrase();
     encryptPhrase(13);
   }
 
@@ -21,16 +21,12 @@ public class LetterCryptogram extends Cryptogram {
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
         char encrypted = (char) ((currentChar - base + offset) % 26 + base);
         super.encryptedPhrase.add(Character.toString(encrypted));
+        super.cryptogramAlphabet.put(Character.toString(encrypted), currentChar);
 
       } else {
         // if it's a space or punctuation just add it as it is
         super.encryptedPhrase.add(Character.toString(currentChar));
       }
-    }
-    System.out.print("Encrypted : ");
-
-    for (int i = 0; i < phrase.length(); i++) {
-      cryptogramAlphabet.put(super.encryptedPhrase.get(i), phrase.charAt(i));
     }
   }
 

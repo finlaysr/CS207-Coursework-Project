@@ -75,7 +75,7 @@ public class Game {
       System.out.println("Letter cryptogram created!");
     } else {
       // Generates the cryptogram and prints the statement
-      currentPlayer.setCurrentCryptogram(new Cryptogram());
+      currentPlayer.setCurrentCryptogram(new NumberCryptogram());
       System.out.println("Number cryptogram created!");
     }
     currentPlayer.getCurrentCryptogram().show(); // shows hashmap connections
@@ -92,6 +92,10 @@ public class Game {
     }
 
     if (currentPlayer.getCurrentCryptogram().getGuesses().containsValue(guess)) {
+      if (currentPlayer.getCurrentCryptogram().getGuesses().containsKey(encrypted)
+          && currentPlayer.getCurrentCryptogram().getGuesses().get(encrypted).equals(guess)) {
+        return null; // letter entered = current letter so it's fine
+      }
       return "Letter already in use!";
     }
 
@@ -151,23 +155,25 @@ public class Game {
   public void showSolution() {}
 
   public boolean checkWin() {
-    System.out.println(currentPlayer.getCurrentCryptogram().getGuesses());
-    System.out.println(currentPlayer.getCurrentCryptogram().getCryptoAlphabet());
     if (currentPlayer.getCurrentCryptogram().getGuesses().containsValue(null)) {
       return false;
     }
 
-    for (String guess : currentPlayer.getCurrentCryptogram().getGuesses().keySet()) {
+    for (String encrypted : currentPlayer.getCurrentCryptogram().getCryptoAlphabet().keySet()) {
       // check input is equal to correct value
+      if (!currentPlayer.getCurrentCryptogram().getGuesses().containsKey(encrypted)) {
+        return false; // If guess not entered for that letter
+      }
       if (!currentPlayer
           .getCurrentCryptogram()
-          .getCryptoAlphabet()
-          .get(guess)
-          .equals(currentPlayer.getCurrentCryptogram().getGuesses().get(guess))) {
+          .getGuesses()
+          .get(encrypted)
+          .equals(currentPlayer.getCurrentCryptogram().getCryptoAlphabet().get(encrypted))) {
         return false; // If any guess is incorrect or missing, the player has not won
       }
     }
     currentPlayer.incrementCryptogramsCompleted();
+    currentPlayer.setCurrentCryptogram(null);
     return true; // All guesses are correct, the player has won
   }
 
