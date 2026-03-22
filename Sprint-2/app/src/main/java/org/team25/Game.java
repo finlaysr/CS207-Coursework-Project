@@ -103,11 +103,12 @@ public class Game {
     currentPlayer.getCurrentCryptogram().getGuesses().put(encrypted, guess);
     currentPlayer.incrementTotalGuesses();
 
-    if (currentPlayer
-        .getCurrentCryptogram()
-        .getCryptoAlphabet()
-        .get(encrypted)
-        .equals(guess)) { // If the guess is correct, increment total correct guesses
+    if (currentPlayer.getCurrentCryptogram().getCryptoAlphabet().containsKey(encrypted)
+        && currentPlayer
+            .getCurrentCryptogram()
+            .getCryptoAlphabet()
+            .get(encrypted)
+            .equals(guess)) { // If the guess is correct, increment total correct guesses
       currentPlayer.incrementTotalCorrectGuesses();
     }
 
