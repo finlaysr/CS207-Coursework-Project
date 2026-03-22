@@ -116,15 +116,70 @@ class PlayerTest {
 
   /**
    * Story 9: // As a player I want the software to track the number of cryptograms I have
-   * successfully
+   * successfully Check if count increases after successful completion of a cryptogram
    */
   @Test
-  void testCryptogramsCompletedIncrement() {
+  void testCryptogramsCompletedSuccessfully() {
     Game game = new Game();
     game.signUp(testUsername);
+    game.generateCryptogram(true);
 
     // initially, they will have 0 cryptograms completed
     // The point of this test shows the stat is there... will only increment when game complete
+    assertEquals(0, game.getCurrentPlayer().getNumCryptogramsCompleted());
+
+    game.getCryptoAlph()
+        .keySet()
+        .forEach(enc -> game.enterLetter(enc, game.getCryptoAlph().get(enc)));
+
+    assertTrue(game.checkWin());
+    assertEquals(1, game.getCurrentPlayer().getNumCryptogramsCompleted());
+  }
+
+  /**
+   * Story 9: // As a player I want the software to track the number of cryptograms I have
+   * successfully Check if count does not increase if not all letters filled in
+   */
+  @Test
+  void testCryptogramsCompletedEmptyLetter() {
+    Game game = new Game();
+    game.signUp(testUsername);
+    game.generateCryptogram(true);
+
+    // initially, they will have 0 cryptograms completed
+    // The point of this test shows the stat is there... will only increment when game complete
+    assertEquals(0, game.getCurrentPlayer().getNumCryptogramsCompleted());
+
+    game.getCryptoAlph().keySet().stream()
+        .skip(1)
+        .forEach(enc -> game.enterLetter(enc, game.getCryptoAlph().get(enc)));
+
+    assertFalse(game.checkWin());
+    assertEquals(0, game.getCurrentPlayer().getNumCryptogramsCompleted());
+  }
+
+  /**
+   * Story 9: // As a player I want the software to track the number of cryptograms I have
+   * successfully Check if count does not increase if all invalid letters entered
+   */
+  @Test
+  void testCryptogramsCompletedInvalidLetter() {
+    Game game = new Game();
+    game.signUp(testUsername);
+    game.generateCryptogram(true);
+
+    // initially, they will have 0 cryptograms completed
+    // The point of this test shows the stat is there... will only increment when game complete
+    assertEquals(0, game.getCurrentPlayer().getNumCryptogramsCompleted());
+
+    String[] encryptedValues = game.getCryptoAlph().keySet().toArray(String[]::new);
+    for (int i = 0; i < encryptedValues.length; i++) {
+      game.enterLetter(
+          encryptedValues[i],
+          game.getCryptoAlph().get(encryptedValues[(i + 1) % encryptedValues.length]));
+    }
+
+    assertFalse(game.checkWin());
     assertEquals(0, game.getCurrentPlayer().getNumCryptogramsCompleted());
   }
 
