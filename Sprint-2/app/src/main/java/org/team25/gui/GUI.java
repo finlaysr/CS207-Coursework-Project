@@ -4,6 +4,11 @@ package org.team25.gui;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import org.team25.Game;
 
@@ -12,6 +17,7 @@ public class GUI {
   final Font titleFont = new Font("Ariel", Font.BOLD, 25);
   private final JPanel contentPane;
   private final JButton backButton;
+  private final PlayerMenu playerMenu;
 
   private int fontChange = 0;
   private static final int FONT_INCREMENT = 3;
@@ -29,6 +35,7 @@ public class GUI {
           }
         });
     mainFrame.setSize(1000, 800);
+    mainFrame.setLocationRelativeTo(null); // opens window in centre of screen
     mainFrame.setLayout(new BorderLayout());
     mainFrame.setVisible(true);
 
@@ -43,14 +50,21 @@ public class GUI {
     mainFrame.add(contentPane, BorderLayout.CENTER);
 
     // Panel containing back button and font options
-    JPanel bottomPannel = new JPanel(new GridBagLayout());
-    mainFrame.add(bottomPannel, BorderLayout.SOUTH);
+    JPanel bottomPanel = new JPanel(new GridBagLayout());
+    mainFrame.add(bottomPanel, BorderLayout.SOUTH);
+
+    // Button to go back to previous screen
+    backButton = new JButton("Back");
+    bottomPanel.add(backButton, setConstraints(0, 0, new Insets(0, 0, 10, 0)));
+
+    playerMenu = new PlayerMenu(this, game);
+    bottomPanel.add(playerMenu, GUI.setConstraints(0, 1, new Insets(0, 0, 10, 0)));
 
     // Add panel for increasing and decreasing the font size
     JPanel fontPanel = new JPanel(new GridBagLayout());
     fontPanel.setBackground(Color.lightGray);
     fontPanel.add(new JLabel("Font Size  "), GUI.setConstraints(0, 0));
-    bottomPannel.add(fontPanel, GUI.setConstraints(0, 1));
+    bottomPanel.add(fontPanel, GUI.setConstraints(0, 2));
 
     // Increase font size button
     JButton fontUp = new JButton("+");
@@ -70,10 +84,6 @@ public class GUI {
           this.fontChange -= 1;
         });
 
-    // Button to go back to previous screen
-    backButton = new JButton("Back");
-    bottomPannel.add(backButton, setConstraints(0, 0));
-
     // Go to first screen
     switchContent(new WelcomePanel(this, game));
   }
@@ -91,6 +101,10 @@ public class GUI {
     } else {
       SwingUtilities.invokeLater(() -> switchContent(pane));
     }
+  }
+
+  public void showPlayerMenu(boolean visible) {
+    playerMenu.showThis(visible);
   }
 
   public JButton getBackButton() {
@@ -123,13 +137,97 @@ public class GUI {
     for (Component comp : container.getComponents()) {
       Font old = comp.getFont();
       if (old != null && (old.getSize() + change > 3)) {
-
         comp.setFont(old.deriveFont(old.getStyle(), old.getSize() + change));
         comp.repaint();
       }
+
       if (comp instanceof Container inner) {
         resizeFont(inner, change);
       }
     }
+  }
+
+  protected int getFontChangeTotal() {
+    return this.fontChange * FONT_INCREMENT;
+  }
+}
+
+class PlayerMenu extends JPanel {
+  private final JLabel usernameLabel = new JLabel("");
+  private final Game game;
+
+  public PlayerMenu(GUI gui, Game game) {
+    this.game = game;
+    this.setLayout(new GridBagLayout());
+    this.setVisible(false);
+    this.setBackground(Color.lightGray);
+
+    // Load app user icon image, resize it, and display it
+    try {
+      BufferedImage logo = ImageIO.read(new File("src/resources/user_icon.png"));
+      Image logoScaled = logo.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+      JLabel picLabel = new JLabel(new ImageIcon(logoScaled));
+      this.add(picLabel, GUI.setConstraints(0, 0, new Insets(0, 5, 0, 10)));
+    } catch (IOException _) {
+      System.out.println("Could not load user icon image!");
+    }
+
+    this.add(usernameLabel, GUI.setConstraints(1, 0, new Insets(0, 0, 0, 10)));
+
+    JButton statsButton = new JButton("Stats");
+    statsButton.addActionListener(_ -> new StatsFrame(gui, game));
+    this.add(statsButton, GUI.setConstraints(2, 0, new Insets(0, 0, 0, 5)));
+
+    JButton logOutButton = new JButton("Log Out");
+    logOutButton.addActionListener(_ -> gui.switchContent(new LoginSignUpPanel(gui, game)));
+    this.add(logOutButton, GUI.setConstraints(3, 0));
+  }
+
+  public void showThis(boolean visible) {
+    this.setVisible(visible);
+    if (visible) {
+      usernameLabel.setText(game.getCurrentPlayer().getUsername());
+    }
+    this.revalidate();
+    this.repaint();
+  }
+}
+
+class StatsFrame extends JFrame {
+  public StatsFrame(GUI gui, Game game) {
+    super("Player Stats");
+    this.setSize(600, 400);
+    this.setLocationRelativeTo(null);
+    this.setVisible(true);
+    this.setLayout(new BorderLayout());
+
+    JLabel titleLabel = new JLabel(game.getCurrentPlayer().getUsername() + "'s Stats");
+    titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    this.add(titleLabel, BorderLayout.NORTH);
+
+    JPanel statsPanel = new JPanel(new GridBagLayout());
+    statsPanel.setLayout(new GridBagLayout());
+    this.add(statsPanel, BorderLayout.CENTER);
+
+    AtomicInteger i = new AtomicInteger();
+
+    game.getPlayerStats()
+        .keySet()
+        .forEach(
+            stat -> {
+              statsPanel.add(
+                  new JLabel(stat), GUI.setConstraints(0, i.get(), new Insets(0, 0, 0, 5)));
+              statsPanel.add(
+                  new JLabel(game.getPlayerStats().get(stat)), GUI.setConstraints(1, i.get()));
+              i.getAndIncrement();
+            });
+
+    JPanel buttonPanel = new JPanel();
+    this.add(buttonPanel, BorderLayout.SOUTH);
+    JButton closeButton = new JButton("Close");
+    closeButton.addActionListener(_ -> this.dispose());
+    buttonPanel.add(closeButton);
+
+    gui.resizeFont(this, gui.getFontChangeTotal());
   }
 }

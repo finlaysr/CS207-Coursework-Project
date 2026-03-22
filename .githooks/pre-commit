@@ -16,7 +16,7 @@ if ((${#staged_java_files[@]})); then
   done
 
   echo "------------------------------------"
-  echo "Detected changes in Java files in Sprint-1/Sprint-2/Sprint-3, running gradle formatter."
+  echo "Detected changes in Java files, running gradle formatter."
   echo "If you don't want this add --no-verify, eg: git commit --no-verify -m \"message\""
   echo "------------------------------------"
 

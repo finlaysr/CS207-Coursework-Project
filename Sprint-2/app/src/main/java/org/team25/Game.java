@@ -178,8 +178,22 @@ public class Game {
    * @return boolean flag to tell if they have a game or not
    */
   public boolean loadGame() {
-    if (currentPlayer.getCurrentCryptogram() != null) {
-      return true;
-    } else return false;
+    return currentPlayer.getCurrentCryptogram() != null;
+  }
+
+  public LinkedHashMap<String, String> getPlayerStats() {
+    LinkedHashMap<String, String> stats = new LinkedHashMap<>();
+    stats.put("Cryptograms Completed", String.valueOf(currentPlayer.getNumCryptogramsCompleted()));
+    stats.put("Cryptograms Played", String.valueOf(currentPlayer.getNumCryptogramsPlayed()));
+    stats.put("Correct Guesses", String.valueOf(currentPlayer.getTotalCorrectGuesses()));
+    stats.put("Total Guesses", String.valueOf(currentPlayer.getTotalGuesses()));
+    if (currentPlayer.getTotalGuesses() == 0) {
+      stats.put("Guess Accuracy", "NA");
+    } else {
+      stats.put(
+          "Guess Accuracy",
+          currentPlayer.getTotalCorrectGuesses() * 100 / currentPlayer.getTotalGuesses() + "%");
+    }
+    return stats;
   }
 }

@@ -28,6 +28,9 @@ public class LoginSignUpPanel extends JPanel {
       gui.getBackButton().removeActionListener(gui.getBackButton().getActionListeners()[0]);
     }
     gui.getBackButton().addActionListener(_ -> gui.switchContent(new WelcomePanel(gui, game)));
+
+    // hide player menu
+    gui.showPlayerMenu(false);
   }
 }
 

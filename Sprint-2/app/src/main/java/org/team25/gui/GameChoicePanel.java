@@ -52,5 +52,8 @@ class GameChoicePanel extends JPanel {
       gui.getBackButton().removeActionListener(gui.getBackButton().getActionListeners()[0]);
     }
     gui.getBackButton().addActionListener(_ -> gui.switchContent(new LoginSignUpPanel(gui, game)));
+
+    // show the user panel
+    gui.showPlayerMenu(true);
   }
 }
