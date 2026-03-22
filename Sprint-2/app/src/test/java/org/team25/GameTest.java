@@ -12,11 +12,21 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class GameTest {
-  private final String testUsername = "testUsername";
+  // random test username
+  private final String testUsername = "sdAUIDefgbaAUsrgAhfeai";
 
   @AfterEach
   void teardown() {
-    File test = new File("src/data/players/" + testUsername + ".ser");
+    File test =
+        new File(
+            "src"
+                + File.separator
+                + "data"
+                + File.separator
+                + "players"
+                + File.separator
+                + testUsername
+                + ".ser");
     test.delete();
   }
 

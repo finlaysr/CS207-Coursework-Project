@@ -8,11 +8,22 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class PlayerTest {
+  // random test username
+  private final String testUsername = "sdAUIDefgbaAUsrgAhfeai";
 
   /** After all delete the test file as a player as it impacts other tests from running */
   @AfterEach
   void teardown() {
-    File test = new File("src/data/players/test.ser");
+    File test =
+        new File(
+            "src"
+                + File.separator
+                + "data"
+                + File.separator
+                + "players"
+                + File.separator
+                + testUsername
+                + ".ser");
     test.delete();
   }
 
@@ -21,14 +32,14 @@ class PlayerTest {
   void saveCryptogram() {
     // create new game and generate cryptogram
     Game game1 = new Game();
-    game1.signUp("test");
+    game1.signUp(testUsername);
     assertNull(game1.getCurrentPlayer().getCurrentCryptogram());
     game1.generateCryptogram(true);
     game1.shutdown();
 
     // create new game and save if game has been saved
     Game game2 = new Game();
-    game2.logIn("test");
+    game2.logIn(testUsername);
     assertNotNull(game2.getCurrentPlayer().getCurrentCryptogram());
   }
 
@@ -40,20 +51,23 @@ class PlayerTest {
   void loadSavedCrypto() {
     // create new game and generate cryptogram
     Game game1 = new Game();
-    game1.signUp("test");
+    game1.signUp(testUsername);
     assertNull(game1.getCurrentPlayer().getCurrentCryptogram());
     game1.generateCryptogram(true);
+    Cryptogram oldCrypto = game1.getCurrentPlayer().getCurrentCryptogram();
     game1.shutdown();
 
     // restart game and check if player can play
     Game game2 = new Game();
-    game2.logIn("test");
-    assertNotNull(game2.getCurrentPlayer().getCurrentCryptogram());
+    game2.logIn(testUsername);
+    Cryptogram newCrypto = game2.getCurrentPlayer().getCurrentCryptogram();
+    assertNotNull(newCrypto);
+
+    assertEquals(oldCrypto.getPhrase(), newCrypto.getPhrase());
 
     // player can enter a guess here...just to show functionality
-    // test will fail if the encrypted value is not in the message
-    // used V and i as assumed they are in most messages since a vowel
-    assertNull(game2.enterLetter("v", 'i'));
+    // enters a random key from the hashmap into the cryptogram as a guess
+    assertNull(game2.enterLetter(game2.getCryptoAlph().keySet().iterator().next(), 't'));
   }
 
   /** User Story 5- loading cryptogram Scenario- Player has no previous game stored */
@@ -61,7 +75,7 @@ class PlayerTest {
   void loadEmptyCryptogram() {
     // create new game and tried to load with no cryptogram
     Game game1 = new Game();
-    game1.signUp("test");
+    game1.signUp(testUsername);
     assertNull(game1.getCurrentPlayer().getCurrentCryptogram());
 
     // try to load the game...GUI will display error message if no existing game
@@ -72,17 +86,16 @@ class PlayerTest {
   @Test
   void corruptGram() {
     Game game1 = new Game();
-    game1.signUp("luke");
+    game1.signUp(testUsername);
     game1.generateCryptogram(true);
     game1.shutdown();
 
     // delete file to simulate corruption
-    File test = new File("src/data/players/luke.ser");
-    test.delete();
+    teardown();
 
     // then try and login...wont be allowed to as their data is corrupt and therefore lost
     Game game2 = new Game();
-    assertEquals("Player not found! Please sign up first.", game2.logIn("luke"));
+    assertEquals("Player not found! Please sign up first.", game2.logIn(testUsername));
   }
 
   /**
@@ -92,13 +105,13 @@ class PlayerTest {
   @Test
   void testStorePlayerName() {
     Game game = new Game();
-    game.signUp("test");
+    game.signUp(testUsername);
     game.shutdown();
 
     // create new game to save if the player was saved to the file
     // then should be able to login in a new run of the game
     Game game1 = new Game();
-    assertNull(game1.logIn("test"));
+    assertNull(game1.logIn(testUsername));
   }
 
   /**
@@ -108,7 +121,7 @@ class PlayerTest {
   @Test
   void testCryptogramsCompletedIncrement() {
     Game game = new Game();
-    game.signUp("test");
+    game.signUp(testUsername);
 
     // initially, they will have 0 cryptograms completed
     // The point of this test shows the stat is there... will only increment when game complete
@@ -122,7 +135,7 @@ class PlayerTest {
   @Test
   void testCryptogramsPlayedIncrement() {
     Game game = new Game();
-    game.signUp("test");
+    game.signUp(testUsername);
 
     // generate new cryptogram and check that cryptograms played is 1
     game.generateCryptogram(true);
@@ -136,7 +149,7 @@ class PlayerTest {
   @Test
   void loadCryptoTest() {
     Game game = new Game();
-    game.signUp("test");
+    game.signUp(testUsername);
 
     // generate new game and check current number played
     game.generateCryptogram(true);
@@ -145,7 +158,7 @@ class PlayerTest {
 
     // load game and login, check number of games doesn't increase
     Game game1 = new Game();
-    game.logIn("test");
+    game.logIn(testUsername);
     assertTrue(game.loadGame()); // used by GUI to load game
     assertEquals(1, game.getCurrentPlayer().getNumCryptogramsPlayed());
   }
@@ -157,11 +170,12 @@ class PlayerTest {
   @Test
   void testCorrectGuessUpdate() {
     Game game = new Game();
-    game.signUp("test");
+    game.signUp(testUsername);
     game.generateCryptogram(true);
 
-    // using knowledge of a correct encryption
-    game.enterLetter("v", 'i');
+    // enter a correct guess
+    String encrypted = game.getCryptoAlph().keySet().iterator().next();
+    game.enterLetter(encrypted, game.getCryptoAlph().get(encrypted));
 
     assertEquals(1, game.getCurrentPlayer().getTotalGuesses());
     assertEquals(1, game.getCurrentPlayer().getTotalCorrectGuesses());
@@ -174,11 +188,13 @@ class PlayerTest {
   @Test
   void incorrectGuess() {
     Game game = new Game();
-    game.signUp("test");
+    game.signUp(testUsername);
     game.generateCryptogram(true);
 
     // using knowledge of a correct encryption
-    game.enterLetter("v", 'r');
+    String encrypted = game.getCryptoAlph().keySet().iterator().next();
+    String next = game.getCryptoAlph().keySet().stream().skip(1).findFirst().get();
+    game.enterLetter(encrypted, game.getCryptoAlph().get(next)); // enter a invalid guess
 
     assertEquals(1, game.getCurrentPlayer().getTotalGuesses());
     assertEquals(0, game.getCurrentPlayer().getTotalCorrectGuesses());
@@ -191,12 +207,12 @@ class PlayerTest {
   @Test
   void testLoadPlayerDetails() {
     Game game = new Game();
-    game.signUp("test");
+    game.signUp(testUsername);
     game.generateCryptogram(true);
     game.shutdown();
 
     Game game1 = new Game();
-    game1.logIn("test");
+    game1.logIn(testUsername);
 
     // check a stat to see if player has been loaded correctly
     assertEquals(1, game1.getCurrentPlayer().getNumCryptogramsPlayed());
@@ -209,16 +225,15 @@ class PlayerTest {
   @Test
   void fileError() {
     Game game = new Game();
-    game.signUp("luke");
+    game.signUp(testUsername);
     game.shutdown();
 
     // delete file to simulate corruption
-    File test = new File("src/data/players/luke.ser");
-    test.delete();
+    teardown();
 
     // try and login...player has been deleted and stats lost.. GUI will say no player exists
     Game game1 = new Game();
-    assertEquals("Player not found! Please sign up first.", game1.logIn("luke"));
+    assertEquals("Player not found! Please sign up first.", game1.logIn(testUsername));
   }
 
   /**
@@ -228,6 +243,6 @@ class PlayerTest {
   @Test
   void dontExist() {
     Game game = new Game();
-    assertEquals("Player not found! Please sign up first.", game.logIn("test"));
+    assertEquals("Player not found! Please sign up first.", game.logIn(testUsername));
   }
 }
