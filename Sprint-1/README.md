@@ -1,28 +1,28 @@
 # Sprint 1 
 
-## User Stories to be Implemented from Product Backlog
+## User Stories to Be Implemented from Product Backlog
 
 For the first sprint, the following user stories should be implemented:
 
-- [x] As a player I want to be able to generate a cryptogram so I can play it
-- [x] As a player I want to be able to enter a letter so I can solve the cryptogram
-- [x] As a player I want to be able to undo a letter so I can play the cryptogram
+- [x] As a player I want to be able to generate a cryptogram so I can play it (1)
+- [x] As a player I want to be able to enter a letter so I can solve the cryptogram (2)
+- [x] As a player I want to be able to undo a letter so I can play the cryptogram (3)
 
-## How to use this gradle project
+## How to Use This Gradle Project
 
-### Commands (tasks)
+### Commands (Tasks)
 * `./gradlew run`: run the project
 * `./gradlew spotlessApply`: format all code in the project
 * `./gradlew test`: run all tests in the project
 <br><br>
 * `./gradlew tasks`: view all available tasks
-  * `./gradlew :app:tasks`: view available tasks for subproccess
+  * `./gradlew :app:tasks`: view available tasks for subprocess
 * `./gradlew build`: build the project
 * `./gradlew jar`: create a jar file of the app
 * `./gradlew clean`: remove cached build files
-* `./gradlew :app:dependencies`: view dependencies of a subproccess
+* `./gradlew :app:dependencies`: view dependencies of a subprocess
 
-### File structure
+### File Structure
 ```
 Sprint-1
 ├── .gradle

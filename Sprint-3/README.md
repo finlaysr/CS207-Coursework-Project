@@ -1,6 +1,6 @@
 # Sprint 3
 
-## User Stories to be Implemented from Product Backlog
+## User Stories to Be Implemented from Product Backlog
 
 For the third sprint, the following user stories should be implemented:
 
@@ -9,9 +9,9 @@ For the third sprint, the following user stories should be implemented:
 - [ ] As a player I want to be able to see the top 10 scores for number of successfully completed cryptograms (13)
 - [ ] As a player I want to be able to get a hint for a letter, so I can solve the cryptogram (14)
 
-## How to use this gradle project
+## How to Use This Gradle Project
 
-### Commands (tasks)
+### Commands (Tasks)
 
 **Windows Users:** substitute `./gradlew ...` for `.\gradlew.bat ...`
 
@@ -20,13 +20,13 @@ For the third sprint, the following user stories should be implemented:
 * `./gradlew test`: run all tests in the project
 <br><br>
 * `./gradlew tasks`: view all available tasks
-  * `./gradlew :app:tasks`: view available tasks for subproccess
+  * `./gradlew :app:tasks`: view available tasks for subprocess
 * `./gradlew build`: build the project
 * `./gradlew jar`: create a jar file of the app
 * `./gradlew clean`: remove cached build files
-* `./gradlew :app:dependencies`: view dependencies of a subproccess
+* `./gradlew :app:dependencies`: view dependencies of a subprocess
 
-### File structure
+### File Structure
 
 ```
 Sprint-3

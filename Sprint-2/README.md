@@ -1,20 +1,20 @@
 # Sprint 2
 
-## User Stories to be Implemented from Product Backlog
+## User Stories to Be Implemented from Product Backlog
 
 For the second sprint, the following user stories should be implemented:
 
-- [ ] Calum: As a player I want to be able to save a cryptogram so I can play it at another time
-- [ ] Calum: As a player I want to be able to load a cryptogram so I can continue a game I was previously playing
-- [ ] As a player I want to store my player name so the software can track my game play statistics
-- [ ] Duncan: As a player I want the software to track the number of cryptograms I have successfully completed
-- [ ] Duncan: As a player I want the software to track the number of cryptograms I have played so I can see how many games I’ve attempted
-- [ ] Duncan: As a player I want the software to track the number of correct guesses I have made so I can see how accurate I am as a percentage of my total number of guesses 
-- [ ] As a player I want to load my details so I can track my game play statistics 
+- [x] As a player I want to be able to save a cryptogram so I can play it at another time (4)
+- [x] As a player I want to be able to load a cryptogram so I can continue a game I was previously playing (5)
+- [x] As a player I want to store my player name so the software can track my game play statistics (8)
+- [x] As a player I want the software to track the number of cryptograms I have successfully completed (9)
+- [x] As a player I want the software to track the number of cryptograms I have played so I can see how many games I’ve attempted (10)
+- [x] As a player I want the software to track the number of correct guesses I have made so I can see how accurate I am as a percentage of my total number of guesses (11)
+- [x] As a player I want to load my details so I can track my game play statistics (12)
 
-## How to use this gradle project
+## How to Use This Gradle Project
 
-### Commands (tasks)
+### Commands (Tasks)
 
 **Windows Users:** substitute `./gradlew ...` for `.\gradlew.bat ...`
 
@@ -23,13 +23,13 @@ For the second sprint, the following user stories should be implemented:
 * `./gradlew test`: run all tests in the project
 <br><br>
 * `./gradlew tasks`: view all available tasks
-  * `./gradlew :app:tasks`: view available tasks for subproccess
+  * `./gradlew :app:tasks`: view available tasks for subprocess
 * `./gradlew build`: build the project
 * `./gradlew jar`: create a jar file of the app
 * `./gradlew clean`: remove cached build files
-* `./gradlew :app:dependencies`: view dependencies of a subproccess
+* `./gradlew :app:dependencies`: view dependencies of a subprocess
 
-### File structure
+### File Structure
 
 ```
 Sprint-2
