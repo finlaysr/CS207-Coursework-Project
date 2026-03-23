@@ -70,6 +70,6 @@ spotless {
         formatAnnotations()
 
         // license header
-        licenseHeader("/* CS207 Cryptogram Project - Sprint 2 - Team 25 2026 */")
+        licenseHeader("/* CS207 Cryptogram Project - Sprint 3 - Team 25 2026 */")
     }
 }
