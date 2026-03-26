@@ -55,18 +55,40 @@ class GamePanel extends JPanel {
     addWords(game.getEncryptedPhrase());
 
     // Add undo button
+    JPanel undoHintPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+    this.add(undoHintPanel, GUI.setConstraints(0, 2));
     JButton undoButton = new JButton("Undo");
-    this.add(undoButton, GUI.setConstraints(0, 2));
+    undoHintPanel.add(undoButton);
     undoButton.addActionListener(
         _ -> {
           game.undoLetter();
           regenerateGuess();
         });
 
+    // Add new get hint button
+    JButton hintButton = new JButton("Hint");
+    undoHintPanel.add(hintButton);
+    hintButton.addActionListener(
+        _ -> {
+          // TODO: get this working
+          // game.getHint(); // example method
+          regenerateGuess();
+        });
+
+    JPanel submitGiveUpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+    this.add(submitGiveUpPanel, GUI.setConstraints(0, 3));
+
+    // Add Give Up button
+    JButton giveUpButton = new JButton("I Give Up :(");
+    submitGiveUpPanel.add(giveUpButton);
+    giveUpButton.addActionListener(
+        _ -> {
+          // TODO: fill this in
+        });
+
     // Add submit button
-    // TODO: make this do something
     JButton submitButton = new JButton("Submit");
-    this.add(submitButton, GUI.setConstraints(0, 3));
+    submitGiveUpPanel.add(submitButton);
     submitButton.addActionListener(
         _ -> {
           if (game.checkWin()) {
