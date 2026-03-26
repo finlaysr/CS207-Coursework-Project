@@ -153,7 +153,12 @@ public class Game {
 
   public void viewFrequencies() {}
 
-  public void showSolution() {}
+  public String showSolution() {
+    String phrase = currentPlayer.getCurrentCryptogram().getPhrase();
+    currentPlayer.setCurrentCryptogram(null);
+
+    return phrase;
+  }
 
   public boolean checkWin() {
     if (currentPlayer.getCurrentCryptogram().getGuesses().containsValue(null)) {
