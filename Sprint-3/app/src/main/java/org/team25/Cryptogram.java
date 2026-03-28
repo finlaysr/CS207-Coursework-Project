@@ -72,7 +72,21 @@ public class Cryptogram implements Serializable {
     return encryptedPhrase;
   }
 
-  void getFrequency() {}
+  /** Returns a hashmap containing the frequency of letters occurring in the encrypted phrase */
+  HashMap<String, Integer> getFrequency() {
+    HashMap<String, Integer> frequency = new HashMap<>();
+    encryptedPhrase.forEach(
+        enc -> {
+          if (cryptogramAlphabet.containsKey(enc)) {
+            if (frequency.containsKey(enc)) {
+              frequency.put(enc, frequency.get(enc) + 1);
+            } else {
+              frequency.put(enc, 1);
+            }
+          }
+        });
+    return frequency;
+  }
 
   public boolean isNumeric(String input) {
     if (input.matches(".*[^a-zA-Z0-9].*")) {

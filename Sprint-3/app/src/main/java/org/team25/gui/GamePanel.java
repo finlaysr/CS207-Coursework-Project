@@ -79,11 +79,15 @@ class GamePanel extends JPanel {
           regenerateGuess();
         });
 
+    JButton freqButton = new JButton("View Frequencies");
+    undoHintPanel.add(freqButton);
+    freqButton.addActionListener(_ -> new FreqFrame(gui, game));
+
     JPanel submitGiveUpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
     this.add(submitGiveUpPanel, GUI.setConstraints(0, 3));
 
     // Add Give Up button
-    JButton giveUpButton = new JButton("I Give Up :(");
+    JButton giveUpButton = new JButton("View Solution");
     submitGiveUpPanel.add(giveUpButton);
     giveUpButton.addActionListener(
         _ -> {

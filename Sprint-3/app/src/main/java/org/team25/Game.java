@@ -152,7 +152,9 @@ public class Game {
     return currentPlayer.getCurrentCryptogram().getEncryptedPhrase();
   }
 
-  public void viewFrequencies() {}
+  public HashMap<String, Integer> viewFrequencies() {
+    return currentPlayer.getCurrentCryptogram().getFrequency();
+  }
 
   public String showSolution() {
     String phrase = currentPlayer.getCurrentCryptogram().getPhrase();
