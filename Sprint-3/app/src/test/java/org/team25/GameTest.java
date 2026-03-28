@@ -177,6 +177,7 @@ class GameTest {
         game2.signUp(testUsername));
   }
 
+  // User Story 6
   // Check that asking to view the solution removes the current cryptogram and changes the player
   // stats correctly
   @Test
@@ -194,6 +195,7 @@ class GameTest {
     assertEquals(1, game.getCurrentPlayer().getNumCryptogramsPlayed());
   }
 
+  // User Story 13
   // Checks that users get added to the leaderboard correctly after completing a cryptogram
   @Test
   void testLeaderBoard() {
@@ -230,7 +232,7 @@ class GameTest {
       for (int j = 0; j < game.getLeaderboard().length; j++) {
         String[] leader = game.getLeaderboard()[j];
         if (leader[0].equals(expected[i][0]) && leader[1].equals(expected[i][1])) {
-          // check the users in the leaderboard are in descending order
+          // check the users in the leaderboard are in descending order of cryptograms completed
           assertTrue(j < pos);
           pos = j;
 

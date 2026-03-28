@@ -54,6 +54,10 @@ class PlayerTest {
     game1.signUp(testUsername);
     assertNull(game1.getCurrentPlayer().getCurrentCryptogram());
     game1.generateCryptogram(true);
+
+    // enters a random key from the hashmap into the cryptogram as a guess
+    String encGuess = game1.getCryptoAlph().keySet().iterator().next();
+    assertNull(game1.enterLetter(encGuess, 'a'));
     Cryptogram oldCrypto = game1.getCurrentPlayer().getCurrentCryptogram();
     game1.shutdown();
 
@@ -63,11 +67,14 @@ class PlayerTest {
     Cryptogram newCrypto = game2.getCurrentPlayer().getCurrentCryptogram();
     assertNotNull(newCrypto);
 
+    // check loaded cryptogram contains previous guess
+    assertTrue(newCrypto.getGuesses().containsKey(encGuess));
+    assertTrue(newCrypto.getGuesses().containsValue('a'));
+
     assertEquals(oldCrypto.getPhrase(), newCrypto.getPhrase());
 
     // player can enter a guess here...just to show functionality
-    // enters a random key from the hashmap into the cryptogram as a guess
-    assertNull(game2.enterLetter(game2.getCryptoAlph().keySet().iterator().next(), 't'));
+    assertNull(game2.enterLetter(game2.getCryptoAlph().keySet().iterator().next(), 'b'));
   }
 
   /** User Story 5- loading cryptogram Scenario- Player has no previous game stored */
@@ -192,6 +199,7 @@ class PlayerTest {
     Game game = new Game();
     game.signUp(testUsername);
 
+    assertEquals(0, game.getCurrentPlayer().getNumCryptogramsPlayed());
     // generate new cryptogram and check that cryptograms played is 1
     game.generateCryptogram(true);
     assertEquals(1, game.getCurrentPlayer().getNumCryptogramsPlayed());
@@ -249,7 +257,7 @@ class PlayerTest {
     // using knowledge of a correct encryption
     String encrypted = game.getCryptoAlph().keySet().iterator().next();
     String next = game.getCryptoAlph().keySet().stream().skip(1).findFirst().get();
-    game.enterLetter(encrypted, game.getCryptoAlph().get(next)); // enter a invalid guess
+    game.enterLetter(encrypted, game.getCryptoAlph().get(next)); // enter an invalid guess
 
     assertEquals(1, game.getCurrentPlayer().getTotalGuesses());
     assertEquals(0, game.getCurrentPlayer().getTotalCorrectGuesses());
@@ -264,6 +272,10 @@ class PlayerTest {
     Game game = new Game();
     game.signUp(testUsername);
     game.generateCryptogram(true);
+
+    // enter a correct guess
+    String encrypted = game.getCryptoAlph().keySet().iterator().next();
+    game.enterLetter(encrypted, game.getCryptoAlph().get(encrypted));
     game.shutdown();
 
     Game game1 = new Game();
