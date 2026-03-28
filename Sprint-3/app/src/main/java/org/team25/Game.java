@@ -208,4 +208,19 @@ public class Game {
     }
     return stats;
   }
+
+  /**
+   * Get a leaderboard of players in the game
+   *
+   * @return 2d array of players and scores in form [[player, score], [player, score],...]
+   */
+  public String[][] getLeaderboard() {
+    return players.getAllPlayers().stream()
+        .map(
+            player ->
+                new String[] {
+                  player.getUsername(), String.valueOf(player.getNumCryptogramsCompleted())
+                })
+        .toArray(String[][]::new);
+  }
 }

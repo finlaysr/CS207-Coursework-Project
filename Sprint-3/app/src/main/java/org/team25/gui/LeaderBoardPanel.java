@@ -5,18 +5,32 @@ import java.awt.Font;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import org.team25.Game;
 
 public class LeaderBoardPanel extends JPanel {
   protected LeaderBoardPanel(GUI gui, Game game) {
     this.setLayout(new GridBagLayout());
 
-    JLabel welcomeLabel = new JLabel("Game Complete!");
+    JLabel welcomeLabel = new JLabel("Game Finished!");
     welcomeLabel.setFont(new Font("Ariel", Font.BOLD, 18));
     this.add(welcomeLabel, GUI.setConstraints(0, 0));
 
-    this.add(new JLabel("Congratulations!"), GUI.setConstraints(0, 1));
-    this.add(new JLabel("Leaderboard: "), GUI.setConstraints(0, 2));
+    this.add(new JLabel("Leaderboard: "), GUI.setConstraints(0, 1));
+
+    String[] columnNames = {"Username", "Games Won"};
+
+    JTable table = new JTable(game.getLeaderboard(), columnNames);
+    table.setDefaultEditor(Object.class, null);
+
+    JScrollPane scrollPane =
+        new JScrollPane(
+            table,
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+    this.add(scrollPane, GUI.setConstraints(0, 1, 1, 1));
 
     // Set back button to go to Game Choice Screen
     gui.getBackButton().setVisible(true);
