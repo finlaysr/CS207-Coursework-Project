@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -133,17 +134,14 @@ public class GUI {
   }
 
   // Recursively increase the font size of all elements in the app
-  protected void resizeFont(Container container, int change) {
-    for (Component comp : container.getComponents()) {
-      Font old = comp.getFont();
-      if (old != null && (old.getSize() + change > 3)) {
-        comp.setFont(old.deriveFont(old.getStyle(), old.getSize() + change));
-        comp.repaint();
-      }
-
-      if (comp instanceof Container inner) {
-        resizeFont(inner, change);
-      }
+  protected void resizeFont(Component comp, int change) {
+    Font old = comp.getFont();
+    if (old != null && (old.getSize() + change > 3)) {
+      comp.setFont(old.deriveFont(old.getStyle(), old.getSize() + change));
+      comp.repaint();
+    }
+    if (comp instanceof Container container) {
+      Arrays.stream(container.getComponents()).forEach(c -> resizeFont(c, change));
     }
   }
 

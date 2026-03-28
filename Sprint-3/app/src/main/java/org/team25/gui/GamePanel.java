@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import org.team25.Game;
 
 /** Panel where the main game is played */
@@ -83,7 +85,15 @@ class GamePanel extends JPanel {
     submitGiveUpPanel.add(giveUpButton);
     giveUpButton.addActionListener(
         _ -> {
-          // TODO: fill this in
+          // The text to display in the pop-up
+          final JLabel[] text = {
+            new JLabel("Solution:", SwingConstants.CENTER),
+            new JLabel(game.showSolution(), SwingConstants.CENTER),
+          };
+          Arrays.stream(text).forEach(l -> gui.resizeFont(l, gui.getFontChangeTotal()));
+
+          JOptionPane.showMessageDialog(this, text, "Solution", JOptionPane.INFORMATION_MESSAGE);
+          gui.switchContent(new LeaderBoardPanel(gui, game));
         });
 
     // Add submit button
