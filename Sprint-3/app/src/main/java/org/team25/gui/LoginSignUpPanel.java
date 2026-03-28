@@ -61,7 +61,9 @@ class SignUp extends JPanel {
     if (error == null) {
       gui.switchContent(new GameChoicePanel(gui, game));
     } else {
-      JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
+      JLabel text = new JLabel(error);
+      gui.resizeFont(text, gui.getFontChangeTotal());
+      JOptionPane.showMessageDialog(null, text, "Error", JOptionPane.ERROR_MESSAGE);
     }
   }
 }
@@ -93,7 +95,9 @@ class Login extends JPanel {
     if (error == null) {
       gui.switchContent(new GameChoicePanel(gui, game));
     } else {
-      JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
+      JLabel text = new JLabel(error);
+      gui.resizeFont(text, gui.getFontChangeTotal());
+      JOptionPane.showMessageDialog(null, text, "Error", JOptionPane.ERROR_MESSAGE);
     }
   }
 }

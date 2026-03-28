@@ -23,14 +23,15 @@ public class LeaderBoardPanel extends JPanel {
     String[] columnNames = {"Username", "Games Won"};
 
     JTable table = new JTable(game.getLeaderboard(), columnNames);
-    table.setDefaultEditor(Object.class, null);
+    table.setDefaultEditor(Object.class, null); // make table non-editable
+    table.setRowHeight(30);
 
     JScrollPane scrollPane =
         new JScrollPane(
             table,
             ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-    this.add(scrollPane, GUI.setConstraints(0, 1, 1, 1));
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    this.add(scrollPane, GUI.setConstraints(0, 2, 1, 1));
 
     // Set back button to go to Game Choice Screen
     gui.getBackButton().setVisible(true);

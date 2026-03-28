@@ -3,6 +3,7 @@ package org.team25;
 
 /*Imports Required */
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -210,12 +211,14 @@ public class Game {
   }
 
   /**
-   * Get a leaderboard of players in the game
+   * Get a sorted leaderboard of top 10 players in the game
    *
    * @return 2d array of players and scores in form [[player, score], [player, score],...]
    */
   public String[][] getLeaderboard() {
     return players.getAllPlayers().stream()
+        .sorted(Comparator.comparing(Player::getNumCryptogramsCompleted).reversed())
+        .limit(10)
         .map(
             player ->
                 new String[] {

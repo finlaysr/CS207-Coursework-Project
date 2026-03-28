@@ -4,9 +4,9 @@
 
 For the third sprint, the following user stories should be implemented:
 
-- [ ] As a player I want to be able to show the solution so I can see the answer to a cryptogram I can’t solve (6)
+- [x] As a player I want to be able to show the solution so I can see the answer to a cryptogram I can’t solve (6)
 - [ ] As a player I want to be able to see the frequencies of all the letters in the cryptogram so I can compare this with the frequencies of English letters (7)
-- [ ] As a player I want to be able to see the top 10 scores for number of successfully completed cryptograms (13)
+- [x] As a player I want to be able to see the top 10 scores for number of successfully completed cryptograms (13)
 - [ ] As a player I want to be able to get a hint for a letter, so I can solve the cryptogram (14)
 
 ## How to Use This Gradle Project

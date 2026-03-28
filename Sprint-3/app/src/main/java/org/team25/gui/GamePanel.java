@@ -24,6 +24,7 @@ import org.team25.Game;
 /** Panel where the main game is played */
 class GamePanel extends JPanel {
   private final Game game;
+  private final GUI gui;
 
   private final JPanel inputGroup;
 
@@ -35,6 +36,7 @@ class GamePanel extends JPanel {
 
   protected GamePanel(GUI gui, Game game) {
     this.game = game;
+    this.gui = gui;
     this.setLayout(new GridBagLayout());
 
     // Add title
@@ -87,7 +89,7 @@ class GamePanel extends JPanel {
         _ -> {
           // The text to display in the pop-up
           final JLabel[] text = {
-            new JLabel("Solution:", SwingConstants.CENTER),
+            new JLabel("The solution was:", SwingConstants.CENTER),
             new JLabel(game.showSolution(), SwingConstants.CENTER),
           };
           Arrays.stream(text).forEach(l -> gui.resizeFont(l, gui.getFontChangeTotal()));
@@ -102,9 +104,15 @@ class GamePanel extends JPanel {
     submitButton.addActionListener(
         _ -> {
           if (game.checkWin()) {
+            JLabel text = new JLabel("You have successfully guessed the message!");
+            gui.resizeFont(text, gui.getFontChangeTotal());
+            JOptionPane.showMessageDialog(
+                null, text, "Congratulations", JOptionPane.INFORMATION_MESSAGE);
             gui.switchContent(new LeaderBoardPanel(gui, game));
           } else {
-            JOptionPane.showMessageDialog(null, "Incorrect!", "Error", JOptionPane.ERROR_MESSAGE);
+            JLabel text = new JLabel("Incorrect guess, try again!");
+            gui.resizeFont(text, gui.getFontChangeTotal());
+            JOptionPane.showMessageDialog(null, text, "Error", JOptionPane.ERROR_MESSAGE);
           }
         });
 
@@ -115,8 +123,10 @@ class GamePanel extends JPanel {
     gui.getBackButton()
         .addActionListener(
             _ -> {
+              JLabel text = new JLabel("Game has been saved");
+              gui.resizeFont(text, gui.getFontChangeTotal());
               JOptionPane.showMessageDialog(
-                  null, "Game has been saved", "Information", JOptionPane.INFORMATION_MESSAGE);
+                  null, text, "Information", JOptionPane.INFORMATION_MESSAGE);
               gui.switchContent(new GameChoicePanel(gui, game));
             });
   }
@@ -232,7 +242,9 @@ class GamePanel extends JPanel {
                 }
               } else {
                 // If invalid character entered
-                JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
+                JLabel text = new JLabel(error);
+                gui.resizeFont(text, gui.getFontChangeTotal());
+                JOptionPane.showMessageDialog(null, text, "Error", JOptionPane.ERROR_MESSAGE);
               }
             }
             regenerateGuess(); // update all text fields
