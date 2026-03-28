@@ -30,8 +30,8 @@ public class Game {
     if (username.isEmpty()) {
       return "Username cannot be empty!";
     }
-    if (!username.chars().allMatch(Character::isLetter)) {
-      return "Username must contain only letters!";
+    if (!username.chars().allMatch(Character::isLetterOrDigit)) {
+      return "Username must contain only letters and numbers!";
     }
     Player found = players.findPlayer(username);
     if (found != null) {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class PlayerTest {
   // random test username
-  private final String testUsername = "sdAUIDefgbaAUsrgAhfeai";
+  private final String testUsername = "41D17BC763FF47A3F99270b2b70da070b04e87fa";
 
   /** After all delete the test file as a player as it impacts other tests from running */
   @AfterEach
