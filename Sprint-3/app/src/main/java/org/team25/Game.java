@@ -65,7 +65,7 @@ public class Game {
 
   /**
    * User story 1: As a player I want to be able to generate a cryptogram When the game starts, a
-   * crcyptogram
+   * cryptogram
    */
   public void generateCryptogram(boolean isLetterCrypto) {
     // allow the user to choice if they would want letter to letter or number to letter
@@ -134,7 +134,7 @@ public class Game {
   }
 
   /**
-   * An accesor method that will tell the GUI what type of cyptogram is in the game
+   * An accesor method that will tell the GUI what type of cryptogram is in the game
    *
    * @return true: this is a letter-letter cipher false: this is a letter-number cipher
    */
@@ -205,9 +205,7 @@ public class Game {
     if (currentPlayer.getTotalGuesses() == 0) {
       stats.put("Guess Accuracy", "NA");
     } else {
-      stats.put(
-          "Guess Accuracy",
-          currentPlayer.getTotalCorrectGuesses() * 100 / currentPlayer.getTotalGuesses() + "%");
+      stats.put("Guess Accuracy", String.format("%.2f%%", currentPlayer.getAccuracy() * 100));
     }
     return stats;
   }

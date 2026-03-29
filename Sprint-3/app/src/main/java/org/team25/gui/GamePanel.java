@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -46,16 +47,18 @@ class GamePanel extends JPanel {
             game.isLetterCrypto() ? "Letter to Letter Cryptogram" : "Letter to Number Cryptogram"),
         GUI.setConstraints(0, 0));
 
-    // TODO: fix this scrollbar
     // Panel containing all the encrypted word groups
     inputGroup = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
     inputGroup.setPreferredSize(new Dimension(600, 300));
     JScrollPane scrollPane =
         new JScrollPane(
             inputGroup,
-            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
             ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     this.add(scrollPane, GUI.setConstraints(0, 1));
+    this.add(
+        new JLabel("Please increase the window size!"),
+        GUI.setConstraints(0, 1, new Insets(0, 0, 60, 0)));
 
     addWords(game.getEncryptedPhrase());
 

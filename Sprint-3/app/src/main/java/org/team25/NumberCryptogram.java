@@ -1,25 +1,36 @@
 /* CS207 Cryptogram Project - Sprint 3 - Team 25 2026 */
 package org.team25;
 
+import java.util.Random;
+
 public class NumberCryptogram extends Cryptogram {
   public NumberCryptogram() { // Scanner the file
     // can't have numbers in a number cryptogram, so re-roll if it happens
     do {
       loadPhrase();
     } while (super.phrase.matches("^.*\\d.*"));
-    encryptPhrase(13);
+    Random rand = new Random();
+    encryptPhrase(rand.nextInt(0, 27));
   }
 
-  // Store the string inside crpytogramAlphabet as a linked hashmap(string, string)
+  public NumberCryptogram(int offset) { // Scanner the file
+    // can't have numbers in a number cryptogram, so re-roll if it happens
+    do {
+      loadPhrase();
+    } while (super.phrase.matches("^.*\\d.*"));
+    encryptPhrase(offset);
+  }
+
+  // Store the string inside cryptogramAlphabet as a linked hashmap(string, string)
   // Convert each element
   // Phrase contains the string
-  // Encrpyted phrase will contain the encrypted chars of each element
+  // Encrypted phrase will contain the encrypted chars of each element
   private void encryptPhrase(int offset) {
     for (int i = 0; i < phrase.length(); i++) {
       char currentChar = phrase.charAt(i);
 
       if (Character.isLetter(currentChar)) {
-        // Move 13 places forward
+        // Move n places forward
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
         int encrypted = (currentChar - base + offset) % 26;
         super.encryptedPhrase.add(Integer.toString(encrypted));
@@ -32,19 +43,14 @@ public class NumberCryptogram extends Cryptogram {
     }
   }
 
-  public char getPlainLetter(String cryptoNum) {
-    System.out.println("CrytoNum : " + cryptoNum);
-    char revertedLetter = ' '; // This is to store the reverted phrase
+  public Character getPlainLetter(String cryptoNum) {
+    Character revertedLetter; // This is to store the reverted phrase
 
     if (isNumeric(cryptoNum)) {
-      int temp = Integer.parseInt(cryptoNum);
-      char cryptoLetter = (char) ((char) temp + 96);
-      System.out.println("CrytoLetter: " + cryptoLetter);
-      revertedLetter = (char) ((cryptoLetter - 'a' - 12 + 26) % 26 + 'a'); // Revert the phrase
+      revertedLetter = cryptogramAlphabet.get(cryptoNum);
     } else {
       revertedLetter = cryptoNum.charAt(0);
     }
-    System.out.println("revertedLetter : " + revertedLetter);
     return revertedLetter;
   }
 }

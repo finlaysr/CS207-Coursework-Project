@@ -221,9 +221,9 @@ class PlayerTest {
 
     // load game and login, check number of games doesn't increase
     Game game1 = new Game();
-    game.logIn(testUsername);
-    assertTrue(game.loadGame()); // used by GUI to load game
-    assertEquals(1, game.getCurrentPlayer().getNumCryptogramsPlayed());
+    game1.logIn(testUsername);
+    assertTrue(game1.loadGame()); // used by GUI to load game
+    assertEquals(1, game1.getCurrentPlayer().getNumCryptogramsPlayed());
   }
 
   /**

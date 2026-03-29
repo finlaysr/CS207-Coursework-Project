@@ -60,6 +60,7 @@ public class Player implements Serializable {
   }
 
   public void incrementTotalGuesses() {
+    updateAccuracy();
     totalGuesses++;
   }
 
@@ -69,6 +70,7 @@ public class Player implements Serializable {
 
   public void incrementTotalCorrectGuesses() {
     totalCorrectGuesses++;
+    updateAccuracy();
   }
 
   /**

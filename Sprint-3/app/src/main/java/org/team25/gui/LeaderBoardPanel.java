@@ -3,6 +3,7 @@ package org.team25.gui;
 
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -37,6 +38,7 @@ public class LeaderBoardPanel extends JPanel {
               ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
               ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       this.add(scrollPane, GUI.setConstraints(0, 2));
+      this.add(new JLabel("Window too small!"), GUI.setConstraints(0, 2, new Insets(0, 0, 60, 0)));
     }
     // Set back button to go to Game Choice Screen
     gui.getBackButton().setVisible(true);

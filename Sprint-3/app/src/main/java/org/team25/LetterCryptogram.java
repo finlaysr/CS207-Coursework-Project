@@ -1,25 +1,32 @@
 /* CS207 Cryptogram Project - Sprint 3 - Team 25 2026 */
 package org.team25;
 
+import java.util.Random;
+
 public class LetterCryptogram extends Cryptogram {
   public LetterCryptogram() {
-    // loadPhrase is called in Cryptogram
     loadPhrase();
-    encryptPhrase(13);
+    Random rand = new Random();
+    encryptPhrase(rand.nextInt(1, 27));
   }
 
-  // Store the string inside crpytogramAlphabet as a linked hashmap(string, string)
+  public LetterCryptogram(int offset) {
+    loadPhrase();
+    encryptPhrase(offset);
+  }
+
+  // Store the string inside cryptogramAlphabet as a linked hashmap(string, string)
   // Phrase contains the string
   // Convert each element
-  // Encrpyted phrase will contain the encrypted chars of each element
+  // Encrypted phrase will contain the encrypted chars of each element
   private void encryptPhrase(int offset) {
     for (int i = 0; i < phrase.length(); i++) {
       char currentChar = phrase.charAt(i);
 
       if (Character.isLetter(currentChar)) {
-        // Move 13 places forward
+        // Move n places forward
         char base = Character.isLowerCase(currentChar) ? 'a' : 'A';
-        char encrypted = (char) ((currentChar - base + offset) % 26 + base);
+        char encrypted = (char) (((currentChar - base + offset) % 26) + base);
         super.encryptedPhrase.add(Character.toString(encrypted));
         super.cryptogramAlphabet.put(Character.toString(encrypted), currentChar);
 
@@ -30,29 +37,14 @@ public class LetterCryptogram extends Cryptogram {
     }
   }
 
-  void compareInput(char input) {
-    for (String i : cryptogramAlphabet.keySet()) {
-      if (cryptogramAlphabet.get(i) == input) {
-        // Correct
-        System.out.println("Found it!");
-      } else {
-        System.out.println("Not found!");
-      }
-    }
-  }
+  public Character getPlainLetter(String cryptoLetter) {
+    Character revertedLetter; // This is to store the reverted phrase
 
-  public char getPlainLetter(char cryptoLetter) {
-    char revertedLetter = ' '; // This is to store the reverted phrase
-
-    if (Character.isLetter(cryptoLetter)) { // Check if the current character is a letter
-
-      char base = Character.isLowerCase(cryptoLetter) ? 'a' : 'A';
-
-      revertedLetter = (char) ((cryptoLetter - base - 13 + 26) % 26 + base); // Revert the phrase
+    if (cryptoLetter.matches("[a-zA-Z]+")) { // Check if the current character is a letter
+      revertedLetter = getCryptoAlphabet().get(cryptoLetter);
 
     } else { // If it is a special character
-
-      revertedLetter = cryptoLetter; // Just return it
+      revertedLetter = cryptoLetter.charAt(0); // Just return it
     }
 
     return revertedLetter;

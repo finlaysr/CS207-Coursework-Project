@@ -7,11 +7,10 @@ import org.junit.jupiter.api.Test;
 
 class LetterCryptogramTest {
 
-  LetterCryptogram letterCryptogram = new LetterCryptogram();
-
   // Check phrase is fully encrypted
   @Test
   void encryptionHappensToGivenPhrase() {
+    LetterCryptogram letterCryptogram = new LetterCryptogram();
     System.out.println("Phrase : " + letterCryptogram.getPhrase());
     System.out.println("Encrypted : " + letterCryptogram.getEncryptedPhrase());
     System.out.println("Task 1 - Checking if encryption happens to the provided phrase fully");
@@ -21,7 +20,8 @@ class LetterCryptogramTest {
 
   // Check phrase is correctly encrypted to base 13
   @Test
-  void encrpytionHappensToBase13() {
+  void encryptionHappensCorrectly() {
+    LetterCryptogram letterCryptogram = new LetterCryptogram();
     System.out.println("Phrase : " + letterCryptogram.getPhrase());
     System.out.println("Encrypted : " + letterCryptogram.getEncryptedPhrase());
     System.out.println("Task 2 - Checking if the encryption happens to every phrase to base 13");
@@ -30,7 +30,26 @@ class LetterCryptogramTest {
       String currentEncrypted = letterCryptogram.getEncryptedPhrase().get(i);
       assertEquals(
           letterCryptogram.getPhrase().charAt(i),
-          letterCryptogram.getPlainLetter(currentEncrypted.charAt(0)));
+          letterCryptogram.getPlainLetter(currentEncrypted));
+    }
+  }
+
+  // Check all letters have been encrypted to the correct offset for all possible offsets
+  @Test
+  void checkAllOffsets() {
+    for (int i = 1; i < 27; i++) {
+      LetterCryptogram l = new LetterCryptogram(i);
+      int offset = i;
+
+      assertTrue(
+          l.cryptogramAlphabet.keySet().stream()
+              .allMatch(
+                  enc -> {
+                    char encChar = enc.charAt(0);
+                    char origChar = l.cryptogramAlphabet.get(enc);
+                    int diff = Math.abs(origChar - encChar);
+                    return diff == offset || diff == 26 - offset;
+                  }));
     }
   }
 }

@@ -51,7 +51,7 @@ class SignUp extends JPanel {
     this.add(usernameField, GUI.setConstraints(1, 1, 1, 1));
 
     JButton signUpButton = new JButton("Sign Up");
-    signUpButton.addActionListener(e -> signUpButton());
+    signUpButton.addActionListener(_ -> signUpButton());
     this.add(signUpButton, GUI.setConstraints(0, 2, 2, 1));
   }
 
@@ -85,7 +85,7 @@ class Login extends JPanel {
     this.add(usernameField, GUI.setConstraints(1, 1, 1, 1));
 
     JButton logInButton = new JButton("Log In");
-    logInButton.addActionListener(e -> loginButton());
+    logInButton.addActionListener(_ -> loginButton());
     this.add(logInButton, GUI.setConstraints(0, 2, 2, 1));
   }
 
