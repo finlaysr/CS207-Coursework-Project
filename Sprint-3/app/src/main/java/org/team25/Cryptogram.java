@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Cryptogram implements Serializable {
+
   /** Stores unencrypted phrase */
   protected String phrase;
 
@@ -19,7 +20,11 @@ public class Cryptogram implements Serializable {
   /** Stores encrypted character mappings, key: encrypted, value: unencrypted */
   protected HashMap<String, Character> cryptogramAlphabet = new HashMap<>();
 
+  /** Stores the current encrypted string as an arrayList * */
   protected ArrayList<String> encryptedPhrase = new ArrayList<>();
+
+  /** This variable stores the number of hints claimed for each cryptogram * */
+  private int noHint;
 
   /**
    * Stores guesses entered: key: encrypted, value: guess LinkedHashMap so that last input can be
@@ -106,5 +111,39 @@ public class Cryptogram implements Serializable {
 
   public LinkedHashMap<String, Character> getGuesses() {
     return guesses;
+  }
+
+  /**
+   * Used to supply the player with a random hint character that is valid If used all hints (max 5,
+   * then just return)
+   *
+   * @return char of hint to be returned to the user
+   */
+  public Character getHint() {
+
+    // variable declerations
+    Random ranEncrypted = new Random();
+    int encryptedAccessor =
+        ranEncrypted.nextInt(cryptogramAlphabet.size()); // 1 to size of the encrpyted message
+    boolean valid = false;
+    String encryptedCharacter = null;
+
+    while (!valid) {
+      // check hint numbers and generate a random hint
+      if (noHint >= 5) return null;
+
+      // can now generate a random hint...get an encrypted value to then return its character pair
+      encryptedCharacter = encryptedPhrase.get(encryptedAccessor - 1);
+
+      // check if this has already been guessed, does encrpyted value already have a guess linked to
+      // it
+      if (guesses.containsKey(encryptedCharacter)) {
+        encryptedAccessor = ranEncrypted.nextInt(cryptogramAlphabet.size());
+      } else valid = true;
+    }
+    // once you get to here, have a valid encrpyted string value that does not already have a linked
+    // guess
+    noHint++;
+    return cryptogramAlphabet.get(encryptedCharacter);
   }
 }
