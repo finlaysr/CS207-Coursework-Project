@@ -228,4 +228,23 @@ public class Game {
                 })
         .toArray(String[][]::new);
   }
+
+  /** Returns null if no hint has been inserted, else returns an error string */
+  public String getHint() {
+    String result = currentPlayer.getCurrentCryptogram().getHint();
+    if (result == null) {
+      return "No more hints available!";
+    } else {
+      // if hint will conflict with preexisting guess, then remove that guess
+      String enterResult = enterLetter(result, getCryptoAlph().get(result));
+      if (enterResult != null && enterResult.equals("Letter already in use!")) {
+        // remove guess that's causing the problem
+        getGuessStack().values().remove(getCryptoAlph().get(result));
+        // enter correct guess received from hint
+        enterLetter(result, getCryptoAlph().get(result));
+      }
+
+      return null;
+    }
+  }
 }

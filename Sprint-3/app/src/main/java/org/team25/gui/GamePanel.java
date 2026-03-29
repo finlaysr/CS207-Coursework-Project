@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -70,13 +71,25 @@ class GamePanel extends JPanel {
         });
 
     // Add new get hint button
-    JButton hintButton = new JButton("Hint");
+    AtomicInteger hintRemaining =
+        new AtomicInteger(
+            game.getCurrentPlayer()
+                .getCurrentCryptogram()
+                .getNumHint()); // has to be atomic since used inside a lambda
+    JButton hintButton = new JButton("Hint (" + hintRemaining + ")");
     undoHintPanel.add(hintButton);
     hintButton.addActionListener(
         _ -> {
-          // TODO: get this working
-          // game.getHint(); // example method
-          regenerateGuess();
+          String result = game.getHint();
+          if (result != null) {
+            JLabel text = new JLabel(result);
+            gui.resizeFont(text, gui.getFontChangeTotal());
+            JOptionPane.showMessageDialog(null, text, "Error", JOptionPane.ERROR_MESSAGE);
+          } else {
+            hintRemaining.set(game.getCurrentPlayer().getCurrentCryptogram().getNumHint());
+            hintButton.setText("Hint (" + hintRemaining + ")");
+            regenerateGuess();
+          }
         });
 
     JButton freqButton = new JButton("View Frequencies");

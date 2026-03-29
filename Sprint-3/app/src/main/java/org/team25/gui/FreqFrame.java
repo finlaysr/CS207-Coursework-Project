@@ -30,8 +30,6 @@ class FreqFrame extends JFrame {
 
     String[][] data = new String[26][3];
 
-    System.out.println(game.viewFrequencies());
-
     // read in letter frequencies from csv file
     final int[] i = {0}; // has to be an array for some reason, java moans otherwise
     try (Stream<String> lines = Files.lines(Paths.get("src/resources/letter-freq.csv"))) {

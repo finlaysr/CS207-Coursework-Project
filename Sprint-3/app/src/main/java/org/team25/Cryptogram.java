@@ -24,7 +24,7 @@ public class Cryptogram implements Serializable {
   protected ArrayList<String> encryptedPhrase = new ArrayList<>();
 
   /** This variable stores the number of hints claimed for each cryptogram * */
-  private int noHint;
+  private int numHint = 5;
 
   /**
    * Stores guesses entered: key: encrypted, value: guess LinkedHashMap so that last input can be
@@ -117,33 +117,36 @@ public class Cryptogram implements Serializable {
    * Used to supply the player with a random hint character that is valid If used all hints (max 5,
    * then just return)
    *
-   * @return char of hint to be returned to the user
+   * @return char of hint to be returned to the user, null if no hint available
    */
-  public Character getHint() {
+  public String getHint() {
+    // variable declarations
+    int encryptedAccessor = 0;
+    String encryptedCharacter;
 
-    // variable declerations
-    Random ranEncrypted = new Random();
-    int encryptedAccessor =
-        ranEncrypted.nextInt(cryptogramAlphabet.size()); // 1 to size of the encrpyted message
-    boolean valid = false;
-    String encryptedCharacter = null;
-
-    while (!valid) {
+    while (encryptedAccessor < encryptedPhrase.size()) {
       // check hint numbers and generate a random hint
-      if (noHint >= 5) return null;
+      if (numHint == 0) return null;
 
       // can now generate a random hint...get an encrypted value to then return its character pair
-      encryptedCharacter = encryptedPhrase.get(encryptedAccessor - 1);
+      encryptedCharacter = encryptedPhrase.get(encryptedAccessor);
 
-      // check if this has already been guessed, does encrpyted value already have a guess linked to
-      // it
-      if (guesses.containsKey(encryptedCharacter)) {
-        encryptedAccessor = ranEncrypted.nextInt(cryptogramAlphabet.size());
-      } else valid = true;
+      // check if this already been guessed, does encrypt value already have a guess linked to it
+      if (guesses.containsKey(encryptedCharacter)
+          || !cryptogramAlphabet.containsKey(encryptedCharacter)) {
+        encryptedAccessor++;
+      } else {
+        // once you get to here, have a valid encrypted string value that does not already have a
+        // linked guess
+        numHint--;
+        return encryptedCharacter;
+      }
     }
-    // once you get to here, have a valid encrpyted string value that does not already have a linked
-    // guess
-    noHint++;
-    return cryptogramAlphabet.get(encryptedCharacter);
+    // No hints can be given since all letters filled in
+    return null;
+  }
+
+  public int getNumHint() {
+    return numHint;
   }
 }
