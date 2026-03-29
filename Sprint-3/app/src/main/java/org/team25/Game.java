@@ -44,7 +44,7 @@ public class Game {
     return null; // if successful return null (no error)
   }
 
-  // Returns error if exists, else null on success
+  /** Returns error if exists, else null on success */
   public String logIn(String username) {
     if (username.isEmpty()) {
       return "Username cannot be empty!";

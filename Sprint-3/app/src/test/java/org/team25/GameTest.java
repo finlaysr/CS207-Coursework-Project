@@ -243,4 +243,42 @@ class GameTest {
       assertTrue(found);
     }
   }
+
+  // User Story 14
+  @Test
+  void hintTest() {
+    Game game = new Game();
+    assertNull(game.signUp(testUsername));
+    game.generateCryptogram(true);
+
+    // the user can ask for 5 hints
+    for (int i = 0; i < 5; i++) {
+      assertNull(game.getHint());
+    }
+
+    // check 5 guesses have been entered
+    assertEquals(5, game.getGuessStack().size());
+    // Check that the hint gave correct guesses
+    game.getGuessStack()
+        .keySet()
+        .forEach(
+            guessEnc ->
+                assertEquals(
+                    game.getGuessStack().get(guessEnc), game.getCryptoAlph().get(guessEnc)));
+
+    // Then any more hints will fail
+    assertEquals("No more hints available!", game.getHint());
+    assertEquals(5, game.getGuessStack().size());
+
+    // check that the amount of hints is stored correctly
+    game.shutdown();
+
+    Game game2 = new Game();
+    assertNull(game2.logIn(testUsername));
+    assertTrue(game2.loadGame());
+
+    // All hints have already been used
+    assertEquals("No more hints available!", game.getHint());
+    assertEquals(5, game.getGuessStack().size());
+  }
 }

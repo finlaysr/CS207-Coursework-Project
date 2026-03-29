@@ -4,7 +4,7 @@ package org.team25.gui;
 import java.awt.BorderLayout;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,22 +30,31 @@ class FreqFrame extends JFrame {
 
     String[][] data = new String[26][3];
 
+    // Count of letters in the cryptogram excluding spaces and punctuation
+    long letters =
+        game.getEncryptedPhrase().stream()
+            .filter(enc -> game.getCryptoAlph().containsKey(enc))
+            .count();
+    System.out.println("letters: " + letters);
+
     // read in letter frequencies from csv file
-    final int[] i = {0}; // has to be an array for some reason, java moans otherwise
+    ArrayList<String[]> englishFreq = new ArrayList<>();
     try (Stream<String> lines = Files.lines(Paths.get("src/resources/letter-freq.csv"))) {
-      lines.forEach(
-          line -> {
-            String[] freq = line.split(",");
-            System.out.println(Arrays.toString(freq));
-            data[i[0]][0] = freq[0];
-            data[i[0]][1] = String.valueOf(game.viewFrequencies().get(freq[0].trim()));
-            data[i[0]][2] = String.format("%.2f%%", Float.parseFloat(freq[1]) * 100);
-            i[0]++;
-          });
+      lines.forEach(line -> englishFreq.add(line.split(",")));
     } catch (Exception e) {
-      System.out.println("Couldn't read csv frequencies file");
-      System.exit(1);
+      System.out.println("Couldn't read csv frequencies file: " + e.getMessage());
     }
+
+    final int[] i = {0}; // has to be an array for some reason, java moans otherwise
+    englishFreq.forEach(
+        freq -> {
+          float percent =
+              (float) 100 * game.viewFrequencies().getOrDefault(freq[0].trim(), 0) / letters;
+          data[i[0]][0] = freq[0];
+          data[i[0]][1] = String.format("%.2f%%", percent);
+          data[i[0]][2] = String.format("%.2f%%", Float.parseFloat(freq[1]) * 100);
+          i[0]++;
+        });
 
     String[] columnNames = {"Encrypted Letter", "This Game", "English Language"};
 

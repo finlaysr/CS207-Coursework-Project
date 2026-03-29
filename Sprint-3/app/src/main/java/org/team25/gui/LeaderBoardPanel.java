@@ -20,19 +20,24 @@ public class LeaderBoardPanel extends JPanel {
 
     this.add(new JLabel("Leaderboard: "), GUI.setConstraints(0, 1));
 
-    String[] columnNames = {"Username", "Games Won"};
+    // Check that some player stats have been stored before creating leaderboard
+    if (game.getLeaderboard().length == 0) {
+      this.add(new JLabel("No player stats have been stored yet!"), GUI.setConstraints(0, 2));
+    } else {
+      // Create leaderboard
+      String[] columnNames = {"Username", "Games Won"};
 
-    JTable table = new JTable(game.getLeaderboard(), columnNames);
-    table.setDefaultEditor(Object.class, null); // make table non-editable
-    table.setRowHeight(30);
+      JTable table = new JTable(game.getLeaderboard(), columnNames);
+      table.setDefaultEditor(Object.class, null); // make table non-editable
+      table.setRowHeight(30);
 
-    JScrollPane scrollPane =
-        new JScrollPane(
-            table,
-            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    this.add(scrollPane, GUI.setConstraints(0, 2, 1, 1));
-
+      JScrollPane scrollPane =
+          new JScrollPane(
+              table,
+              ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+              ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      this.add(scrollPane, GUI.setConstraints(0, 2));
+    }
     // Set back button to go to Game Choice Screen
     gui.getBackButton().setVisible(true);
     if (gui.getBackButton().getActionListeners().length > 0) {
